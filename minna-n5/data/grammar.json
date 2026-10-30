@@ -27,8 +27,8 @@
 ],
 "4": [
  {"id":"4-1","p":"今 ～時～分 です","m":"Bây giờ là ~ giờ ~ phút","n":"Đọc giờ: 4時(よじ), 7時(しちじ), 9時(くじ); phút: ～ふん／～ぷん.","ex":[["今 何時ですか。…7時10分です。","Bây giờ là mấy giờ? …7 giờ 10 phút."]]},
- {"id":"4-2","p":"Vます／Vません／Vました／Vませんでした","m":"Động từ lịch sự: hiện tại – phủ định – quá khứ – quá khứ phủ định","n":"Vます dùng cho thói quen, sự thật hoặc việc sẽ làm.","ex":[["毎朝 6時に 起きます。","Hàng sáng tôi dậy lúc 6 giờ."],["きのう 勉強しませんでした。","Hôm qua tôi đã không học."]]},
- {"id":"4-3","p":"N（thời gian）に V","m":"Làm V vào lúc N","n":"Dùng に với thời điểm có số (giờ, ngày, tháng, năm) và các thứ. Không dùng に với きょう、あした、毎朝…","ex":[["日曜日に 休みます。","Chủ nhật tôi nghỉ."],["11時に 寝ます。","Tôi ngủ lúc 11 giờ."]]},
+ {"id":"4-2","p":"Vます／Vません／Vました／Vませんでした","m":"Động từ lịch sự: hiện tại – phủ định – quá khứ – quá khứ phủ định","n":"Vます dùng cho thói quen, sự thật hoặc việc sẽ làm.","ex":[["毎朝 6時に 起きます。","Hàng sáng tôi dậy lúc 6 giờ."],["きのう 勉強しませんでした。","Hôm qua tôi đã không học."]],"bang":[{"t":"Bốn dạng lịch sự của động từ","h":["Dạng","Đuôi","Ví dụ"],"r":[["Hiện tại / tương lai","～ます","行きます ／ 食べます ／ 勉強します"],["Phủ định","～ません","行きません ／ 食べません ／ 勉強しません"],["Quá khứ","～ました","行きました ／ 食べました ／ 勉強しました"],["Quá khứ phủ định","～ませんでした","行きませんでした ／ 食べませんでした ／ 勉強しませんでした"]]}]},
+ {"id":"4-3","p":"N（thời gian）に V","m":"Làm V vào lúc N","n":"Dùng に với thời điểm có số (giờ, ngày, tháng, năm). Với thứ trong tuần có thể dùng hoặc bỏ に. Không dùng に với きょう、あした、きのう、毎朝、いつ…","ex":[["日曜日に 休みます。","Chủ nhật tôi nghỉ."],["11時に 寝ます。","Tôi ngủ lúc 11 giờ."]]},
  {"id":"4-4","p":"N1 から N2 まで","m":"Từ N1 đến N2","n":"Chỉ điểm bắt đầu và kết thúc của thời gian hoặc nơi chốn.","ex":[["9時から 5時まで 働きます。","Tôi làm việc từ 9 giờ đến 5 giờ."],["銀行は 何時までですか。","Ngân hàng mở đến mấy giờ?"]]},
  {"id":"4-5","p":"N1 と N2","m":"N1 và N2","n":"Nối hai danh từ ngang hàng.","ex":[["銀行の 休みは 土曜日と 日曜日です。","Ngân hàng nghỉ thứ bảy và chủ nhật."]]},
  {"id":"4-6","p":"S ね","m":"…nhỉ / …nhé","n":"Biểu thị sự đồng cảm hoặc mong người nghe đồng ý.","ex":[["毎晩 12時まで 勉強します。…大変ですね。","Tối nào tôi cũng học đến 12 giờ. …Vất vả quá nhỉ."]]}
@@ -58,7 +58,7 @@
  {"id":"7-5","p":"もう Vました","m":"Đã V rồi","n":"Trả lời: はい、もう Vました／いいえ、まだです.","ex":[["もう 荷物を 送りましたか。…いいえ、まだです。","Bạn đã gửi hành lý chưa? …Chưa."]]}
 ],
 "8": [
- {"id":"8-1","p":"N は なAdj［な］ です／いAdj（～い） です","m":"N thì (tính từ)","n":"Tính từ đứng làm vị ngữ. Phủ định: なAdj じゃありません、いAdj ～くないです; いい → よくないです.","ex":[["ワット先生は 親切です。","Thầy Watt tốt bụng."],["この 本は おもしろくないです。","Cuốn sách này không thú vị."]]},
+ {"id":"8-1","p":"N は なAdj［な］ です／いAdj（～い） です","m":"N thì (tính từ)","n":"Tính từ đứng làm vị ngữ. Phủ định: なAdj じゃありません、いAdj ～くないです; いい → よくないです.","ex":[["ワット先生は 親切です。","Thầy Watt tốt bụng."],["この 本は おもしろくないです。","Cuốn sách này không thú vị."]],"bang":[{"t":"Tính từ ở hiện tại (lịch sự)","h":["Loại","Khẳng định","Phủ định"],"r":[["Tính từ い","高いです","高くないです（高くありません）"],["いい (ngoại lệ)","いいです","よくないです"],["Tính từ な","静かです","静かじゃありません（静かではありません）"]]}],"luu":["Tính từ い: bỏ い, thêm くないです. Tính từ な: bỏ な, giống danh từ.","きれい、有名、嫌い là tính từ な dù kết thúc bằng い: きれいじゃありません (không nói きれくない)."]},
  {"id":"8-2","p":"なAdj な N／いAdj N","m":"N (mang tính chất của tính từ)","n":"Tính từ bổ nghĩa cho danh từ: なAdj giữ な, いAdj giữ nguyên い.","ex":[["奈良は 静かな 町です。","Nara là thành phố yên tĩnh."],["富士山は 高い 山です。","Núi Phú Sĩ là ngọn núi cao."]]},
  {"id":"8-3","p":"とても／あまり","m":"Rất / không ~ lắm","n":"とても đi với khẳng định, あまり đi với phủ định.","ex":[["北京は とても 寒いです。","Bắc Kinh rất lạnh."],["この 町は あまり にぎやかじゃありません。","Thành phố này không nhộn nhịp lắm."]]},
  {"id":"8-4","p":"N は どうですか","m":"N thế nào?","n":"Hỏi cảm tưởng hoặc ý kiến.","ex":[["日本の 生活は どうですか。…楽しいです。","Cuộc sống ở Nhật thế nào? …Vui lắm."]]},
@@ -91,20 +91,20 @@
 ],
 "12": [
  {"id":"12-1","p":"N／なAdj でした／じゃありませんでした","m":"Đã là / đã không phải là (quá khứ)","n":"Quá khứ của danh từ và tính từ đuôi な.","ex":[["きのうは 雨でした。","Hôm qua trời mưa."],["きのうの 試験は 簡単じゃありませんでした。","Bài thi hôm qua không dễ."]]},
- {"id":"12-2","p":"いAdj（～い）→ ～かったです／～くなかったです","m":"Quá khứ của tính từ đuôi い","n":"いい → よかったです／よくなかったです.","ex":[["きのうは 暑かったです。","Hôm qua trời nóng."],["パーティーは あまり 楽しくなかったです。","Bữa tiệc không vui lắm."]]},
+ {"id":"12-2","p":"いAdj（～い）→ ～かったです／～くなかったです","m":"Quá khứ của tính từ đuôi い","n":"いい → よかったです／よくなかったです.","ex":[["きのうは 暑かったです。","Hôm qua trời nóng."],["パーティーは あまり 楽しくなかったです。","Bữa tiệc không vui lắm."]],"bang":[{"t":"Quá khứ của tính từ và danh từ (lịch sự)","h":["Loại","Quá khứ","Quá khứ phủ định"],"r":[["Tính từ い","暑かったです","暑くなかったです（暑くありませんでした）"],["いい (ngoại lệ)","よかったです","よくなかったです"],["Tính từ な","簡単でした","簡単じゃありませんでした"],["Danh từ","雨でした","雨じゃありませんでした"]]}],"luu":["Không nói 暑いでした: quá khứ của tính từ い nằm ở đuôi かった, không ở です."]},
  {"id":"12-3","p":"N1 は N2 より Adj です","m":"N1 (tính từ) hơn N2","n":"So sánh hơn.","ex":[["この 車は あの 車より 大きいです。","Xe này to hơn xe kia."]]},
  {"id":"12-4","p":"N1 と N2 と どちらが Adj ですか／N の ほうが Adj です","m":"N1 và N2, cái nào (tính từ) hơn?","n":"Hỏi so sánh giữa hai thứ; trả lời bằng ～の ほうが. Bằng nhau thì どちらも.","ex":[["サッカーと 野球と どちらが おもしろいですか。…サッカーの ほうが おもしろいです。","Bóng đá và bóng chày, môn nào hay hơn? …Bóng đá hay hơn."]]},
  {"id":"12-5","p":"N1［の 中］で 何／どこ／だれ／いつ が いちばん Adj ですか","m":"Trong N1, cái gì… nhất?","n":"So sánh nhất trong một nhóm.","ex":[["日本料理の 中で 何が いちばん おいしいですか。…てんぷらが いちばん おいしいです。","Trong các món Nhật, món nào ngon nhất? …Tempura ngon nhất."]]}
 ],
 "13": [
  {"id":"13-1","p":"N が 欲しいです","m":"Muốn có N","n":"Diễn tả mong muốn của người nói (ngôi thứ nhất), không dùng cho người khác.","ex":[["わたしは 友達が 欲しいです。","Tôi muốn có bạn."]]},
- {"id":"13-2","p":"Vます（bỏ ます）＋ たいです","m":"Muốn làm V","n":"Chia như tính từ đuôi い: ～たくないです、～たかったです. Có thể dùng が thay cho を.","ex":[["わたしは 沖縄へ 行きたいです。","Tôi muốn đi Okinawa."],["きょうは 何も 食べたくないです。","Hôm nay tôi không muốn ăn gì cả."]]},
+ {"id":"13-2","p":"Vます（bỏ ます）＋ たいです","m":"Muốn làm V","n":"Chia như tính từ đuôi い: ～たくないです、～たかったです. Có thể dùng が thay cho を.","ex":[["わたしは 沖縄へ 行きたいです。","Tôi muốn đi Okinawa."],["きょうは 何も 食べたくないです。","Hôm nay tôi không muốn ăn gì cả."]],"bang":[{"t":"Chia ～たい như tính từ い","h":["Dạng","Ví dụ"],"r":[["Khẳng định","行きたいです"],["Phủ định","行きたくないです"],["Quá khứ","行きたかったです"],["Quá khứ phủ định","行きたくなかったです"]]}],"luu":["Chỉ dùng cho mong muốn của người nói (hoặc hỏi người nghe), không nói thẳng mong muốn của người thứ ba."]},
  {"id":"13-3","p":"N（địa điểm）へ Vます（bỏ ます）／N に 行きます／来ます／帰ります","m":"Đi / đến / về (đâu) để làm V","n":"に chỉ mục đích của việc di chuyển.","ex":[["神戸へ インド料理を 食べに 行きます。","Tôi đến Kobe để ăn món Ấn."],["京都へ 桜の 見物に 行きます。","Tôi đi Kyoto ngắm hoa anh đào."]]},
  {"id":"13-4","p":"どこか／何か","m":"Đâu đó / cái gì đó","n":"Thường lược bỏ trợ từ へ, を sau どこか, 何か.","ex":[["冬休みは どこか［へ］ 行きましたか。…はい、行きました。","Kỳ nghỉ đông bạn có đi đâu không? …Có."],["のどが かわきましたから、何か 飲みたいです。","Tôi khát nên muốn uống gì đó."]]},
  {"id":"13-5","p":"ご～ (tiền tố lịch sự)","m":"Kính ngữ","n":"ご đặt trước một số danh từ để thể hiện sự kính trọng: ご注文、ご家族…","ex":[["ご注文は？","Quý khách gọi món gì ạ?"]]}
 ],
 "14": [
- {"id":"14-1","p":"Nhóm động từ & thể て","m":"Phân loại động từ và cách chia thể て","n":"Nhóm I: い・ち・り→って; み・び・に→んで; き→いて; ぎ→いで; し→して (行きます→行って). Nhóm II: bỏ ます thêm て. Nhóm III: します→して、来ます→来て.","ex":[["書きます → 書いて、読みます → 読んで、食べます → 食べて","Viết, đọc, ăn ở thể て"]]},
+ {"id":"14-1","p":"Nhóm động từ & thể て","m":"Phân loại động từ và cách chia thể て","n":"Thể て nối câu và là phần đầu của nhiều mẫu (～てください、～ています…). Muốn chia đúng, trước hết phải biết động từ thuộc nhóm nào.","ex":[["書きます → 書いて、読みます → 読んで、食べます → 食べて","Viết, đọc, ăn ở thể て"]],"bang":[{"t":"Nhận biết nhóm động từ (nhìn âm ngay trước ます)","h":["Nhóm","Dấu hiệu","Ví dụ"],"r":[["I","Âm trước ます thuộc hàng い (い、き、ぎ、し、ち、に、び、み、り)","買います ／ 書きます ／ 話します ／ 待ちます ／ 飲みます ／ 帰ります"],["II","Âm trước ます thuộc hàng え; và một số động từ hàng い cần học thuộc","食べます ／ 寝ます ／ 見ます ／ 起きます ／ 借ります ／ 浴びます ／ います ／ できます"],["III","します, 来ます và N + します","します ／ 来ます ／ 勉強します ／ 結婚します"]]},{"t":"Cách chia thể て","h":["Nhóm","Cách chia","Ví dụ"],"r":[["I: い・ち・り","→ って","買います → 買って ／ 待ちます → 待って ／ 帰ります → 帰って"],["I: み・び・に","→ んで","飲みます → 飲んで ／ 遊びます → 遊んで ／ 死にます → 死んで"],["I: き","→ いて","書きます → 書いて ／ 聞きます → 聞いて"],["I: ぎ","→ いで","泳ぎます → 泳いで ／ 急ぎます → 急いで"],["I: し","→ して","話します → 話して ／ 貸します → 貸して"],["II","Bỏ ます, thêm て","食べます → 食べて ／ 見ます → 見て ／ 起きます → 起きて"],["III","Bất quy tắc","します → して ／ 来ます → 来（き）て ／ 勉強します → 勉強して"]]}],"luu":["Ngoại lệ duy nhất cần nhớ: 行きます → 行って (không phải 行いて).","Mẹo nhớ nhóm I: い・ち・り → って; み・び・に → んで; き → いて; ぎ → いで; し → して."]},
  {"id":"14-2","p":"Vて ください","m":"Hãy làm V","n":"Nhờ vả, chỉ thị hoặc mời một cách lịch sự.","ex":[["すみませんが、この 漢字の 読み方を 教えてください。","Xin lỗi, hãy chỉ cho tôi cách đọc chữ Hán này."]]},
  {"id":"14-3","p":"Vて います (đang diễn ra)","m":"Đang làm V","n":"Diễn tả hành động đang tiếp diễn.","ex":[["ミラーさんは 今 電話を かけています。","Anh Miller đang gọi điện thoại."]]},
  {"id":"14-4","p":"Vます（bỏ ます）ましょうか","m":"Để tôi làm V nhé?","n":"Đề nghị giúp đỡ người nghe.","ex":[["暑いですね。窓を 開けましょうか。…ええ、お願いします。","Nóng nhỉ. Để tôi mở cửa sổ nhé? …Vâng, nhờ anh."]]},
@@ -129,7 +129,7 @@
  {"id":"16-7","p":"どれ／どの N","m":"Cái nào / N nào","n":"どれ đứng một mình; どの đi kèm danh từ.","ex":[["サントスさんは どの 人ですか。…あの 背が 高くて、髪が 黒い 人です。","Anh Santos là người nào? …Người cao, tóc đen kia."]]}
 ],
 "17": [
- {"id":"17-1","p":"Thể ない","m":"Cách chia thể phủ định ngắn","n":"Nhóm I: đổi âm cuối hàng い→あ + ない (い→わ: 買います→買わない). Nhóm II: bỏ ます + ない. Nhóm III: しない、来ない.","ex":[["書きます→書かない、食べます→食べない、来ます→来ない","Thể ない của viết, ăn, đến"]]},
+ {"id":"17-1","p":"Thể ない","m":"Cách chia thể phủ định ngắn","n":"Thể ない là dạng phủ định ngắn của động từ, dùng trong nhiều mẫu (～ないでください、～なければなりません…).","ex":[["書きます→書かない、食べます→食べない、来ます→来ない","Thể ない của viết, ăn, đến"]],"bang":[{"t":"Cách chia thể ない","h":["Nhóm","Cách chia","Ví dụ"],"r":[["I","Thể ます: âm trước ます đổi từ hàng い sang hàng あ, bỏ ます, thêm ない","書きます → 書かない ／ 急ぎます → 急がない ／ 話します → 話さない ／ 待ちます → 待たない ／ 遊びます → 遊ばない ／ 飲みます → 飲まない ／ 帰ります → 帰らない ／ 買います → 買わない"],["II","Bỏ ます, thêm ない","食べます → 食べない ／ 見ます → 見ない ／ 起きます → 起きない"],["III","Bất quy tắc","します → しない ／ 来ます → 来（こ）ない ／ 勉強します → 勉強しない"]]}],"luu":["Âm い đổi thành わ, không phải あ: 買います → 買わない、会います → 会わない.","あります → ない (không nói あらない).","来ない đọc là こない."]},
  {"id":"17-2","p":"Vないで ください","m":"Xin đừng làm V","n":"Nhờ người nghe không làm việc gì đó.","ex":[["ここで 写真を 撮らないで ください。","Xin đừng chụp ảnh ở đây."]]},
  {"id":"17-3","p":"Vなければ なりません","m":"Phải làm V","n":"Nghĩa vụ, việc bắt buộc làm.","ex":[["薬を 飲まなければ なりません。","Tôi phải uống thuốc."]]},
  {"id":"17-4","p":"Vなくても いいです","m":"Không cần làm V cũng được","n":"Không bắt buộc.","ex":[["あした 来なくても いいです。","Ngày mai không cần đến cũng được."]]},
@@ -137,7 +137,7 @@
  {"id":"17-6","p":"N（thời hạn）までに V","m":"Làm V trước (thời hạn)","n":"までに chỉ hạn chót; khác với まで (liên tục đến lúc).","ex":[["土曜日までに 本を 返さなければ なりません。","Phải trả sách trước thứ bảy."]]}
 ],
 "18": [
- {"id":"18-1","p":"Thể từ điển","m":"Cách chia thể từ điển (V る)","n":"Nhóm I: đổi âm cuối hàng い→う (書きます→書く). Nhóm II: bỏ ます + る. Nhóm III: する、来る.","ex":[["読みます→読む、見ます→見る、します→する","Thể từ điển của đọc, xem, làm"]]},
+ {"id":"18-1","p":"Thể từ điển","m":"Cách chia thể từ điển (V る)","n":"Thể từ điển là dạng gốc của động từ, dạng được ghi trong từ điển. Dùng trong ～ことができます、～まえに…","ex":[["読みます→読む、見ます→見る、します→する","Thể từ điển của đọc, xem, làm"]],"bang":[{"t":"Cách chia thể từ điển","h":["Nhóm","Cách chia","Ví dụ"],"r":[["I","Thể ます: âm trước ます đổi từ hàng い sang hàng う, bỏ ます","書きます → 書く ／ 急ぎます → 急ぐ ／ 話します → 話す ／ 待ちます → 待つ ／ 遊びます → 遊ぶ ／ 飲みます → 飲む ／ 帰ります → 帰る ／ 買います → 買う"],["II","Bỏ ます, thêm る","食べます → 食べる ／ 見ます → 見る ／ 起きます → 起きる"],["III","Bất quy tắc","します → する ／ 来ます → 来（く）る ／ 勉強します → 勉強する"]]}],"luu":["来る đọc là くる (khác 来ます: きます, 来ない: こない).","Có động từ nhóm I tận cùng ～える／～いる trông như nhóm II: 帰る、入る、走る、知る、要る、切る. Thể ます của chúng là 帰ります、入ります… (hàng い) nên vẫn là nhóm I."]},
  {"id":"18-2","p":"N／V る こと が できます","m":"Có thể làm V","n":"Diễn tả năng lực hoặc khả năng thực hiện.","ex":[["ミラーさんは 漢字を 読む ことが できます。","Anh Miller có thể đọc chữ Hán."],["カードで 払う ことが できます。","Có thể thanh toán bằng thẻ."]]},
  {"id":"18-3","p":"わたしの 趣味は N／V る こと です","m":"Sở thích của tôi là…","n":"Nói cụ thể về sở thích.","ex":[["わたしの 趣味は 映画を 見る ことです。","Sở thích của tôi là xem phim."]]},
  {"id":"18-4","p":"V る／N の／Khoảng thời gian まえに、～","m":"Trước khi …","n":"Động từ trước まえに luôn ở thể từ điển.","ex":[["寝る まえに、本を 読みます。","Trước khi ngủ tôi đọc sách."],["食事の まえに、手を 洗います。","Trước bữa ăn tôi rửa tay."]]},
@@ -145,7 +145,7 @@
  {"id":"18-6","p":"ぜひ","m":"Nhất định","n":"Nhấn mạnh mong muốn hoặc lời nhờ.","ex":[["ぜひ 北海道へ 行きたいです。","Nhất định tôi muốn đi Hokkaido."]]}
 ],
 "19": [
- {"id":"19-1","p":"Thể た","m":"Cách chia thể quá khứ ngắn","n":"Chia như thể て, chỉ đổi て→た, で→だ.","ex":[["行きます→行った、飲みます→飲んだ、食べます→食べた","Thể た của đi, uống, ăn"]]},
+ {"id":"19-1","p":"Thể た","m":"Cách chia thể quá khứ ngắn","n":"Thể た là dạng quá khứ ngắn. Chia giống hệt thể て, chỉ đổi て → た và で → だ.","ex":[["行きます→行った、飲みます→飲んだ、食べます→食べた","Thể た của đi, uống, ăn"]],"bang":[{"t":"Cách chia thể た","h":["Nhóm","Cách chia","Ví dụ"],"r":[["I: い・ち・り","→ った","買います → 買った ／ 待ちます → 待った ／ 帰ります → 帰った"],["I: み・び・に","→ んだ","飲みます → 飲んだ ／ 遊びます → 遊んだ ／ 死にます → 死んだ"],["I: き","→ いた","書きます → 書いた（行きます → 行った）"],["I: ぎ","→ いだ","泳ぎます → 泳いだ"],["I: し","→ した","話します → 話した"],["II","Bỏ ます, thêm た","食べます → 食べた ／ 見ます → 見た"],["III","Bất quy tắc","します → した ／ 来ます → 来（き）た"]]}]},
  {"id":"19-2","p":"Vた ことが あります","m":"Đã từng làm V","n":"Nói về kinh nghiệm trong quá khứ.","ex":[["馬に 乗った ことが あります。","Tôi đã từng cưỡi ngựa."]]},
  {"id":"19-3","p":"Vた り、Vた り します","m":"Lúc thì V1, lúc thì V2…","n":"Liệt kê vài hành động tiêu biểu, không theo thứ tự.","ex":[["日曜日は テニスを したり、映画を 見たり します。","Chủ nhật tôi chơi tennis, xem phim, v.v."]]},
  {"id":"19-4","p":"いAdj（～い）→ ～く なります","m":"Trở nên (tính từ い)","n":"Diễn tả sự thay đổi trạng thái.","ex":[["寒く なりました。","Trời đã trở lạnh."]]},
@@ -153,7 +153,7 @@
 ],
 "20": [
  {"id":"20-1","p":"Thể lịch sự và thể thông thường","m":"です・ます và thể ngắn","n":"Thể thông thường dùng với bạn bè, người thân, và trong văn viết như nhật ký, luận văn.","ex":[["あした 東京へ 行く。","Mai tớ đi Tokyo."],["毎日 忙しい。","Ngày nào cũng bận."]]},
- {"id":"20-2","p":"Thể thông thường: V／いAdj／なAdj／N","m":"Bảng chia ngắn","n":"V: 行く／行かない／行った／行かなかった; いAdj: 大きい／大きくない／大きかった; なAdj・N: きれいだ／きれいじゃない／きれいだった.","ex":[["相撲が 好きだ。","Tớ thích sumo."],["きのうは 雨だった。","Hôm qua mưa."]]},
+ {"id":"20-2","p":"Thể thông thường: V／いAdj／なAdj／N","m":"Bảng chia ngắn","n":"Thể thông thường có bốn dạng cho mỗi loại từ. Dạng này được dùng trong hội thoại thân mật và làm phần đầu của nhiều mẫu ngữ pháp (～と思います、～でしょう…).","ex":[["相撲が 好きだ。","Tớ thích sumo."],["きのうは 雨だった。","Hôm qua mưa."]],"bang":[{"t":"Bảng thể thông thường","h":["Loại","Hiện tại","Hiện tại phủ định","Quá khứ","Quá khứ phủ định"],"r":[["Động từ","行く","行かない","行った","行かなかった"],["あります","ある","ない","あった","なかった"],["Tính từ い","大きい","大きくない","大きかった","大きくなかった"],["いい","いい","よくない","よかった","よくなかった"],["Tính từ な","きれいだ","きれいじゃない","きれいだった","きれいじゃなかった"],["Danh từ","雨だ","雨じゃない","雨だった","雨じゃなかった"]]}],"luu":["Quá khứ phủ định: đổi ない → なかった (行かない → 行かなかった).","Trong câu hỏi thân mật, danh từ và tính từ な thường bỏ だ: あした 暇？"]},
  {"id":"20-3","p":"Câu hỏi thể thông thường","m":"Hỏi thân mật","n":"Bỏ か, lên giọng cuối câu; với N/なAdj bỏ だ.","ex":[["コーヒー、飲む？…うん、飲む。","Uống cà phê không? …Ừ, uống."],["あした 暇？…ううん、暇じゃない。","Mai rảnh không? …Không, không rảnh."]]},
  {"id":"20-4","p":"Lược bỏ trợ từ và ～けど","m":"Đặc điểm văn nói","n":"Trong hội thoại thân mật thường lược は、を、へ; けど là dạng thân mật của が (nhưng).","ex":[["ごはん［を］食べる？","Ăn cơm không?"],["その カレー［は］、おいしい？…うん、辛いけど、おいしい。","Món cà ri đó ngon không? …Ừ, cay nhưng ngon."]]}
 ],
@@ -184,10 +184,10 @@
  {"id":"24-2","p":"Vて あげます","m":"Làm V cho (người khác)","n":"Làm việc gì đó vì người khác; tránh dùng trực tiếp với người trên.","ex":[["わたしは 木村さんに 本を 貸して あげました。","Tôi đã cho chị Kimura mượn sách."]]},
  {"id":"24-3","p":"Vて もらいます","m":"Được (ai) làm V cho","n":"Thể hiện lòng biết ơn của người nhận.","ex":[["わたしは 山田さんに 図書館の 電話番号を 教えて もらいました。","Tôi được anh Yamada chỉ cho số điện thoại thư viện."]]},
  {"id":"24-4","p":"Vて くれます","m":"(Ai đó) làm V cho tôi","n":"Người làm hành động là chủ ngữ, người nhận là người nói.","ex":[["母は わたしに セーターを 送って くれました。","Mẹ đã gửi áo len cho tôi."]]},
- {"id":"24-5","p":"N（người）は V (chủ ngữ là người làm)","m":"Ai… (hỏi người làm)","n":"Hỏi người đã làm cho mình: だれが ～て くれましたか.","ex":[["だれが 手伝いに 来て くれますか。…カリナさんが 来て くれます。","Ai sẽ đến giúp? …Chị Karina sẽ đến giúp."]]}
+ {"id":"24-5","p":"N（người）が V (hỏi, trả lời về người làm)","m":"Ai… (hỏi người làm)","n":"Hỏi người đã làm cho mình: だれが ～て くれましたか.","ex":[["だれが 手伝いに 来て くれますか。…カリナさんが 来て くれます。","Ai sẽ đến giúp? …Chị Karina sẽ đến giúp."]]}
 ],
 "25": [
- {"id":"25-1","p":"Thể thông thường quá khứ ＋ ら、～ (điều kiện)","m":"Nếu…","n":"V た ら、いAdj ～かったら、なAdj／N だったら.","ex":[["お金が あったら、旅行します。","Nếu có tiền tôi sẽ đi du lịch."],["雨が 降ったら、出かけません。","Nếu trời mưa tôi sẽ không ra ngoài."]]},
+ {"id":"25-1","p":"Thể thông thường quá khứ ＋ ら、～ (điều kiện)","m":"Nếu…","n":"V た ら、いAdj ～かったら、なAdj／N だったら.","ex":[["お金が あったら、旅行します。","Nếu có tiền tôi sẽ đi du lịch."],["雨が 降ったら、出かけません。","Nếu trời mưa tôi sẽ không ra ngoài."]],"bang":[{"t":"Cách tạo ～たら","h":["Loại","Khẳng định","Phủ định"],"r":[["Động từ","行ったら（thể た + ら）","行かなかったら"],["Tính từ い","安かったら ／ いい → よかったら","安くなかったら"],["Tính từ な","暇だったら","暇じゃなかったら"],["Danh từ","雨だったら","雨じゃなかったら"]]}]},
  {"id":"25-2","p":"V たら、～ (khi / sau khi)","m":"Sau khi V thì…","n":"Việc chắc chắn xảy ra trong tương lai.","ex":[["10時に なったら、出かけましょう。","Đến 10 giờ thì đi thôi."],["うちへ 帰ったら、すぐ シャワーを 浴びます。","Về nhà là tôi tắm ngay."]]},
  {"id":"25-3","p":"V て も／いAdj ～くても／なAdj・N でも、～","m":"Dù … cũng…","n":"Diễn tả kết quả trái với dự đoán.","ex":[["雨が 降っても、出かけます。","Dù trời mưa tôi vẫn ra ngoài."],["日曜日でも、働きます。","Dù là chủ nhật tôi vẫn làm việc."]]},
  {"id":"25-4","p":"もし／いくら","m":"Nếu như / dù bao nhiêu","n":"もし đi với ～たら; いくら đi với ～ても.","ex":[["もし 1億円 あったら、いろいろな 国を 旅行したいです。","Nếu có 100 triệu yên tôi muốn đi du lịch nhiều nước."],["いくら 考えても、わかりません。","Nghĩ mãi vẫn không hiểu."]]},
