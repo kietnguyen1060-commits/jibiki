@@ -180,6 +180,8 @@ main { padding-block: 20px 64px; }
 .counts { font-variant-numeric: tabular-nums; font-weight: 600; display: flex; gap: 10px; }
 .counts .new { color: var(--ai); } .counts .lrn { color: var(--bad); } .counts .rev { color: var(--ok); }
 .cardframe { width: 100%; min-height: 340px; border: 1px solid var(--line); border-radius: var(--r); background: var(--sheet); }
+/* Nút trả lời luôn nằm trong tầm mắt, kể cả khi mặt sau thẻ dài hơn màn hình. */
+#ansArea { position: sticky; bottom: 0; z-index: 3; background: var(--paper); padding: 10px 0 max(10px, env(safe-area-inset-bottom)); border-top: 1px solid var(--line); }
 .answers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
 .answers button { padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--sheet); cursor: pointer; font-weight: 600; }
 .answers button small { display: block; color: var(--muted); font-weight: 500; font-size: .75rem; }

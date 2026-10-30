@@ -270,9 +270,9 @@ CSS = """
 .pg-top{display:flex;align-items:center;gap:8px;border-bottom:1px solid #999;padding:8px}
 .pg-head{flex:0 0 auto;min-width:130px;text-align:center}
 .pg-no{display:inline-block;font-size:14px;background:#333;color:#fff;border-radius:3px;padding:0 6px}
-.pg-k{font-size:96px;line-height:1.05;font-family:"Yu Mincho","MS Mincho",serif}
+.pg-k{font-size:84px;line-height:1.05;font-family:"Yu Mincho","MS Mincho",serif}
 .pg-mean{font-size:20px;font-weight:bold}
-.pg-img{flex:1;text-align:center}.pg-img img{display:block;margin:4px auto;max-width:100%;height:auto}
+.pg-img{flex:1;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px}.pg-img img{display:block;max-width:100%;max-height:130px;width:auto;height:auto;object-fit:contain}
 .pg-mid{padding:8px 12px;border-bottom:1px solid #999;font-size:18px}
 .pg-nho:before{content:"💡 "}.pg-lq{font-size:15px;color:#777;margin-top:4px}
 .pg-bot{display:flex;flex-wrap:wrap}
@@ -281,7 +281,7 @@ CSS = """
 .pg-kun{background:#333;color:#fff}
 .pg-ex{flex:1;min-width:260px}.pg-ex table.ex{margin:0;width:100%}
 .pg-ex td.core{background:#e3e3e3}
-.pg-strokes{border-top:1px solid #999;padding:6px;text-align:center}.pg-strokes img{max-width:100%;height:auto}
+.pg-strokes{border-top:1px solid #999;padding:6px;text-align:center}.pg-strokes img{max-width:100%;max-height:44px;height:auto}
 @media (max-width:520px){.pg-top{flex-direction:column}.pg-reads{flex-basis:100%;border-right:0;border-bottom:1px solid #999}}
 .nightMode .pg,.night_mode .pg{background:#262626;color:#eee;border-color:#888}
 .nightMode .pg-ex td.core,.night_mode .pg-ex td.core{background:#3a3a3a}
