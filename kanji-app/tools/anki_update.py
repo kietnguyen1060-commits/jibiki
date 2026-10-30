@@ -4,6 +4,7 @@ Cách dùng: py anki_update.py <bước...>
   backup <thư mục>   sao lưu collection.anki2 (dùng sqlite backup, an toàn khi Anki đang mở)
   fields             thêm trường "Hình" và "Nét viết" vào kiểu ghi chú KLL
   media              tải mọi kll_*.svg trong _build/media vào thư mục media của Anki
+  media_tranh        chỉ tải tranh kll_pic_*.svg (sau khi chạy make_tranh.py)
   fill               điền 2 trường hình cho các ghi chú KLL đã có
   extra              thêm các kanji Minna không có trong KLL (đọc tools/extra_vi_*.txt)
   template           đổi mặt sau thẻ thành bố cục giống trang sách
@@ -38,8 +39,9 @@ def multi(actions, size=200):
 
 
 def img_fields(ch):
+    # Tranh → chữ (kiểu sách) ở trên, hình thành phần màu ở dưới.
     cp = f"{ord(ch):05x}"
-    return {"Hình": f'<img src="kll_comp_{cp}.svg">', "Nét viết": f'<img src="kll_stroke_{cp}.svg">'}
+    return {"Hình": f'<img src="kll_pic_{cp}.svg"><img src="kll_comp_{cp}.svg">', "Nét viết": f'<img src="kll_stroke_{cp}.svg">'}
 
 
 def backup(dest):
@@ -62,8 +64,8 @@ def fields():
     print("trường:", have)
 
 
-def media():
-    files = sorted(glob.glob(os.path.join(MEDIA, "kll_*.svg")))
+def media(pattern="kll_*.svg"):
+    files = sorted(glob.glob(os.path.join(MEDIA, pattern)))
     multi([{"action": "storeMediaFile", "params": {"filename": os.path.basename(f), "path": os.path.abspath(f)}} for f in files], 100)
     print("đã lưu", len(files), "tệp")
 
@@ -188,7 +190,7 @@ CSS = """
 .pg-no{display:inline-block;font-size:14px;background:#333;color:#fff;border-radius:3px;padding:0 6px}
 .pg-k{font-size:96px;line-height:1.05;font-family:"Yu Mincho","MS Mincho",serif}
 .pg-mean{font-size:20px;font-weight:bold}
-.pg-img{flex:1;text-align:center}.pg-img img{max-width:100%;height:auto}
+.pg-img{flex:1;text-align:center}.pg-img img{display:block;margin:4px auto;max-width:100%;height:auto}
 .pg-mid{padding:8px 12px;border-bottom:1px solid #999;font-size:18px}
 .pg-nho:before{content:"💡 "}.pg-lq{font-size:15px;color:#777;margin-top:4px}
 .pg-bot{display:flex;flex-wrap:wrap}
@@ -222,4 +224,4 @@ while args:
     if step == "backup":
         backup(args.pop(0))
     else:
-        globals()[step]()
+        media("kll_pic_*.svg") if step == "media_tranh" else globals()[step]()

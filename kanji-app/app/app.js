@@ -202,7 +202,9 @@
   /* ---------- Thẻ kanji kiểu Look and Learn ---------- */
   // Chữ bổ sung từ Minna mang số 1001+ trong dữ liệu, hiển thị là +1, +2… như trên thẻ Anki.
   const noLabel = x => x.n > 1000 ? "+" + (x.n - 1000) : x.n;
-  const compImg = ch => `/media/kll_comp_${ch.codePointAt(0).toString(16).padStart(5, "0")}.svg`;
+  const hexOf = ch => ch.codePointAt(0).toString(16).padStart(5, "0");
+  // Tranh → chữ (kiểu sách) và hình thành phần màu, cùng các tệp đã đưa vào Anki.
+  const figHtml = ch => `<img class="comp" src="/media/kll_pic_${hexOf(ch)}.svg" alt="Tranh gợi nhớ chữ ${esc(ch)}"><img class="comp" src="/media/kll_comp_${hexOf(ch)}.svg" alt="Các thành phần ghép thành chữ ${esc(ch)}">`;
   function splitReads(s) { return String(s || "").split(/[、,]\s*/).filter(Boolean); }
   function minnaLink(m) {
     const book = m[3] <= 25 ? "n5" : "n4";
@@ -226,7 +228,7 @@
     h += `<div class="page" aria-label="Thẻ kanji ${esc(ch)}">
       <div class="row1">
         <div class="bigk">${x ? `<span class="no">${noLabel(x)}</span>` : ""}<div><div class="ch">${esc(ch)}</div>${x ? `<div class="mean">${esc(x.nghia)}</div><div class="hv">${esc(x.hv)}</div>` : ""}</div></div>
-        <div class="anim"><div id="animBox">${x ? `<img class="comp" src="${compImg(ch)}" alt="Các thành phần ghép thành chữ ${esc(ch)}">` : paths.length ? strokeSvg(paths, paths.length, 140, true) : '<span class="muted">Chưa có dữ liệu nét</span>'}</div>
+        <div class="anim"><div id="animBox">${x ? figHtml(ch) : paths.length ? strokeSvg(paths, paths.length, 140, true) : '<span class="muted">Chưa có dữ liệu nét</span>'}</div>
           ${paths.length ? `<button class="btn small" type="button" id="animBtn">▶ Xem cách viết</button>` : ""}</div>
         <div class="nho">${x ? `<p id="nhoText">${esc(x.nho) || '<span class="muted">Chưa có cách nhớ.</span>'}</p>${x.lq ? `<div class="lq">Liên quan: <b>${esc(x.lq)}</b></div>` : ""}`
           : `<p class="muted">Chữ này không có trong Kanji Look and Learn. Dưới đây là thứ tự nét và các từ có chứa chữ này trong bộ tài liệu của bạn.</p>`}</div>
@@ -256,7 +258,7 @@
     const btn = $("#animBtn");
     if (btn) btn.addEventListener("click", () => {
       // Bấm lần nữa để quay lại hình thành phần.
-      if (x && btn.dataset.on) { delete btn.dataset.on; btn.textContent = "▶ Xem cách viết"; $("#animBox").innerHTML = `<img class="comp" src="${compImg(ch)}" alt="Các thành phần ghép thành chữ ${esc(ch)}">`; return; }
+      if (x && btn.dataset.on) { delete btn.dataset.on; btn.textContent = "▶ Xem cách viết"; $("#animBox").innerHTML = figHtml(ch); return; }
       animate($("#animBox"), paths);
       if (x) { btn.dataset.on = "1"; btn.textContent = "◧ Hình thành phần"; }
     });

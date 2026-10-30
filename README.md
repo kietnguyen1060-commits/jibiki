@@ -18,5 +18,6 @@ Nội dung sách (cách nhớ và ví dụ của Kanji Look and Learn, danh sác
 ## Nguồn và giấy phép
 
 - Nhận diện chữ viết tay: [KanjiCanvas](https://github.com/asdfjkl/kanjicanvas) — MIT.
+- Tranh gợi nhớ: [OpenMoji](https://openmoji.org) — CC BY-SA 4.0.
 - Thứ tự nét và hình thành phần: [KanjiVG](http://kanjivg.tagaini.net) — Ulrich Apel, CC BY-SA 3.0.
 - Âm on/kun, số nét: [KANJIDIC2](https://www.edrdg.org/wiki/index.php/KANJIDIC_Project) — EDRDG, CC BY-SA 4.0.

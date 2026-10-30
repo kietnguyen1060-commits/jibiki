@@ -31,6 +31,7 @@ py tools/build_data.py "<đường dẫn collection.anki2 (bản sao)>" _dl/kanj
 
 ## Hình thành phần và kanji bổ sung
 
+- `tools/make_tranh.py` vẽ hình kiểu sách: tranh nét OpenMoji → chữ kanji (`kll_pic_<mã>.svg`). Tranh cho từng chữ chọn trong `tools/tranh.txt` (`chữ|emoji…`).
 - `tools/make_images.py` vẽ cho mỗi chữ hai hình SVG từ KanjiVG: thành phần ghép (`kll_comp_<mã>.svg`, ví dụ 彳 + 夋 → 後) và dải thứ tự nét (`kll_stroke_<mã>.svg`).
 - `tools/anki_update.py` đưa hình vào Anki: thêm trường "Hình" và "Nét viết", tải ảnh vào thư mục media, đổi mặt sau thẻ thành bố cục giống trang sách, và thêm 392 kanji có trong từ vựng Minna mà Kanji Look and Learn không có (deck `Kanji Look and Learn::4. Bổ sung từ Minna`, số `+1`, `+2`…).
 - Nghĩa, âm Hán Việt và cách nhớ của chữ bổ sung nằm ở `tools/extra_vi_*.txt` (`chữ|HÁN VIỆT|nghĩa|cách nhớ`), soạn theo kiểu Look and Learn dựa trên các thành phần, không chép từ sách.
@@ -38,6 +39,7 @@ py tools/build_data.py "<đường dẫn collection.anki2 (bản sao)>" _dl/kanj
 ## Nguồn và giấy phép
 
 - Nhận diện chữ viết tay: [KanjiCanvas](https://github.com/asdfjkl/kanjicanvas) — MIT (`app/lib/kanjicanvas/LICENSE.txt`).
+- Tranh gợi nhớ: [OpenMoji](https://openmoji.org) — CC BY-SA 4.0.
 - Thứ tự nét và hình thành phần: [KanjiVG](http://kanjivg.tagaini.net) — Ulrich Apel, CC BY-SA 3.0.
 - Âm on/kun và số nét của chữ bổ sung: [KANJIDIC2](https://www.edrdg.org/wiki/index.php/KANJIDIC_Project) — EDRDG, CC BY-SA 4.0.
 - Nội dung kanji, từ ghép, câu ví dụ và từ vựng: các deck Anki của bạn.

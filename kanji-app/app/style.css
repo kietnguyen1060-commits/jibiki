@@ -103,7 +103,8 @@ main { padding-block: 20px 64px; }
 .bigk .hv { font-weight: 700; letter-spacing: .08em; font-size: .85rem; color: var(--ai); }
 .anim { border-right: 1px solid var(--rule); display: grid; place-items: center; padding: 10px; gap: 6px; }
 .anim svg { width: 140px; height: 140px; max-width: 100%; }
-.anim img.comp { width: 100%; max-height: 170px; object-fit: contain; border-radius: 8px; }
+.anim img.comp { display: block; width: 100%; max-height: 120px; object-fit: contain; border-radius: 8px; }
+.anim #animBox { display: grid; gap: 6px; }
 .nho { padding: 14px 16px; display: grid; gap: 8px; align-content: center; }
 .nho p { margin: 0; font-size: 1.02rem; }
 .nho .lq { color: var(--muted); font-size: .9rem; }
