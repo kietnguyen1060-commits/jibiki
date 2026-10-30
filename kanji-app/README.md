@@ -32,6 +32,7 @@ py tools/build_data.py "<đường dẫn collection.anki2 (bản sao)>" _dl/kanj
 ## Hình thành phần và kanji bổ sung
 
 - `tools/cat_tranh_sach.py` cắt tranh minh hoạ của 512 chữ từ bản PDF sách Kanji Look and Learn của chính bạn (`kll_book_<mã>.png` trong `_build/sach`, không đưa lên repo). Số thứ tự lấy theo dải số in ở đầu mỗi trang; `_xem.html` để soát. Sau đó `py tools/anki_update.py media_sach fill`.
+- `tools/doc_n3n2.py` đọc bản PDF "Kanji Look and Learn N3 N2 (tiếng Việt)" (322 chữ: Hán Việt, nghĩa, câu gợi nhớ, âm đọc, từ ghép, tranh) vào `_build/n3n2` (không đưa lên repo). Rồi `py tools/make_images.py <các chữ mới> _build/media_n3` và `py tools/anki_update.py media_n3 media_n3_hinh n3n2 fill`: chữ mới vào deck `Kanji Look and Learn::5. N3–N2 (sách tiếng Việt)` (số `N3·1`…), chữ bổ sung từ Minna trùng thì nhận câu gợi nhớ và tranh của sách.
 - `tools/make_tranh.py` vẽ hình kiểu sách: tranh nét OpenMoji → chữ kanji (`kll_pic_<mã>.svg`). Tranh cho từng chữ chọn trong `tools/tranh.txt` (`chữ|emoji…`).
 - `tools/make_images.py` vẽ cho mỗi chữ hai hình SVG từ KanjiVG: thành phần ghép (`kll_comp_<mã>.svg`, ví dụ 彳 + 夋 → 後) và dải thứ tự nét (`kll_stroke_<mã>.svg`).
 - `tools/anki_update.py` đưa hình vào Anki: thêm trường "Hình" và "Nét viết", tải ảnh vào thư mục media, đổi mặt sau thẻ thành bố cục giống trang sách, và thêm 392 kanji có trong từ vựng Minna mà Kanji Look and Learn không có (deck `Kanji Look and Learn::4. Bổ sung từ Minna`, số `+1`, `+2`…).

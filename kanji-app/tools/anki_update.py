@@ -6,6 +6,8 @@ Cách dùng: py anki_update.py <bước...>
   media              tải mọi kll_*.svg trong _build/media vào thư mục media của Anki
   media_tranh        chỉ tải tranh kll_pic_*.svg (sau khi chạy make_tranh.py)
   media_sach         tải tranh cắt từ sách kll_book_*.png (sau khi chạy cat_tranh_sach.py)
+  media_n3, media_n3_hinh  tải tranh sách N3–N2 và hình thành phần/nét của chữ mới
+  n3n2               thêm chữ của sách N3–N2 (sau khi chạy doc_n3n2.py)
   fill               điền 2 trường hình cho các ghi chú KLL đã có
   extra              thêm các kanji Minna không có trong KLL (đọc tools/extra_vi_*.txt)
   template           đổi mặt sau thẻ thành bố cục giống trang sách
@@ -40,12 +42,16 @@ def multi(actions, size=200):
 
 
 SACH = os.path.join(ROOT, "_build", "sach")  # tranh cắt từ PDF sách của người học (cat_tranh_sach.py), không đưa lên repo
+N3 = os.path.join(ROOT, "_build", "n3n2")    # dữ liệu + tranh sách N3–N2 tiếng Việt (doc_n3n2.py), không đưa lên repo
+MEDIA_N3 = os.path.join(ROOT, "_build", "media_n3")  # hình thành phần / nét cho chữ mới của sách N3–N2
+DECK_N3 = "Kanji Look and Learn::5. N3–N2 (sách tiếng Việt)::Phần {:02d}"
 
 
 def img_fields(ch):
-    # Tranh ở trên (tranh trong sách nếu có, không thì tranh OpenMoji), hình thành phần màu ở dưới.
+    # Tranh ở trên (sách KLL → sách N3–N2 → tranh OpenMoji), hình thành phần màu ở dưới.
     cp = f"{ord(ch):05x}"
-    pic = f"kll_book_{cp}.png" if os.path.exists(os.path.join(SACH, f"kll_book_{cp}.png")) else f"kll_pic_{cp}.svg"
+    pic = next((f for d, f in ((SACH, f"kll_book_{cp}.png"), (N3, f"kll_n3_{cp}.png")) if os.path.exists(os.path.join(d, f))),
+               f"kll_pic_{cp}.svg")
     return {"Hình": f'<img src="{pic}"><img src="kll_comp_{cp}.svg">', "Nét viết": f'<img src="kll_stroke_{cp}.svg">'}
 
 
@@ -157,7 +163,67 @@ def extra():
     print("tạm ngưng", len(rev), "thẻ Nghĩa → Kanji")
 
 
-FRONT = '<div class="small">#{{Số}} · Bài {{Bài}}</div><div class="kanji">{{Kanji}}</div>'
+def n3n2():
+    """Thêm các chữ của sách "Kanji Look and Learn N3 N2 (tiếng Việt)" (đọc bằng doc_n3n2.py).
+
+    Chữ chưa có → ghi chú mới (số N3·n, deck theo phần 20 chữ của sách). Chữ bổ sung từ Minna đã có
+    → lấy câu gợi nhớ và Hán Việt của sách. Chữ trong KLL giữ nguyên."""
+    book = json.load(open(os.path.join(N3, "n3n2.json"), encoding="utf-8"))
+    labels = json.load(open(os.path.join(MEDIA_N3, "_labels.json"), encoding="utf-8"))
+    kd = {}
+    xml = gzip.open(os.path.join(ROOT, "_dl", "kanjidic", "kanjidic2.xml.gz"), "rt", encoding="utf-8").read()
+    for m in re.finditer(r"<character>(.*?)</character>", xml, re.S):
+        b = m.group(1)
+        kd[re.search(r"<literal>(.)</literal>", b).group(1)] = (
+            [kana_h(x) for x in re.findall(r'<reading r_type="ja_on">([^<]+)</reading>', b)],
+            [re.sub(r"\..*", "", x).strip("-") for x in re.findall(r'<reading r_type="ja_kun">([^<]+)</reading>', b)],
+            re.search(r"<stroke_count>(\d+)</stroke_count>", b).group(1))
+    have = {n["fields"]["Kanji"]["value"]: n for n in call("notesInfo", notes=call("findNotes", query=f'"note:{MODEL}"'))}
+    notes, decks, upd = [], set(), []
+    for e in book:
+        k = e["k"]
+        on_kd, kun_kd, net = kd.get(k, ([], [], ""))
+        if k in have:
+            f = have[k]["fields"]
+            if f["Số"]["value"].startswith("+"):
+                new = {"Cách nhớ": e["nho"]} if e["nho"] else {}
+                if e["hv"] and e["hv"].split(",")[0].strip() != f["Hán Việt"]["value"]:
+                    new["Hán Việt"] = e["hv"]
+                if new:
+                    upd.append({"action": "updateNoteFields", "params": {"note": {"id": have[k]["noteId"], "fields": new}}})
+                upd.append({"action": "addTags", "params": {"notes": [have[k]["noteId"]], "tags": "KLL_N3N2"}})
+            continue
+        # Âm on của sách có khi lẫn lỗi OCR: chỉ giữ âm có trong KANJIDIC2.
+        on = [r for r in uniq(x for s in e["on"] for x in s.split()) if r in on_kd] or on_kd[:3]
+        kun = uniq(re.sub(r"\..*", "", x).strip("-") for x in e["kun"]) or kun_kd[:3]
+        ex = "".join(f'<tr><td class="{"core" if j < 2 else ""}">{html.escape(w[0])}</td><td>{html.escape(w[1])}</td><td>{html.escape(w[3])}</td></tr>'
+                     for j, w in enumerate(e["tu"][:10]))
+        part = (e["n"] - 1) // 20 + 1
+        deck = DECK_N3.format(part)
+        decks.add(deck)
+        f = {"Số": f"N3·{e['n']}", "Kanji": k, "Nghĩa": e["nghia"], "Hán Việt": e["hv"],
+             "Onyomi": "、".join(on[:4]), "Kunyomi": "、".join(kun[:4]), "Số nét": net, "Cách nhớ": e["nho"],
+             "Liên quan": "Liên quan: " + "、".join(uniq(labels.get(k, []))) if labels.get(k) else "",
+             "Từ ví dụ": f'<table class="ex">{ex}</table>' if ex else "", "Bài": f"N3–N2 phần {part}"}
+        f.update(img_fields(k))
+        notes.append({"deckName": deck, "modelName": MODEL, "fields": f, "tags": ["KLL_N3N2", f"N3N2_Phan{part:02d}"],
+                      "options": {"allowDuplicate": False}})
+    if upd:
+        multi(upd)
+    for d in sorted(decks):
+        call("createDeck", deck=d)
+    if decks:
+        call("setDeckConfigId", decks=sorted(decks) + [DECK_N3.split("::Phần")[0]], configId=PRESET)
+    ids = call("addNotes", notes=notes) if notes else []
+    print("đã thêm", len([i for i in ids if i]), "ghi chú mới; cập nhật", sum(1 for a in upd if a["action"] == "updateNoteFields"),
+          "chữ bổ sung; lỗi:", "".join(n["fields"]["Kanji"] for n, i in zip(notes, ids) if not i))
+    rev = call("findCards", query="tag:KLL_N3N2 card:2 -is:suspended")
+    if rev:
+        call("suspend", cards=rev)
+    print("tạm ngưng", len(rev), "thẻ Nghĩa → Kanji")
+
+
+FRONT ='<div class="small">#{{Số}} · Bài {{Bài}}</div><div class="kanji">{{Kanji}}</div>'
 BACK = """<div id="answer"></div>
 <div class="pg">
   <div class="pg-top">
@@ -229,4 +295,4 @@ while args:
     if step == "backup":
         backup(args.pop(0))
     else:
-        media("kll_pic_*.svg") if step == "media_tranh" else media("kll_book_*.png", SACH) if step == "media_sach" else globals()[step]()
+        media("kll_pic_*.svg") if step == "media_tranh" else media("kll_book_*.png", SACH) if step == "media_sach" else media("kll_n3_*.png", N3) if step == "media_n3" else media("kll_*.svg", MEDIA_N3) if step == "media_n3_hinh" else globals()[step]()

@@ -38,8 +38,11 @@ def ex_rows(table):
 
 kll = []
 for nid, f in notes(MID["kll"]):
-    # Chữ bổ sung từ Minna có số "+N" → 1000 + N để vẫn sắp xếp và lật trang được.
-    kll.append({"n": 1000 + int(f[0][1:]) if f[0].startswith("+") else int(f[0]), "k": f[1], "nghia": f[2], "hv": f[3], "on": f[4], "kun": f[5], "net": f[6],
+    # Chữ bổ sung từ Minna có số "+N" → 1000 + N, chữ sách N3–N2 có số "N3·N" → 2000 + N,
+    # để vẫn sắp xếp và lật trang được.
+    num = 1000 + int(f[0][1:]) if f[0].startswith("+") else 2000 + int(f[0][3:]) if f[0].startswith("N3·") else int(f[0])
+    img = re.search(r'src="([^"]+)"', f[11]) if len(f) > 11 else None
+    kll.append({"n": num, "img": img.group(1) if img else "", "k": f[1], "nghia": f[2], "hv": f[3], "on": f[4], "kun": f[5], "net": f[6],
                 "nho": f[7], "lq": re.sub(r"^Liên quan:\s*", "", f[8]), "ex": ex_rows(f[9]), "bai": f[10], "nid": nid})
 kll.sort(key=lambda x: x["n"])
 

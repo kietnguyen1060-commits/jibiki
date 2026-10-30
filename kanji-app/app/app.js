@@ -201,11 +201,11 @@
 
   /* ---------- Thẻ kanji kiểu Look and Learn ---------- */
   // Chữ bổ sung từ Minna mang số 1001+ trong dữ liệu, hiển thị là +1, +2… như trên thẻ Anki.
-  const noLabel = x => x.n > 1000 ? "+" + (x.n - 1000) : x.n;
+  const noLabel = x => x.n > 2000 ? "N3·" + (x.n - 2000) : x.n > 1000 ? "+" + (x.n - 1000) : x.n;
   const hexOf = ch => ch.codePointAt(0).toString(16).padStart(5, "0");
-  // Tranh → chữ và hình thành phần màu, cùng các tệp đã đưa vào Anki. Chữ trong sách KLL (số < 1000)
-  // dùng tranh cắt từ sách của người học; chữ bổ sung dùng tranh OpenMoji.
-  const picOf = ch => (kllByChar.get(ch) || {}).n < 1000 ? `kll_book_${hexOf(ch)}.png` : `kll_pic_${hexOf(ch)}.svg`;
+  // Tranh → chữ và hình thành phần màu, cùng các tệp đã đưa vào Anki: tranh lấy đúng tệp đang gắn
+  // ở trường "Hình" của thẻ (sách KLL, sách N3–N2 hoặc tranh OpenMoji).
+  const picOf = ch => (kllByChar.get(ch) || {}).img || `kll_pic_${hexOf(ch)}.svg`;
   const figHtml = ch => `<img class="comp" src="/media/${picOf(ch)}" alt="Tranh gợi nhớ chữ ${esc(ch)}"><img class="comp" src="/media/kll_comp_${hexOf(ch)}.svg" alt="Các thành phần ghép thành chữ ${esc(ch)}">`;
   function splitReads(s) { return String(s || "").split(/[、,]\s*/).filter(Boolean); }
   function minnaLink(m) {
@@ -223,7 +223,7 @@
     if (x) {
       const prev = kllByN.get(x.n - 1), next = kllByN.get(x.n + 1);
       h += `<div class="nav-book">${prev ? `<a class="btn small" href="#lookup/${encodeURIComponent(prev.k)}">‹ ${noLabel(prev)} ${esc(prev.k)}</a>` : "<span></span>"}
-        <span class="where">${x.n > 1000 ? `Bổ sung theo Minna · ${noLabel(x)} · bài ${esc(x.bai)}` : `Kanji Look and Learn · số ${x.n} · bài ${esc(x.bai)}`}</span>
+        <span class="where">${x.n > 2000 ? `Sách N3–N2 tiếng Việt · ${noLabel(x)} · ${esc(x.bai)}` : x.n > 1000 ? `Bổ sung theo Minna · ${noLabel(x)} · bài ${esc(x.bai)}` : `Kanji Look and Learn · số ${x.n} · bài ${esc(x.bai)}`}</span>
         ${next ? `<a class="btn small" href="#lookup/${encodeURIComponent(next.k)}">${esc(next.k)} ${noLabel(next)} ›</a>` : "<span></span>"}</div>`;
     }
     const core = x ? x.ex.filter(e => e[3]) : [], more = x ? x.ex.filter(e => !e[3]) : [];
