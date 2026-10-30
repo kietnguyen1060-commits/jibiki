@@ -1,4 +1,4 @@
-"""Server chạy trên máy cho app Tra Kanji.
+"""Server chạy trên máy cho app 字引 (Jibiki).
 
 - Phục vụ thư mục app/ tại http://localhost:8780
 - /media/<tên file> lấy âm thanh trực tiếp từ thư mục collection.media của Anki
@@ -77,7 +77,7 @@ if __name__ == "__main__":
     Handler.extensions_map.update({".js": "text/javascript; charset=utf-8", ".mp3": "audio/mpeg"})
     with Server(("127.0.0.1", PORT), Handler) as httpd:
         url = f"http://localhost:{PORT}/"
-        print(f"Tra Kanji đang chạy tại {url}")
+        print(f"字引 Jibiki đang chạy tại {url}")
         print("Âm thanh Anki:", MEDIA or "không tìm thấy thư mục collection.media")
         print("Nhấn Ctrl+C để dừng.")
         if "--no-browser" not in sys.argv:

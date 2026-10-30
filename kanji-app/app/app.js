@@ -1,4 +1,4 @@
-/* Tra Kanji — bảng trắng nhận diện chữ (KanjiCanvas), thẻ kanji kiểu Look and Learn,
+/* 字引 (Jibiki) — bảng trắng nhận diện chữ (KanjiCanvas), thẻ kanji kiểu Look and Learn,
    bộ đề Minna, và học thẻ trực tiếp trên bộ sưu tập Anki qua AnkiConnect. */
 (function () {
   "use strict";

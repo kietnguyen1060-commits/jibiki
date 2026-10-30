@@ -1,4 +1,4 @@
-# Tra Kanji
+# 字引 Jibiki
 
 Bộ công cụ tự học tiếng Nhật đi kèm Anki:
 

@@ -1,4 +1,4 @@
-# Tra Kanji
+# 字引 Jibiki
 
 App chạy trên máy để tra kanji bằng chữ viết tay, xem thẻ kiểu Kanji Look and Learn, làm bộ đề Minna N5/N4 và học thẻ Anki.
 
