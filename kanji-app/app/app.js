@@ -203,8 +203,10 @@
   // Chữ bổ sung từ Minna mang số 1001+ trong dữ liệu, hiển thị là +1, +2… như trên thẻ Anki.
   const noLabel = x => x.n > 1000 ? "+" + (x.n - 1000) : x.n;
   const hexOf = ch => ch.codePointAt(0).toString(16).padStart(5, "0");
-  // Tranh → chữ (kiểu sách) và hình thành phần màu, cùng các tệp đã đưa vào Anki.
-  const figHtml = ch => `<img class="comp" src="/media/kll_pic_${hexOf(ch)}.svg" alt="Tranh gợi nhớ chữ ${esc(ch)}"><img class="comp" src="/media/kll_comp_${hexOf(ch)}.svg" alt="Các thành phần ghép thành chữ ${esc(ch)}">`;
+  // Tranh → chữ và hình thành phần màu, cùng các tệp đã đưa vào Anki. Chữ trong sách KLL (số < 1000)
+  // dùng tranh cắt từ sách của người học; chữ bổ sung dùng tranh OpenMoji.
+  const picOf = ch => (kllByChar.get(ch) || {}).n < 1000 ? `kll_book_${hexOf(ch)}.png` : `kll_pic_${hexOf(ch)}.svg`;
+  const figHtml = ch => `<img class="comp" src="/media/${picOf(ch)}" alt="Tranh gợi nhớ chữ ${esc(ch)}"><img class="comp" src="/media/kll_comp_${hexOf(ch)}.svg" alt="Các thành phần ghép thành chữ ${esc(ch)}">`;
   function splitReads(s) { return String(s || "").split(/[、,]\s*/).filter(Boolean); }
   function minnaLink(m) {
     const book = m[3] <= 25 ? "n5" : "n4";

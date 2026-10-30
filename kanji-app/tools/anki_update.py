@@ -5,6 +5,7 @@ Cách dùng: py anki_update.py <bước...>
   fields             thêm trường "Hình" và "Nét viết" vào kiểu ghi chú KLL
   media              tải mọi kll_*.svg trong _build/media vào thư mục media của Anki
   media_tranh        chỉ tải tranh kll_pic_*.svg (sau khi chạy make_tranh.py)
+  media_sach         tải tranh cắt từ sách kll_book_*.png (sau khi chạy cat_tranh_sach.py)
   fill               điền 2 trường hình cho các ghi chú KLL đã có
   extra              thêm các kanji Minna không có trong KLL (đọc tools/extra_vi_*.txt)
   template           đổi mặt sau thẻ thành bố cục giống trang sách
@@ -38,10 +39,14 @@ def multi(actions, size=200):
     return out
 
 
+SACH = os.path.join(ROOT, "_build", "sach")  # tranh cắt từ PDF sách của người học (cat_tranh_sach.py), không đưa lên repo
+
+
 def img_fields(ch):
-    # Tranh → chữ (kiểu sách) ở trên, hình thành phần màu ở dưới.
+    # Tranh ở trên (tranh trong sách nếu có, không thì tranh OpenMoji), hình thành phần màu ở dưới.
     cp = f"{ord(ch):05x}"
-    return {"Hình": f'<img src="kll_pic_{cp}.svg"><img src="kll_comp_{cp}.svg">', "Nét viết": f'<img src="kll_stroke_{cp}.svg">'}
+    pic = f"kll_book_{cp}.png" if os.path.exists(os.path.join(SACH, f"kll_book_{cp}.png")) else f"kll_pic_{cp}.svg"
+    return {"Hình": f'<img src="{pic}"><img src="kll_comp_{cp}.svg">', "Nét viết": f'<img src="kll_stroke_{cp}.svg">'}
 
 
 def backup(dest):
@@ -64,8 +69,8 @@ def fields():
     print("trường:", have)
 
 
-def media(pattern="kll_*.svg"):
-    files = sorted(glob.glob(os.path.join(MEDIA, pattern)))
+def media(pattern="kll_*.svg", folder=MEDIA):
+    files = sorted(glob.glob(os.path.join(folder, pattern)))
     multi([{"action": "storeMediaFile", "params": {"filename": os.path.basename(f), "path": os.path.abspath(f)}} for f in files], 100)
     print("đã lưu", len(files), "tệp")
 
@@ -224,4 +229,4 @@ while args:
     if step == "backup":
         backup(args.pop(0))
     else:
-        media("kll_pic_*.svg") if step == "media_tranh" else globals()[step]()
+        media("kll_pic_*.svg") if step == "media_tranh" else media("kll_book_*.png", SACH) if step == "media_sach" else globals()[step]()
