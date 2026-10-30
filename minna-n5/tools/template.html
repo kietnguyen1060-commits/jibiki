@@ -1,0 +1,393 @@
+<title>Minna N5 · 25 bài</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Old+Mincho:wght@600;700&display=swap">
+<style>
+/* Layout: sổ tay học tập — thanh điều hướng dính trên cùng, cột nội dung ~62rem, lưới chip 25 bài, đề thi theo khối もんだい như giấy thi JLPT. */
+:root {
+  --paper: #f5f6f2;
+  --sheet: #ffffff;
+  --ink: #1d2330;
+  --muted: #5c6474;
+  --line: #dfe2dc;
+  --ai: #2c4a8a;          /* 藍 chàm — màu nhấn */
+  --ai-soft: #e6ebf6;
+  --shu: #c0392b;         /* 朱 son — dấu ★, điểm nhấn hiếm */
+  --ok: #2c7a4b;
+  --ok-soft: #e3f2e8;
+  --bad: #b3261e;
+  --bad-soft: #fbe7e5;
+  --font-jp: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+  --font-mincho: "Zen Old Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --font-vi: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #12151b; --sheet: #1a1e26; --ink: #e5e8ee; --muted: #9aa3b2; --line: #2c323d;
+    --ai: #91a9ea; --ai-soft: #232c40; --shu: #ef7a6b; --ok: #6cc893; --ok-soft: #173023;
+    --bad: #f08b80; --bad-soft: #3a1d1b; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #12151b; --sheet: #1a1e26; --ink: #e5e8ee; --muted: #9aa3b2; --line: #2c323d;
+  --ai: #91a9ea; --ai-soft: #232c40; --shu: #ef7a6b; --ok: #6cc893; --ok-soft: #173023;
+  --bad: #f08b80; --bad-soft: #3a1d1b; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font: 15px/1.6 var(--font-vi); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--sheet); }
+.jp { font-family: var(--font-jp); }
+a { color: var(--ai); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--ai); outline-offset: 2px; }
+
+header.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--sheet); border-bottom: 1px solid var(--line);
+}
+.wrap { max-width: 62rem; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.top .wrap { display: flex; align-items: center; gap: 12px; padding-block: 10px; flex-wrap: wrap; }
+.brand { display: flex; align-items: baseline; gap: 8px; text-decoration: none; color: var(--ink); margin-right: auto; }
+.brand b { font-family: var(--font-mincho); font-size: 1.25rem; letter-spacing: .02em; }
+.brand span { color: var(--muted); font-size: .85rem; }
+nav.tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+nav.tabs a { text-decoration: none; color: var(--muted); padding: 6px 12px; border-radius: 999px; font-weight: 500; font-size: .9rem; }
+nav.tabs a[aria-current="page"] { background: var(--ai-soft); color: var(--ai); }
+
+main { padding-block: 24px 64px; }
+h1, h2, h3 { text-wrap: balance; line-height: 1.25; }
+h1 { font-family: var(--font-mincho); font-size: clamp(1.6rem, 4vw, 2.2rem); margin: 0 0 6px; }
+h2 { font-size: 1.15rem; margin: 32px 0 12px; }
+.lede { color: var(--muted); margin: 0 0 20px; max-width: 65ch; }
+.eyebrow { font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+/* Tổng quan */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; margin: 20px 0 8px; }
+.stats div { background: var(--sheet); padding: 14px 16px; }
+.stats b { display: block; font-size: 1.6rem; font-variant-numeric: tabular-nums; font-family: var(--font-mincho); }
+.stats span { color: var(--muted); font-size: .85rem; }
+.lessons { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.lesson-group { margin-top: 20px; }
+.lesson-group h3 { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 1rem; margin: 0 0 10px; flex-wrap: wrap; }
+.lesson-group h3 a { font-size: .85rem; font-weight: 600; }
+.chip { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border: 1px solid var(--line); background: var(--sheet); border-radius: var(--r); text-decoration: none; color: var(--ink); }
+.chip:hover { border-color: var(--ai); }
+.chip .jp { font-family: var(--font-mincho); font-size: 1.05rem; }
+.chip small { color: var(--muted); font-variant-numeric: tabular-nums; }
+.test-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+.test-card { padding: 14px; border: 1px solid var(--line); border-radius: var(--r); background: var(--sheet); text-decoration: none; color: var(--ink); display: grid; gap: 4px; }
+.test-card:hover { border-color: var(--ai); }
+.test-card b { font-size: 1.05rem; }
+.test-card small { color: var(--muted); }
+.note { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; color: var(--muted); max-width: 70ch; }
+
+/* Bài học */
+.pager { display: flex; justify-content: space-between; gap: 8px; margin: 8px 0 0; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--sheet); cursor: pointer; text-decoration: none; color: var(--ink); font-weight: 500; font-size: .9rem; }
+.btn:hover { border-color: var(--ai); }
+.btn.primary { background: var(--ai); border-color: var(--ai); color: var(--sheet); }
+.btn[disabled] { opacity: .45; cursor: default; }
+.lesson-strip { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin: 0 0 18px; }
+.lesson-strip a { flex: 0 0 auto; min-width: 2.4rem; text-align: center; padding: 5px 8px; border-radius: 8px; border: 1px solid var(--line); text-decoration: none; color: var(--muted); font-variant-numeric: tabular-nums; font-size: .85rem; background: var(--sheet); }
+.lesson-strip a[aria-current="page"] { background: var(--ai); color: var(--sheet); border-color: var(--ai); }
+.grammar { display: grid; gap: 10px; }
+.g-card { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; display: grid; gap: 6px; min-width: 0; }
+.g-card header { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.g-id { font-size: .75rem; color: var(--ai); font-weight: 700; font-variant-numeric: tabular-nums; border: 1px solid var(--ai); border-radius: 6px; padding: 0 6px; }
+.g-pat { font-family: var(--font-jp); font-weight: 700; font-size: 1.05rem; }
+.g-mean { color: var(--muted); }
+.g-card p { margin: 0; }
+.ex { display: grid; gap: 4px; padding-left: 12px; border-left: 2px solid var(--line); }
+.ex .jp { font-size: 1rem; }
+.ex small { color: var(--muted); display: block; }
+.tools { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 0 0 10px; }
+.tools input[type=search] { flex: 1 1 200px; min-width: 0; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--sheet); color: var(--ink); font: inherit; }
+.toggle { display: inline-flex; align-items: center; gap: 6px; font-size: .9rem; color: var(--muted); cursor: pointer; }
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r); background: var(--sheet); }
+table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
+.vocab th, .vocab td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.vocab th { font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; background: var(--paper); }
+.vocab tr:last-child td { border-bottom: 0; }
+.vocab td.n { color: var(--muted); font-variant-numeric: tabular-nums; width: 2.5rem; }
+.w-main { font-family: var(--font-jp); font-size: 1.1rem; font-weight: 500; }
+.w-kana { font-family: var(--font-jp); color: var(--muted); font-size: .85rem; }
+.vocab td.ex-cell .jp { font-size: .95rem; }
+.vocab td.ex-cell small { color: var(--muted); display: block; }
+.hide-mean td.mean { color: transparent; background: repeating-linear-gradient(45deg, var(--line) 0 6px, transparent 6px 12px); cursor: pointer; border-radius: 4px; }
+.hide-mean td.mean.show { color: inherit; background: none; }
+
+/* Đề thi */
+.test-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
+.badges { display: flex; gap: 6px; flex-wrap: wrap; }
+.badge { font-size: .8rem; padding: 3px 10px; border-radius: 999px; background: var(--ok-soft); color: var(--ok); font-weight: 600; font-variant-numeric: tabular-nums; }
+.bar { position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--hh, 56px)); z-index: 4; background: var(--paper); padding-block: 10px; margin-top: 14px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+.progress { flex: 1 1 160px; height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; min-width: 0; }
+.progress i { display: block; height: 100%; background: var(--ai); width: 0; transition: width .2s; }
+.count { font-variant-numeric: tabular-nums; color: var(--muted); font-size: .9rem; }
+.result { margin-top: 16px; background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 10px; }
+.result .score { font-family: var(--font-mincho); font-size: 2rem; font-variant-numeric: tabular-nums; }
+.result .parts { display: flex; gap: 16px; flex-wrap: wrap; color: var(--muted); font-size: .9rem; }
+.result .parts b { color: var(--ink); font-variant-numeric: tabular-nums; }
+.weak { display: flex; gap: 6px; flex-wrap: wrap; }
+.weak a { font-size: .8rem; text-decoration: none; padding: 2px 8px; border-radius: 6px; background: var(--bad-soft); color: var(--bad); font-weight: 600; }
+.part-head { margin: 34px 0 6px; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.part-head .jp { font-family: var(--font-mincho); font-size: 1.35rem; }
+.part-head span:last-child { color: var(--muted); font-size: .9rem; }
+.sec { margin-top: 18px; }
+.sec h3 { font-family: var(--font-jp); font-size: 1rem; margin: 0 0 2px; }
+.sec .instr { color: var(--muted); font-size: .9rem; margin: 0 0 10px; }
+.passage { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; font-family: var(--font-jp); font-size: 1rem; line-height: 1.95; white-space: pre-wrap; margin-bottom: 12px; overflow-x: auto; }
+.passage table { border-collapse: collapse; white-space: normal; margin: 4px 0; font-size: .95rem; }
+.passage td { border: 1px solid var(--line); padding: 4px 10px; }
+.q { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; margin-bottom: 8px; display: grid; gap: 10px; min-width: 0; }
+.q .stem { display: flex; gap: 10px; align-items: baseline; }
+.q .num { flex: 0 0 auto; font-weight: 700; color: var(--ai); font-variant-numeric: tabular-nums; min-width: 1.8rem; }
+.q .text { font-family: var(--font-jp); font-size: 1.02rem; min-width: 0; overflow-wrap: anywhere; }
+.q .text u { text-decoration-thickness: 2px; text-underline-offset: 4px; text-decoration-color: var(--ai); }
+.star { color: var(--shu); font-weight: 700; }
+.opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 6px; }
+.opt { display: flex; gap: 8px; align-items: flex-start; padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; font-family: var(--font-jp); min-width: 0; overflow-wrap: anywhere; }
+.opt input { margin-top: .35em; accent-color: var(--ai); }
+.opt:has(input:checked) { border-color: var(--ai); background: var(--ai-soft); }
+.opt .k { color: var(--muted); font-variant-numeric: tabular-nums; font-family: var(--font-vi); font-size: .85rem; }
+.done .opt { cursor: default; }
+.done .opt.correct { border-color: var(--ok); background: var(--ok-soft); }
+.done .opt.wrong { border-color: var(--bad); background: var(--bad-soft); }
+.fb { display: none; font-size: .9rem; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 8px; }
+.done .fb { display: block; }
+.fb .mark { font-weight: 700; margin-right: 6px; }
+.fb .mark.ok { color: var(--ok); }
+.fb .mark.no { color: var(--bad); }
+.fb .tags { display: inline-flex; gap: 4px; flex-wrap: wrap; margin-left: 6px; }
+.fb .tags a { font-size: .75rem; text-decoration: none; border: 1px solid var(--line); border-radius: 5px; padding: 0 5px; }
+.full { font-family: var(--font-jp); color: var(--ink); }
+@media (max-width: 520px) {
+  .top .wrap { gap: 8px; }
+  .brand span { display: none; }
+  .opts { grid-template-columns: 1fr 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#"><b>Minna N5</b><span>みんなの日本語 初級Ⅰ · Bài 1–25</span></a>
+    <nav class="tabs" aria-label="Điều hướng">
+      <a href="#" data-nav="home">Tổng quan</a>
+      <a href="#bai-1" data-nav="lesson">Bài học</a>
+      <a href="#de-1" data-nav="test">Đề kiểm tra</a>
+    </nav>
+  </div>
+</header>
+<main class="wrap" id="app"></main>
+
+<script type="application/json" id="data">/*__DATA__*/{}</script>
+<script>
+(function () {
+  const D = JSON.parse(document.getElementById("data").textContent);
+  const app = document.getElementById("app");
+  const LESSON_JP = ["", "第1課", "第2課", "第3課", "第4課", "第5課", "第6課", "第7課", "第8課", "第9課", "第10課", "第11課", "第12課", "第13課", "第14課", "第15課", "第16課", "第17課", "第18課", "第19課", "第20課", "第21課", "第22課", "第23課", "第24課", "第25課"];
+  const PARTS = { "もじ・ごい": "Từ vựng", "ぶんぽう": "Ngữ pháp", "どっかい": "Đọc hiểu" };
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  // Câu hỏi chỉ chứa thẻ <u> do bộ đề tự viết; mọi thứ khác được thoát ký tự.
+  const rich = s => esc(s).replace(/&lt;(\/?)u&gt;/g, "<$1u>").replace(/★/g, '<span class="star">★</span>');
+  const store = {
+    get(k) { try { return JSON.parse(localStorage.getItem(k) || "null"); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  };
+  const testOf = b => D.tests.find(t => b >= t.lessons[0] && b <= t.lessons[1]);
+  const gLesson = id => id.split("-")[0];
+  const vocabCount = Object.values(D.vocab).reduce((a, v) => a + v.length, 0);
+  const grammarCount = Object.values(D.grammar).reduce((a, v) => a + v.length, 0);
+  const qCount = D.tests.reduce((a, t) => a + t.sections.reduce((b, s) => b + s.items.length, 0), 0);
+
+  function setNav(which) {
+    document.querySelectorAll("[data-nav]").forEach(a => a.toggleAttribute("aria-current", a.dataset.nav === which));
+    document.querySelectorAll("[data-nav]").forEach(a => { if (a.dataset.nav === which) a.setAttribute("aria-current", "page"); });
+  }
+
+  function home() {
+    setNav("home");
+    let h = `<p class="eyebrow">Bộ tài liệu JLPT N5 theo giáo trình</p>
+      <h1>みんなの日本語 · 25 bài</h1>
+      <p class="lede">Từ vựng và ngữ pháp của 25 bài Minna no Nihongo Sơ cấp 1, cùng 5 đề kiểm tra theo dạng đề JLPT N5. Mỗi đề gộp 5 bài và dùng toàn bộ từ vựng, mẫu ngữ pháp của 5 bài đó.</p>
+      <div class="stats">
+        <div><b>25</b><span>bài học</span></div>
+        <div><b>${vocabCount.toLocaleString("vi")}</b><span>từ vựng</span></div>
+        <div><b>${grammarCount}</b><span>mẫu ngữ pháp</span></div>
+        <div><b>5</b><span>đề · ${qCount} câu</span></div>
+      </div>
+      <h2>Đề kiểm tra</h2><div class="test-cards">`;
+    D.tests.forEach((t, i) => {
+      const c = D.coverage[i], n = t.sections.reduce((a, s) => a + s.items.length, 0);
+      const saved = store.get("minna-n5-de-" + t.id);
+      const st = saved && saved.done ? ` · đã làm: ${saved.score}/${n}` : "";
+      h += `<a class="test-card" href="#de-${t.id}"><b>${t.title} · Bài ${t.lessons[0]}–${t.lessons[1]}</b>
+        <small>${n} câu${st}</small><small>Dùng ${c.vocab[0]}/${c.vocab[1]} từ · ${c.grammar[0]}/${c.grammar[1]} mẫu ngữ pháp</small></a>`;
+    });
+    h += `</div><h2>Bài học</h2>`;
+    D.tests.forEach(t => {
+      h += `<section class="lesson-group"><h3><span>Bài ${t.lessons[0]}–${t.lessons[1]}</span><a href="#de-${t.id}">Làm ${t.title} →</a></h3><div class="lessons">`;
+      for (let b = t.lessons[0]; b <= t.lessons[1]; b++) {
+        h += `<a class="chip" href="#bai-${b}"><span class="jp">${LESSON_JP[b]}</span><small>Bài ${b} · ${D.vocab[b].length} từ · ${D.grammar[b].length} mẫu</small></a>`;
+      }
+      h += `</div></section>`;
+    });
+    h += `<h2>Cách dùng</h2><p class="note">Học từ vựng và ngữ pháp của từng bài trước. Học xong 5 bài thì làm đề tương ứng rồi bấm <b>Nộp bài</b> để xem điểm, lời giải và các mẫu ngữ pháp cần ôn lại. Danh sách từ vựng lấy từ deck Anki "Minna no Nihongo 1" của bạn. Câu trả lời được lưu trên trình duyệt này để bạn làm tiếp lần sau.</p>`;
+    app.innerHTML = h;
+  }
+
+  function lesson(b) {
+    setNav("lesson");
+    const words = D.vocab[b], gs = D.grammar[b], t = testOf(b);
+    let h = `<nav class="lesson-strip" aria-label="Chọn bài">`;
+    for (let i = 1; i <= 25; i++) h += `<a href="#bai-${i}" ${i === b ? 'aria-current="page"' : ""}>${i}</a>`;
+    h += `</nav><p class="eyebrow">Bài ${b} · ${words.length} từ · ${gs.length} mẫu ngữ pháp</p>
+      <h1>${LESSON_JP[b]}</h1>
+      <p class="lede">Thuộc <a href="#de-${t.id}">${t.title} (bài ${t.lessons[0]}–${t.lessons[1]})</a>.</p>
+      <h2>Ngữ pháp</h2><div class="grammar">`;
+    gs.forEach(g => {
+      h += `<article class="g-card" id="g-${g.id}"><header><span class="g-id">${g.id}</span><span class="g-pat">${esc(g.p)}</span><span class="g-mean">${esc(g.m)}</span></header>
+        <p>${esc(g.n)}</p><div class="ex">${g.ex.map(e => `<div><span class="jp">${esc(e[0])}</span><small>${esc(e[1])}</small></div>`).join("")}</div></article>`;
+    });
+    h += `</div><h2>Từ vựng</h2>
+      <div class="tools"><input type="search" id="q-${b}" placeholder="Tìm từ, cách đọc hoặc nghĩa…" aria-label="Tìm từ vựng">
+      <label class="toggle"><input type="checkbox" id="hide-${b}"> Che nghĩa để tự kiểm tra</label></div>
+      <div class="table-wrap"><table class="vocab" id="vt"><thead><tr><th>#</th><th>Từ</th><th>Nghĩa</th><th>Ví dụ</th></tr></thead><tbody>`;
+    words.forEach((w, i) => {
+      const main = w[0] || w[1], kana = w[0] ? w[1] : "";
+      h += `<tr data-s="${esc((w[0] + " " + w[1] + " " + w[2]).toLowerCase())}"><td class="n">${i + 1}</td>
+        <td><div class="w-main">${esc(main)}</div>${kana ? `<div class="w-kana">${esc(kana)}</div>` : ""}</td>
+        <td class="mean">${esc(w[2])}</td><td class="ex-cell"><span class="jp">${esc(w[3])}</span><small>${esc(w[4])}</small></td></tr>`;
+    });
+    h += `</tbody></table></div>
+      <div class="pager">${b > 1 ? `<a class="btn" href="#bai-${b - 1}">← Bài ${b - 1}</a>` : "<span></span>"}
+      ${b === t.lessons[1] ? `<a class="btn primary" href="#de-${t.id}">Làm ${t.title} →</a>` : b < 25 ? `<a class="btn" href="#bai-${b + 1}">Bài ${b + 1} →</a>` : ""}</div>`;
+    app.innerHTML = h;
+    const tbl = document.getElementById("vt");
+    document.getElementById("q-" + b).addEventListener("input", e => {
+      const v = e.target.value.trim().toLowerCase();
+      tbl.querySelectorAll("tbody tr").forEach(tr => { tr.hidden = v && !tr.dataset.s.includes(v); });
+    });
+    document.getElementById("hide-" + b).addEventListener("change", e => {
+      tbl.classList.toggle("hide-mean", e.target.checked);
+      tbl.querySelectorAll("td.mean").forEach(td => td.classList.remove("show"));
+    });
+    tbl.addEventListener("click", e => { const td = e.target.closest("td.mean"); if (td) td.classList.toggle("show"); });
+  }
+
+  function passageHTML(p) {
+    const lines = p.split("\n"), out = [];
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].startsWith("|")) {
+        let rows = "";
+        while (i < lines.length && lines[i].startsWith("|")) {
+          rows += "<tr>" + lines[i].split("|").slice(1, -1).map(c => `<td>${esc(c.trim())}</td>`).join("") + "</tr>";
+          i++;
+        }
+        i--;
+        out.push(`<table>${rows}</table>`);
+      } else out.push(esc(lines[i]) + (i < lines.length - 1 ? "\n" : ""));
+    }
+    return out.join("");
+  }
+
+  function test(id) {
+    setNav("test");
+    const t = D.tests.find(x => x.id === id), cov = D.coverage[id - 1];
+    const key = "minna-n5-de-" + id;
+    const saved = store.get(key) || { ans: {}, done: false };
+    const all = [];
+    let h = `<nav class="lesson-strip" aria-label="Chọn đề">${D.tests.map(x => `<a href="#de-${x.id}" ${x.id === id ? 'aria-current="page"' : ""}>${x.title}</a>`).join("")}</nav>
+      <div class="test-head"><div><p class="eyebrow">Bài ${t.lessons[0]}–${t.lessons[1]} · dạng đề JLPT N5</p><h1>${t.title}</h1></div>
+      <div class="badges"><span class="badge">Từ vựng ${cov.vocab[0]}/${cov.vocab[1]}</span><span class="badge">Ngữ pháp ${cov.grammar[0]}/${cov.grammar[1]}</span></div></div>
+      <div class="bar" id="bar"><div class="progress"><i id="prog"></i></div><span class="count" id="cnt"></span>
+      <button class="btn primary" id="submit" type="button">Nộp bài</button><button class="btn" id="reset" type="button">Làm lại</button></div>
+      <div id="res"></div>`;
+    let part = "", n = 0;
+    t.sections.forEach((s, si) => {
+      if (s.part !== part) { part = s.part; h += `<div class="part-head"><span class="jp">${part}</span><span>${PARTS[part] || ""}</span></div>`; }
+      h += `<section class="sec"><h3>${esc(s.title)}</h3><p class="instr">${esc(s.instr)}</p>`;
+      if (s.passage) h += `<div class="passage">${passageHTML(s.passage)}</div>`;
+      s.items.forEach((it, ii) => {
+        n++;
+        const qid = `${si}-${ii}`;
+        all.push({ qid, it, part: s.part });
+        h += `<div class="q" data-q="${qid}"><div class="stem"><span class="num">${n}</span><span class="text">${rich(it.q)}</span></div><div class="opts" role="radiogroup" aria-label="Câu ${n}">`;
+        it.o.forEach((o, oi) => {
+          const iid = `t${id}-q${qid}-o${oi}`;
+          h += `<label class="opt" for="${iid}"><input type="radio" id="${iid}" name="t${id}-q${qid}" value="${oi}" ${saved.ans[qid] === oi ? "checked" : ""}><span class="k">${oi + 1}</span><span>${esc(o)}</span></label>`;
+        });
+        const tags = (it.g || []).filter(g => D.grammar[gLesson(g)]).map(g => `<a href="#bai-${gLesson(g)}" title="Xem mẫu ${g}">${g}</a>`).join("");
+        h += `</div><div class="fb"><span class="mark"></span>${it.full ? `<span class="full">${esc(it.full)}</span><br>` : ""}${esc(it.e || "")}${tags ? `<span class="tags">${tags}</span>` : ""}</div></div>`;
+      });
+      h += `</section>`;
+    });
+    h += `<div class="pager"><a class="btn" href="#bai-${t.lessons[0]}">← Ôn bài ${t.lessons[0]}–${t.lessons[1]}</a>${id < 5 ? `<a class="btn" href="#de-${id + 1}">Đề ${id + 1} →</a>` : ""}</div>`;
+    app.innerHTML = h;
+    document.documentElement.style.setProperty("--hh", document.querySelector("header.top").offsetHeight + "px");
+
+    const total = all.length;
+    function refresh() {
+      const c = Object.keys(saved.ans).length;
+      document.getElementById("prog").style.width = (100 * c / total) + "%";
+      document.getElementById("cnt").textContent = `${c}/${total} câu`;
+    }
+    function grade() {
+      let score = 0; const per = {}; const weak = new Set();
+      all.forEach(({ qid, it, part }) => {
+        const box = app.querySelector(`[data-q="${qid}"]`), chosen = saved.ans[qid];
+        per[part] = per[part] || [0, 0]; per[part][1]++;
+        const ok = chosen === it.a;
+        if (ok) { score++; per[part][0]++; } else (it.g || []).forEach(g => weak.add(g));
+        box.classList.add("done");
+        box.querySelectorAll(".opt").forEach((l, oi) => {
+          l.classList.toggle("correct", oi === it.a);
+          l.classList.toggle("wrong", oi === chosen && !ok);
+          l.querySelector("input").disabled = true;
+        });
+        const m = box.querySelector(".mark");
+        m.className = "mark " + (ok ? "ok" : "no");
+        m.textContent = ok ? "Đúng." : chosen === undefined ? `Chưa trả lời · đáp án ${it.a + 1}.` : `Sai · đáp án ${it.a + 1}.`;
+      });
+      saved.done = true; saved.score = score; store.set(key, saved);
+      const pct = Math.round(100 * score / total);
+      const weakList = [...weak].filter(g => D.grammar[gLesson(g)]).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+      document.getElementById("res").innerHTML = `<div class="result"><div><span class="eyebrow">Kết quả</span><div class="score">${score}/${total} · ${pct}%</div></div>
+        <div class="parts">${Object.entries(per).map(([p, v]) => `<span>${PARTS[p]} <b>${v[0]}/${v[1]}</b></span>`).join("")}</div>
+        ${weakList.length ? `<div><span class="eyebrow">Mẫu ngữ pháp nên ôn lại</span><div class="weak">${weakList.map(g => `<a href="#bai-${gLesson(g)}">${g}</a>`).join("")}</div></div>` : `<div>Không sai câu nào về ngữ pháp. Rất tốt!</div>`}</div>`;
+      document.getElementById("submit").disabled = true;
+    }
+    app.onchange = e => {
+      const inp = e.target.closest('input[type="radio"]');
+      if (!inp || saved.done) return;
+      saved.ans[inp.closest(".q").dataset.q] = Number(inp.value);
+      store.set(key, saved); refresh();
+    };
+    document.getElementById("submit").addEventListener("click", () => {
+      grade();
+      document.getElementById("res").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    document.getElementById("reset").addEventListener("click", () => {
+      store.set(key, { ans: {}, done: false });
+      test(id);
+    });
+    refresh();
+    if (saved.done) grade();
+  }
+
+  function route() {
+    app.onchange = null;
+    const h = location.hash.replace("#", "");
+    let m;
+    if ((m = h.match(/^bai-(\d+)$/)) && +m[1] >= 1 && +m[1] <= 25) lesson(+m[1]);
+    else if ((m = h.match(/^de-(\d)$/)) && +m[1] >= 1 && +m[1] <= 5) test(+m[1]);
+    else home();
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener("hashchange", route);
+  route();
+})();
+</script>

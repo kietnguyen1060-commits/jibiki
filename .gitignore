@@ -1,0 +1,16 @@
+# Dữ liệu trích từ deck Anki (nội dung sách Kanji Look and Learn, từ vựng Minna no Nihongo):
+# giữ trên máy, không đưa lên repo công khai.
+kanji-app/app/data/app-data.js
+kanji-app/app/minna/
+kanji-app/tools/extra_source.json
+minna-n5/data/vocab.json
+minna-n4/data/vocab.json
+minna-n5/dist/
+minna-n4/dist/
+
+# Tệp tải về và tệp sinh ra (tạo lại bằng các script trong tools/).
+kanji-app/_dl/
+kanji-app/_build/
+
+__pycache__/
+*.pyc

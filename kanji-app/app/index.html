@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tra Kanji</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%232c4a8a'/%3E%3Ctext x='32' y='46' font-size='40' text-anchor='middle' fill='white' font-family='serif'%3E字%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Old+Mincho:wght@600;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap bar-top">
+    <a class="brand" href="#lookup"><b>字</b><span>Tra Kanji</span></a>
+    <nav class="tabs" aria-label="Chế độ">
+      <a href="#lookup" data-tab="lookup">Tra cứu</a>
+      <a href="#study" data-tab="study">Học với Anki</a>
+      <a href="#minna-n5" data-tab="minna-n5">Minna N5</a>
+      <a href="#minna-n4" data-tab="minna-n4">Minna N4</a>
+    </nav>
+    <span class="anki-pill" id="ankiPill" title="Trạng thái kết nối với Anki">Đang kết nối Anki…</span>
+  </div>
+</header>
+
+<main>
+  <!-- Tra cứu -->
+  <section class="view wrap" id="view-lookup">
+    <div class="lookup">
+      <aside class="board">
+        <div class="board-head">
+          <h2>Bảng trắng</h2>
+          <span class="hint">Viết một chữ, không cần đúng thứ tự nét</span>
+        </div>
+        <div class="canvas-box">
+          <canvas id="pad" aria-label="Vùng vẽ kanji"></canvas>
+          <canvas id="can" width="300" height="300" hidden></canvas>
+          <div class="guide" aria-hidden="true"></div>
+        </div>
+        <div class="board-actions">
+          <button class="btn" id="undo" type="button">↶ Xóa nét cuối</button>
+          <button class="btn" id="clear" type="button">Xóa hết</button>
+        </div>
+        <div class="cands" id="cands" aria-live="polite"><span class="muted">Chữ gợi ý sẽ hiện ở đây.</span></div>
+        <label class="search">
+          <span>Hoặc gõ để tìm</span>
+          <input type="search" id="q" placeholder="後, hậu, sau, うし, 41…" autocomplete="off">
+        </label>
+        <div class="results" id="results"></div>
+        <p class="recent-label" id="recentLabel" hidden>Vừa tra</p>
+        <div class="recent" id="recent"></div>
+      </aside>
+      <article class="card-area" id="card"></article>
+    </div>
+  </section>
+
+  <!-- Học với Anki -->
+  <section class="view wrap" id="view-study" hidden>
+    <div id="study"></div>
+  </section>
+
+  <!-- Minna -->
+  <section class="view minna" id="view-minna" hidden>
+    <iframe id="minnaFrame" title="Bộ tài liệu Minna no Nihongo"></iframe>
+  </section>
+</main>
+
+<script src="lib/kanjicanvas/kanji-canvas.js"></script>
+<script src="lib/kanjicanvas/ref-patterns.js"></script>
+<script src="data/app-data.js"></script>
+<script src="data/strokes.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

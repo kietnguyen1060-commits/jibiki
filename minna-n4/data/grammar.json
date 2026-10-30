@@ -1,0 +1,158 @@
+{
+"26": [
+ {"id":"26-1","p":"Thể thông thường ＋ んです","m":"Giải thích, hỏi lý do, nhấn mạnh","n":"N/なAdj dùng ～なんです. Hỏi: ～んですか; trả lời lý do: ～んです.","ex":[["どうして 遅れたんですか。…バスが 来なかったんです。","Sao anh đến muộn? …Vì xe buýt không đến."],["頭が 痛いんです。","Tôi bị đau đầu."]]},
+ {"id":"26-2","p":"～んですが、Vて いただけませんか","m":"…, anh/chị có thể làm V giúp tôi không?","n":"んですが mở đầu tình huống, sau đó nhờ vả rất lịch sự.","ex":[["日本語で 手紙を 書いたんですが、ちょっと 見て いただけませんか。","Tôi viết thư bằng tiếng Nhật, anh xem giúp tôi được không?"]]},
+ {"id":"26-3","p":"Từ để hỏi ＋ Vたら いいですか","m":"Nên làm V như thế nào / ở đâu…?","n":"Xin lời khuyên, chỉ dẫn.","ex":[["どこで カメラを 買ったら いいですか。","Nên mua máy ảnh ở đâu thì được?"]]},
+ {"id":"26-4","p":"N（tân ngữ）は 好きです／上手です／あります…","m":"Dùng は thay が để làm chủ đề","n":"Đối tượng của 好き、上手、あります… có thể được đưa lên làm chủ đề bằng は.","ex":[["運動会に 参加しますか。…いいえ、スポーツは あまり 好きじゃないんです。","Bạn có tham gia hội thao không? …Không, tôi không thích thể thao lắm."]]}
+],
+"27": [
+ {"id":"27-1","p":"Động từ khả năng（可能動詞）","m":"Có thể làm V","n":"Nhóm I: đổi âm cuối hàng い→え (書きます→書けます). Nhóm II: ～られます (食べられます). Nhóm III: できます、来られます. Đối tượng thường dùng が.","ex":[["わたしは 日本語が 話せます。","Tôi nói được tiếng Nhật."],["あした 来られますか。","Ngày mai bạn đến được không?"]]},
+ {"id":"27-2","p":"見えます／聞こえます","m":"Nhìn thấy / nghe thấy (tự nhiên)","n":"Diễn tả việc tự nhiên nhìn thấy, nghe thấy; đối tượng dùng が.","ex":[["部屋から 海が 見えます。","Từ phòng nhìn thấy biển."],["鳥の 声が 聞こえます。","Nghe thấy tiếng chim."]]},
+ {"id":"27-3","p":"N が できます","m":"Được làm xong, hoàn thành, mọc lên","n":"できます còn có nghĩa là được xây dựng, hoàn thành.","ex":[["駅の 前に 大きい スーパーが できました。","Trước ga đã mọc lên một siêu thị lớn."]]},
+ {"id":"27-4","p":"N しか ＋ phủ định","m":"Chỉ… (không hơn)","n":"Nhấn mạnh sự ít ỏi; động từ luôn ở dạng phủ định.","ex":[["ローマ字しか 書けません。","Tôi chỉ viết được chữ La-tinh."]]},
+ {"id":"27-5","p":"N は (đối chiếu)／Trợ từ ＋ は・も","m":"Còn N thì…","n":"は dùng để so sánh, đối chiếu hai sự việc; に・で・へ・から… + は／も.","ex":[["ワインは 飲みますが、ビールは 飲みません。","Rượu vang thì tôi uống, còn bia thì không."],["ここでは 写真が 撮れません。","Ở đây thì không chụp ảnh được."]]}
+],
+"28": [
+ {"id":"28-1","p":"Vます（bỏ ます）＋ ながら","m":"Vừa làm V1 vừa làm V2","n":"Hành động chính đặt ở vế sau.","ex":[["音楽を 聞きながら、食事します。","Vừa nghe nhạc vừa ăn."],["働きながら、日本語を 勉強しています。","Vừa đi làm vừa học tiếng Nhật."]]},
+ {"id":"28-2","p":"Vて います (thói quen)","m":"Thường xuyên làm V","n":"Hành động lặp đi lặp lại trong một thời gian dài.","ex":[["毎朝 ジョギングを しています。","Sáng nào tôi cũng chạy bộ."]]},
+ {"id":"28-3","p":"Thể thông thường ＋ し、～し","m":"Vừa… vừa… (liệt kê lý do)","n":"Liệt kê nhiều lý do hoặc tính chất.","ex":[["この 店は 安いし、おいしいし、よく 来ます。","Quán này vừa rẻ vừa ngon nên tôi hay đến."]]},
+ {"id":"28-4","p":"それに／それで","m":"Hơn nữa / Vì vậy","n":"それに thêm ý; それで nối kết quả.","ex":[["駅に 近いし、それに 安いです。","Gần ga, hơn nữa lại rẻ."],["それで、この 店に 決めました。","Vì vậy tôi chọn quán này."]]}
+],
+"29": [
+ {"id":"29-1","p":"Vて います (trạng thái kết quả)","m":"Đang ở trạng thái…","n":"Với tự động từ: 窓が 開いています、電気が ついています、ガラスが 割れています.","ex":[["窓が 閉まっています。","Cửa sổ đang đóng."],["この いすは 壊れています。","Cái ghế này bị hỏng."]]},
+ {"id":"29-2","p":"Vて しまいました／しまいます","m":"Đã làm xong hẳn / lỡ làm mất…","n":"Nhấn mạnh sự hoàn tất hoặc sự đáng tiếc.","ex":[["宿題は もう やって しまいました。","Bài tập tôi đã làm xong hết rồi."],["電車に 傘を 忘れて しまいました。","Tôi lỡ để quên ô trên tàu."]]},
+ {"id":"29-3","p":"N が ありました (phát hiện)","m":"Ồ, có… / tìm thấy rồi","n":"Dùng thì quá khứ ありました khi vừa phát hiện, tìm thấy vật đã mất.","ex":[["［かばんが］ ありましたよ。","[Cái cặp] có đây rồi."]]},
+ {"id":"29-4","p":"Tự động từ / Tha động từ","m":"Cặp động từ: 開きます／開けます…","n":"Tự động từ đi với が (ドアが 開きます), tha động từ đi với を (ドアを 開けます).","ex":[["風で ドアが 閉まりました。","Cửa đóng lại do gió."],["わたしが ドアを 閉めました。","Tôi đã đóng cửa."]]},
+ {"id":"29-5","p":"どこかで／どこかに","m":"Ở đâu đó","n":"Không bỏ trợ từ で、に sau どこか.","ex":[["どこかで 財布を なくして しまいました。","Tôi đã làm mất ví ở đâu đó."]]}
+],
+"30": [
+ {"id":"30-1","p":"N が Vて あります","m":"(Ai đó) đã làm V và để nguyên trạng thái","n":"Dùng tha động từ; nhấn mạnh trạng thái là kết quả có chủ ý.","ex":[["机の 上に メモが 置いて あります。","Trên bàn có để sẵn mẩu ghi chú."],["カレンダーに 予定が 書いて あります。","Lịch có ghi sẵn kế hoạch."]]},
+ {"id":"30-2","p":"Vて おきます","m":"Làm sẵn, làm trước / để nguyên","n":"Chuẩn bị trước cho việc sau, hoặc giữ nguyên trạng thái.","ex":[["旅行の まえに、切符を 買って おきます。","Trước khi đi du lịch tôi mua sẵn vé."],["はさみを 使ったら、元の 所に 戻して おいて ください。","Dùng kéo xong hãy để lại chỗ cũ."]]},
+ {"id":"30-3","p":"まだ Vて います","m":"Vẫn còn đang…","n":"Trạng thái còn tiếp diễn.","ex":[["雨は まだ 降って います。","Trời vẫn còn mưa."]]},
+ {"id":"30-4","p":"～とか、～とか","m":"Nào là…, nào là…","n":"Liệt kê ví dụ (văn nói).","ex":[["ナイフとか、はさみとか、危ない 物は 子どもの 手が 届かない 所に 置いて おきます。","Dao, kéo… những đồ nguy hiểm tôi để chỗ trẻ không với tới."]]}
+],
+"31": [
+ {"id":"31-1","p":"Thể ý chí（意向形）","m":"Cách chia: 書こう、食べよう、しよう、来よう","n":"Nhóm I: âm cuối hàng い→お + う. Nhóm II: bỏ ます + よう. Nhóm III: しよう、来（こ）よう. Thân mật: ～ましょう → ～よう.","ex":[["ちょっと 休もう。","Nghỉ một chút đi."],["いっしょに 帰ろう。","Cùng về thôi."]]},
+ {"id":"31-2","p":"Vよう と 思って います","m":"Tôi định làm V","n":"Diễn tả dự định đã hình thành từ trước.","ex":[["週末は 海へ 行こうと 思って います。","Cuối tuần tôi định đi biển."]]},
+ {"id":"31-3","p":"V る／Vない つもりです","m":"Dự định (không) làm V","n":"Ý định chắc chắn hơn ～ようと思っています.","ex":[["国へ 帰っても、柔道を 続ける つもりです。","Dù về nước tôi vẫn định tiếp tục học judo."],["あしたからは たばこを 吸わない つもりです。","Từ mai tôi định không hút thuốc."]]},
+ {"id":"31-4","p":"V る／N の 予定です","m":"Theo kế hoạch thì…","n":"Kế hoạch đã được quyết định.","ex":[["7月の 終わりに ドイツへ 出張する 予定です。","Theo kế hoạch cuối tháng 7 tôi đi công tác Đức."],["旅行は 1週間ぐらいの 予定です。","Chuyến đi dự kiến khoảng 1 tuần."]]},
+ {"id":"31-5","p":"まだ Vて いません","m":"Vẫn chưa làm V","n":"Việc dự kiến nhưng chưa thực hiện.","ex":[["銀行は まだ 開いて いません。","Ngân hàng vẫn chưa mở cửa."]]}
+],
+"32": [
+ {"id":"32-1","p":"Vた／Vない ほうが いいです","m":"Nên / không nên làm V","n":"Lời khuyên.","ex":[["毎日 運動した ほうが いいです。","Nên tập thể dục mỗi ngày."],["熱が あるんです。…じゃ、おふろに 入らない ほうが いいですよ。","Tôi bị sốt. …Vậy không nên tắm bồn."]]},
+ {"id":"32-2","p":"Thể thông thường ＋ でしょう (dự đoán)","m":"Có lẽ, chắc là","n":"N/なAdj bỏ だ. Thường dùng trong dự báo thời tiết.","ex":[["あしたは 雨が 降るでしょう。","Ngày mai có lẽ trời mưa."]]},
+ {"id":"32-3","p":"Thể thông thường ＋ かも しれません","m":"Không chừng, có thể","n":"Khả năng thấp hơn でしょう. N/なAdj bỏ だ.","ex":[["約束の 時間に 間に合わないかも しれません。","Không chừng tôi sẽ không kịp giờ hẹn."]]},
+ {"id":"32-4","p":"きっと／たぶん／もしかしたら","m":"Chắc chắn / có lẽ / không chừng","n":"きっと đi với でしょう (độ chắc cao); もしかしたら đi với かもしれません.","ex":[["もしかしたら 3月に 卒業できないかも しれません。","Không chừng tháng 3 tôi không tốt nghiệp được."]]},
+ {"id":"32-5","p":"何か ＋ なAdj な こと／いAdj こと","m":"Điều gì đó (tính chất)…","n":"何か + Adj な こと／Adj こと: điều gì đó…","ex":[["何か 心配な ことが あるんですか。","Bạn có điều gì lo lắng à?"]]}
+],
+"33": [
+ {"id":"33-1","p":"Thể mệnh lệnh / cấm chỉ（命令形・禁止形）","m":"Hãy làm! / Cấm làm!","n":"Mệnh lệnh: 書け、食べろ、しろ、来い. Cấm: V る + な (書くな). Dùng trong khẩu hiệu, biển báo, cổ vũ, lời nam giới.","ex":[["急げ。","Nhanh lên!"],["ここに 車を 止めるな。","Không được đỗ xe ở đây!"]]},
+ {"id":"33-2","p":"X は Y と 読みます／書いて あります","m":"X đọc là Y / có viết là Y","n":"Trích dẫn cách đọc, nội dung ghi trên biển.","ex":[["あの 漢字は 何と 読むんですか。…「きんえん」です。","Chữ Hán kia đọc là gì? …Là \"kin'en\"."],["あそこに 「止まれ」と 書いて あります。","Ở kia có ghi là \"Dừng lại\"."]]},
+ {"id":"33-3","p":"X は Y という 意味です","m":"X có nghĩa là Y","n":"Hỏi nghĩa: X は どういう 意味ですか.","ex":[["「立入禁止」は 入るなと いう 意味です。","\"Tachiiri kinshi\" nghĩa là cấm vào."]]},
+ {"id":"33-4","p":"「S」／Thể thông thường と 言って いました","m":"(Ai đó) đã nói là…","n":"Truyền lại lời người thứ ba.","ex":[["田中さんは 「あした 休みます」と 言って いました。","Anh Tanaka bảo là mai anh ấy nghỉ."]]},
+ {"id":"33-5","p":"Thể thông thường と 伝えて いただけませんか","m":"Nhắn giúp tôi rằng…","n":"Nhờ chuyển lời.","ex":[["すみませんが、田中さんに 「あとで 電話を ください」と 伝えて いただけませんか。","Xin lỗi, nhắn giúp tôi với anh Tanaka là \"lát nữa gọi lại\" được không?"]]}
+],
+"34": [
+ {"id":"34-1","p":"Vた／N の とおりに、V","m":"Làm V theo đúng như…","n":"Làm theo cách đã thấy, đã nghe, đã viết.","ex":[["わたしが やった とおりに、やって ください。","Hãy làm đúng như tôi đã làm."],["線の とおりに、紙を 切って ください。","Hãy cắt giấy theo đường kẻ."]]},
+ {"id":"34-2","p":"Vた／N の あとで、～","m":"Sau khi…","n":"Thứ tự thời gian rõ ràng.","ex":[["新しいのを 買った あとで、なくした 時計が 見つかりました。","Sau khi mua cái mới thì tìm thấy cái đồng hồ đã mất."],["仕事の あとで、飲みに 行きませんか。","Sau giờ làm đi uống không?"]]},
+ {"id":"34-3","p":"Vて／Vないで V (cách thức)","m":"Làm V2 trong trạng thái V1 / không V1","n":"Diễn tả cách thực hiện hành động chính.","ex":[["しょうゆを つけて 食べます。","Chấm xì dầu rồi ăn."],["しょうゆを つけないで 食べます。","Ăn mà không chấm xì dầu."]]},
+ {"id":"34-4","p":"Vないで、V (thay vì)","m":"Không làm V1 mà làm V2","n":"Chọn một trong hai hành động.","ex":[["日曜日は どこも 行かないで、うちで ゆっくり 休みます。","Chủ nhật tôi không đi đâu mà ở nhà nghỉ ngơi."]]}
+],
+"35": [
+ {"id":"35-1","p":"Thể điều kiện ば","m":"Nếu…","n":"V: 書けば、食べれば、すれば、来れば. いAdj: ～ければ. なAdj/N: ～なら. Phủ định: ～なければ.","ex":[["ボタンを 押せば、窓が 開きます。","Ấn nút thì cửa sổ mở."],["時間が なければ、テレビを 見ません。","Nếu không có thời gian thì tôi không xem tivi."]]},
+ {"id":"35-2","p":"N なら、～","m":"Nếu là N thì… (chủ đề)","n":"Tiếp nhận chủ đề người nghe nêu ra và đưa thông tin.","ex":[["温泉に 行きたいんですが、どこか いい 所は ありませんか。…温泉なら、白馬が いいですよ。","Tôi muốn đi suối nước nóng… …Nếu là suối nước nóng thì Hakuba hay đấy."]]},
+ {"id":"35-3","p":"Từ để hỏi ＋ Vば いいですか","m":"Phải làm thế nào thì được?","n":"Tương tự ～たら いいですか.","ex":[["どう すれば いいですか。","Làm thế nào thì được?"]]},
+ {"id":"35-4","p":"～ば ～ほど","m":"Càng… càng…","n":"Lặp lại cùng một từ: ば-form + từ điển + ほど.","ex":[["パソコンは 使えば 使うほど 上手に なります。","Máy tính càng dùng càng giỏi."]]}
+],
+"36": [
+ {"id":"36-1","p":"V る／Vない ように、～","m":"Để (có thể) …","n":"Dùng với động từ không chủ ý, khả năng, phủ định.","ex":[["早く 泳げる ように、毎日 練習して います。","Tôi tập mỗi ngày để có thể bơi nhanh."],["忘れない ように、メモして ください。","Hãy ghi lại để không quên."]]},
+ {"id":"36-2","p":"V る ように なります","m":"Trở nên có thể…","n":"Diễn tả sự thay đổi năng lực, thói quen. Phủ định: ～なく なりました.","ex":[["毎日 練習すれば、泳げる ように なります。","Tập mỗi ngày thì sẽ bơi được."],["最近は あまり 本を 読まなく なりました。","Dạo này tôi không còn đọc sách nhiều."]]},
+ {"id":"36-3","p":"V る／Vない ように して います","m":"Cố gắng (không) làm V","n":"Nỗ lực duy trì thói quen.","ex":[["毎日 運動して、甘い 物を 食べない ように して います。","Tôi cố tập thể dục mỗi ngày và không ăn đồ ngọt."]]},
+ {"id":"36-4","p":"V る／Vない ように して ください","m":"Xin hãy cố gắng (không) …","n":"Lời đề nghị lịch sự, gián tiếp hơn ～てください.","ex":[["あしたは 絶対に 遅れない ように して ください。","Ngày mai nhất định đừng đến muộn."]]}
+],
+"37": [
+ {"id":"37-1","p":"Bị động: N1（người）は N2 に V られます","m":"N1 bị / được N2 làm V","n":"Nhóm I: hàng い→あ + れます (呼ばれます). Nhóm II: ～られます. Nhóm III: されます、来られます.","ex":[["わたしは 先生に 褒められました。","Tôi được thầy khen."]]},
+ {"id":"37-2","p":"N1 は N2 に N3 を V られます","m":"N1 bị N2 làm V vào N3 (vật sở hữu)","n":"Thường mang nghĩa bị làm phiền, thiệt hại.","ex":[["わたしは 弟に パソコンを 壊されました。","Tôi bị em trai làm hỏng máy tính."]]},
+ {"id":"37-3","p":"N（vật, sự việc）が／は V られます","m":"N được V (không cần nêu người làm)","n":"Nói về sự kiện, sản phẩm, công trình xã hội.","ex":[["大阪で 展覧会が 開かれます。","Triển lãm được tổ chức ở Osaka."],["この 車は 世界中へ 輸出されて います。","Xe này được xuất khẩu ra toàn thế giới."]]},
+ {"id":"37-4","p":"N は N（người）に よって V られます","m":"Được tạo ra / phát minh bởi…","n":"Dùng với 書きます、発明します、発見します、作ります…","ex":[["「源氏物語」は 紫式部に よって 書かれました。","\"Truyện Genji\" do Murasaki Shikibu viết."]]},
+ {"id":"37-5","p":"N から／N で つくられます","m":"Được làm từ (nguyên liệu)","n":"から: nguyên liệu biến đổi (không nhìn thấy); で: chất liệu còn nhận ra.","ex":[["ビールは 麦から 造られます。","Bia được làm từ lúa mạch."],["昔 日本の 家は 木で 造られました。","Ngày xưa nhà Nhật làm bằng gỗ."]]}
+],
+"38": [
+ {"id":"38-1","p":"V る の は Adj です","m":"Việc làm V thì (tính từ)","n":"の danh từ hóa động từ.","ex":[["テニスは おもしろいです。テニスを するのは おもしろいです。","Chơi tennis thì thú vị."]]},
+ {"id":"38-2","p":"V る の が 好きです／上手です／速いです…","m":"Thích / giỏi việc làm V","n":"Đối tượng của tính từ cảm xúc, năng lực.","ex":[["わたしは 花を 育てるのが 好きです。","Tôi thích trồng hoa."]]},
+ {"id":"38-3","p":"V る の を 忘れました","m":"Quên làm V","n":"の danh từ hóa làm tân ngữ.","ex":[["窓を 閉めるのを 忘れました。","Tôi quên đóng cửa sổ."]]},
+ {"id":"38-4","p":"Thể thông thường の を 知って いますか","m":"Bạn có biết việc… không?","n":"Hỏi người nghe có biết thông tin.","ex":[["鈴木さんが 来月 結婚するのを 知って いますか。","Bạn có biết anh Suzuki tháng sau kết hôn không?"]]},
+ {"id":"38-5","p":"Thể thông thường の は N です","m":"Cái mà… là N (nhấn mạnh)","n":"Đưa thông tin muốn nhấn mạnh về cuối câu.","ex":[["初めて 会ったのは いつですか。…3年まえです。","Lần đầu gặp là khi nào? …3 năm trước."]]}
+],
+"39": [
+ {"id":"39-1","p":"Vて／Vなくて／いAdj くて／なAdj で、～ (nguyên nhân cảm xúc)","m":"Vì… nên (cảm thấy)…","n":"Vế sau là cảm xúc, trạng thái, không phải ý chí.","ex":[["ニュースを 聞いて、びっくりしました。","Nghe tin tức tôi giật mình."],["家族に 会えなくて、寂しいです。","Không gặp được gia đình nên buồn."]]},
+ {"id":"39-2","p":"N で (nguyên nhân)","m":"Vì / do N","n":"N là sự kiện, hiện tượng: 地震、事故、病気…","ex":[["地震で ビルが 倒れました。","Tòa nhà sập vì động đất."]]},
+ {"id":"39-3","p":"Thể thông thường ＋ ので、～","m":"Vì… nên…","n":"Nhẹ nhàng, khách quan hơn から; なAdj/N: ～なので.","ex":[["用事が あるので、お先に 失礼します。","Vì có việc nên tôi xin phép về trước."]]},
+ {"id":"39-4","p":"途中で","m":"Giữa đường, giữa chừng","n":"V る／N の 途中で.","ex":[["実は 来る 途中で 事故が あって、バスが 遅れて しまったんです。","Thật ra trên đường đến có tai nạn nên xe buýt bị trễ."]]}
+],
+"40": [
+ {"id":"40-1","p":"Từ để hỏi ＋ Thể thông thường か、～","m":"Câu hỏi gián tiếp có từ để hỏi","n":"N/なAdj bỏ だ.","ex":[["JL107便は 何時に 到着するか、調べて ください。","Hãy kiểm tra chuyến JL107 đến lúc mấy giờ."]]},
+ {"id":"40-2","p":"Thể thông thường ＋ か どうか、～","m":"… hay không","n":"Câu hỏi gián tiếp không có từ để hỏi.","ex":[["忘年会に 出席するか どうか、20日までに 返事を ください。","Hãy trả lời trước ngày 20 có dự tiệc cuối năm hay không."]]},
+ {"id":"40-3","p":"Vて みます","m":"Thử làm V","n":"Làm thử để biết.","ex":[["この ズボンを はいて みても いいですか。","Tôi mặc thử cái quần này được không?"]]},
+ {"id":"40-4","p":"いAdj（～い）→ ～さ","m":"Danh từ hóa tính từ","n":"長い→長さ、高い→高さ、重い→重さ; いい→よさ.","ex":[["山の 高さは どのくらいですか。","Ngọn núi cao bao nhiêu?"]]},
+ {"id":"40-5","p":"～でしょうか","m":"…không ạ? (hỏi lịch sự)","n":"Hỏi một cách mềm mỏng.","ex":[["ハンスは 学校で どうでしょうか。","Hans ở trường thế nào ạ?"]]}
+],
+"41": [
+ {"id":"41-1","p":"いただきます／くださいます／やります","m":"Cho nhận kính ngữ","n":"いただきます: nhận từ người trên. くださいます: người trên cho mình. やります: cho người dưới, động vật, cây.","ex":[["わたしは 社長に お土産を いただきました。","Tôi nhận quà từ giám đốc."],["社長が わたしに お土産を くださいました。","Giám đốc tặng quà cho tôi."],["わたしは 犬に えさを やりました。","Tôi cho chó ăn."]]},
+ {"id":"41-2","p":"Vて いただきます／くださいます／やります","m":"Được làm cho / làm cho (kính ngữ)","n":"Hành động làm vì người khác với quan hệ trên dưới.","ex":[["わたしは 課長に 手紙の まちがいを 直して いただきました。","Tôi được trưởng phòng sửa giúp lỗi trong thư."],["部長の 奥さんが お茶を 教えて くださいました。","Vợ trưởng phòng đã dạy tôi trà đạo."],["わたしは 息子に 紙飛行機を 作って やりました。","Tôi làm máy bay giấy cho con trai."]]},
+ {"id":"41-3","p":"Vて くださいませんか","m":"Anh/chị có thể làm V giúp không ạ?","n":"Nhờ vả lịch sự hơn ～てください.","ex":[["コピー機の 使い方を 教えて くださいませんか。","Anh chỉ giúp tôi cách dùng máy photo được không ạ?"]]},
+ {"id":"41-4","p":"N に V (mục đích tặng: お祝いに…)","m":"Làm V nhân dịp / để N","n":"に chỉ mục đích, dịp tặng.","ex":[["田中さんが 結婚の お祝いに この お皿を くださいました。","Anh Tanaka tặng cái đĩa này để mừng đám cưới."]]}
+],
+"42": [
+ {"id":"42-1","p":"V る／N の ために、～","m":"Để… / Vì (lợi ích của)…","n":"Mục đích có chủ ý (khác ように). N の ために còn nghĩa là vì lợi ích của N.","ex":[["自分の 店を 持つ ために、貯金して います。","Tôi để dành tiền để có cửa hàng riêng."],["家族の ために、うちを 建てます。","Tôi xây nhà vì gia đình."]]},
+ {"id":"42-2","p":"V る の に／N に 使います／いいです／便利です／役に立ちます／［時間］が かかります","m":"Dùng để / tốt cho / mất (để làm V)","n":"のに ở đây chỉ mục đích sử dụng.","ex":[["この はさみは 花を 切るのに 使います。","Cái kéo này dùng để cắt hoa."],["この 辞書は 漢字を 調べるのに 便利です。","Từ điển này tiện để tra chữ Hán."],["うちを 建てるのに 4,000万円 かかりました。","Xây nhà tốn 40 triệu yên."]]},
+ {"id":"42-3","p":"Số lượng ＋ は／も","m":"Ít nhất / tới những…","n":"は: ước lượng tối thiểu; も: nhấn mạnh nhiều.","ex":[["わたしは ［少なくとも］ 3時間は 勉強します。","Tôi học ít nhất 3 tiếng."],["わたしは ビールを 10本も 飲みました。","Tôi đã uống tới 10 chai bia."]]}
+],
+"43": [
+ {"id":"43-1","p":"Vます（bỏ ます）＋ そうです","m":"Có vẻ sắp…, trông như sắp…","n":"Dự đoán từ quan sát: 今にも 雨が 降りそうです.","ex":[["今にも 雨が 降りそうです。","Trời trông như sắp mưa đến nơi."]]},
+ {"id":"43-2","p":"いAdj（bỏ い）／なAdj ＋ そうです","m":"Trông có vẻ (tính từ)","n":"いい→よさそう、ない→なさそう. Không dùng cho tính từ nhìn là biết ngay (きれい、赤い).","ex":[["この 料理は 辛そうです。","Món này trông có vẻ cay."],["ミラーさんは うれしそうです。","Anh Miller trông có vẻ vui."]]},
+ {"id":"43-3","p":"Vて 来ます","m":"Đi làm V rồi quay lại","n":"Đi đâu đó làm việc rồi trở về.","ex":[["ちょっと たばこを 買って 来ます。","Tôi đi mua thuốc lá một chút rồi về."]]},
+ {"id":"43-4","p":"Vて くれませんか","m":"Làm V giúp tôi được không?","n":"Nhờ vả thân mật hơn ～てくださいませんか.","ex":[["ちょっと 手伝って くれませんか。","Giúp tôi một chút được không?"]]}
+],
+"44": [
+ {"id":"44-1","p":"Vます（bỏ ます）／Adj（bỏ い・な）＋ すぎます","m":"Quá…","n":"Mức độ vượt quá, thường mang ý không tốt.","ex":[["ゆうべ お酒を 飲みすぎました。","Tối qua tôi uống quá nhiều rượu."],["この セーターは 大きすぎます。","Áo len này rộng quá."]]},
+ {"id":"44-2","p":"Vます（bỏ ます）＋ やすいです／にくいです","m":"Dễ / khó làm V","n":"Chia như tính từ đuôi い.","ex":[["この パソコンは 使いやすいです。","Máy tính này dễ dùng."],["白い シャツは 汚れやすいです。","Áo sơ mi trắng dễ bẩn."]]},
+ {"id":"44-3","p":"いAdj（～い）→ ～く／なAdj → ～に／N に します","m":"Làm cho (trở nên)…","n":"Chủ thể tác động thay đổi trạng thái (khác なります).","ex":[["音を 大きく します。","Tôi làm âm thanh to lên."],["部屋を きれいに します。","Tôi làm cho phòng sạch sẽ."],["半分に します。","Chia làm đôi."]]},
+ {"id":"44-4","p":"N に します (chọn, quyết định)","m":"Chọn N","n":"Diễn tả quyết định lựa chọn.","ex":[["部屋は シングルに しますか、ツインに しますか。","Anh chọn phòng đơn hay phòng đôi?"]]}
+],
+"45": [
+ {"id":"45-1","p":"V る／Vない／Vた／いAdj／なAdj な／N の ＋ 場合は、～","m":"Trong trường hợp…","n":"Giả định một tình huống và cách xử lý.","ex":[["会議に 間に合わない 場合は、連絡して ください。","Trường hợp không kịp họp thì hãy liên lạc."],["火事の 場合は、エレベーターを 使わないで ください。","Khi có hỏa hoạn đừng dùng thang máy."]]},
+ {"id":"45-2","p":"Thể thông thường ＋ のに、～","m":"Vậy mà…, mặc dù…","n":"Kết quả trái mong đợi, mang ý bất mãn, tiếc nuối. なAdj/N: ～なのに.","ex":[["約束を したのに、彼女は 来ませんでした。","Đã hẹn rồi vậy mà cô ấy không đến."],["きょうは 日曜日なのに、働かなければ なりません。","Hôm nay chủ nhật vậy mà vẫn phải làm việc."]]}
+],
+"46": [
+ {"id":"46-1","p":"V る ところです","m":"Sắp sửa làm V","n":"Ngay trước khi bắt đầu hành động.","ex":[["昼ごはんは もう 食べましたか。…いいえ、これから 食べる ところです。","Ăn trưa chưa? …Chưa, giờ tôi sắp ăn."]]},
+ {"id":"46-2","p":"Vて いる ところです","m":"Đang làm V (đúng lúc này)","n":"Hành động đang diễn ra.","ex":[["故障の 原因が わかりましたか。…いいえ、今 調べて いる ところです。","Tìm ra nguyên nhân hỏng chưa? …Chưa, đang kiểm tra đây."]]},
+ {"id":"46-3","p":"Vた ところです","m":"Vừa mới làm V xong","n":"Ngay sau khi hành động kết thúc.","ex":[["渡辺さんは いますか。…あ、たった今 帰った ところです。","Chị Watanabe có đây không? …À, chị ấy vừa mới về."]]},
+ {"id":"46-4","p":"Vた ばかりです","m":"Vừa mới…","n":"Cảm nhận chủ quan rằng thời gian còn ngắn (có thể vài tháng).","ex":[["木村さんは 先月 この 会社に 入った ばかりです。","Chị Kimura mới vào công ty tháng trước."]]},
+ {"id":"46-5","p":"Thể thông thường ＋ はずです","m":"Chắc chắn là…, lẽ ra…","n":"Phán đoán có căn cứ. なAdj: ～なはず; N: ～のはず.","ex":[["ミラーさんは きょう 来るでしょうか。…来る はずですよ。きのう 電話が ありましたから。","Hôm nay anh Miller có đến không? …Chắc chắn đến, vì hôm qua anh ấy gọi điện."]]}
+],
+"47": [
+ {"id":"47-1","p":"Thể thông thường ＋ そうです (truyền đạt)","m":"Nghe nói là…","n":"Truyền đạt thông tin nghe được; nguồn: ～によると.","ex":[["天気予報に よると、あしたは 寒く なるそうです。","Theo dự báo thời tiết, nghe nói mai trời sẽ lạnh."]]},
+ {"id":"47-2","p":"Thể thông thường ＋ ようです","m":"Có vẻ như…","n":"Suy đoán dựa trên quan sát, cảm nhận. なAdj: ～なようです; N: ～のようです.","ex":[["人が 大勢 集まって いますね。…事故のようですね。","Đông người tụ tập nhỉ. …Hình như có tai nạn."]]},
+ {"id":"47-3","p":"声／音／におい／味 が します","m":"Nghe thấy tiếng / có mùi / có vị","n":"Cảm nhận bằng giác quan.","ex":[["にぎやかな 声が しますね。","Nghe tiếng ồn ào nhỉ."],["この 料理は 変な 味が します。","Món này có vị lạ."]]}
+],
+"48": [
+ {"id":"48-1","p":"Thể sai khiến（使役）","m":"Cách chia: 行かせます、食べさせます、させます、来させます","n":"Nhóm I: hàng い→あ + せます. Nhóm II: bỏ ます + させます. Nhóm III: させます、来（こ）させます.","ex":[["部長は 部下を 大阪へ 出張させます。","Trưởng phòng bắt cấp dưới đi công tác Osaka."]]},
+ {"id":"48-2","p":"N（người）を V（tự động từ）させます","m":"Bắt / cho ai làm V","n":"Với tự động từ, người bị sai khiến dùng を.","ex":[["わたしは 娘を 自由に 遊ばせました。","Tôi cho con gái chơi tự do."]]},
+ {"id":"48-3","p":"N（người）に N を V（tha động từ）させます","m":"Bắt / cho ai làm V cái gì","n":"Với tha động từ, người bị sai khiến dùng に.","ex":[["わたしは 息子に 荷物を 持たせました。","Tôi bắt con trai mang hành lý."],["子どもに 好きな 本を 読ませます。","Tôi cho con đọc sách nó thích."]]},
+ {"id":"48-4","p":"Vさせて いただけませんか","m":"Cho phép tôi làm V được không ạ?","n":"Xin phép rất lịch sự.","ex":[["すみませんが、あした 休ませて いただけませんか。","Xin lỗi, cho phép tôi nghỉ ngày mai được không ạ?"]]}
+],
+"49": [
+ {"id":"49-1","p":"Tôn kính ngữ: V られます","m":"Kính ngữ dạng bị động","n":"Dùng hình thức bị động để tôn kính hành động của người trên.","ex":[["中村さんは 7時に 来られます。","Anh Nakamura sẽ đến lúc 7 giờ."],["お酒を やめられたんですか。","Ông đã bỏ rượu rồi ạ?"]]},
+ {"id":"49-2","p":"お Vます（bỏ ます）に なります","m":"Kính ngữ","n":"Lịch sự hơn ～られます; không dùng với động từ 1 âm tiết (見ます、寝ます) và nhóm III.","ex":[["社長は もう お帰りに なりました。","Giám đốc đã về rồi ạ."]]},
+ {"id":"49-3","p":"Động từ tôn kính đặc biệt","m":"いらっしゃいます、召し上がります、おっしゃいます、ご覧に なります、なさいます、ご存じです","n":"Thay thế động từ thường khi nói về hành động của người trên.","ex":[["ワット先生は 研究室に いらっしゃいます。","Thầy Watt đang ở phòng nghiên cứu."],["どうぞ 召し上がって ください。","Xin mời dùng."]]},
+ {"id":"49-4","p":"お Vます（bỏ ます）ください","m":"Xin mời…, xin vui lòng…","n":"Kính ngữ của ～てください.","ex":[["あちらで お待ち ください。","Xin vui lòng đợi ở đằng kia."]]},
+ {"id":"49-5","p":"～まして","m":"Dạng て trang trọng","n":"Dùng trong phát biểu, nói với người trên.","ex":[["ハンスが ゆうべ 熱を 出しまして、けさも まだ 下がらないんです。","Hans tối qua bị sốt, sáng nay vẫn chưa hạ."]]}
+],
+"50": [
+ {"id":"50-1","p":"お Vます（bỏ ます）します／ご N します","m":"Khiêm nhường ngữ","n":"Hạ thấp hành động của mình liên quan đến người trên.","ex":[["重そうですね。お持ちしましょうか。","Trông nặng nhỉ. Để tôi xách cho ạ."],["きょうの 予定を ご説明します。","Tôi xin giải thích lịch trình hôm nay."]]},
+ {"id":"50-2","p":"Động từ khiêm nhường đặc biệt","m":"参ります、おります、いただきます、申します、いたします、拝見します、伺います、存じます","n":"Dùng khi nói về hành động của bản thân hoặc người nhà mình.","ex":[["ミラーと 申します。","Tôi tên là Miller."],["あした 伺っても よろしいですか。","Ngày mai tôi đến thăm có được không ạ?"]]},
+ {"id":"50-3","p":"ございます／でございます","m":"Cách nói lịch sự của あります／です","n":"Dùng trong cửa hàng, khách sạn, phát biểu.","ex":[["電話は 階段の 横に ございます。","Điện thoại ở cạnh cầu thang ạ."],["こちらは ミラーで ございます。","Đây là Miller ạ."]]},
+ {"id":"50-4","p":"Thể khiêm nhường trong phát biểu / thư từ","m":"心から 感謝いたします…","n":"Kết hợp kính ngữ, khiêm nhường trong bài phát biểu trang trọng.","ex":[["皆様の おかげで、無事に 研修を 終える ことが できました。心から 感謝いたします。","Nhờ mọi người, tôi đã hoàn thành khóa tu nghiệp suôn sẻ. Xin chân thành cảm ơn."]]}
+]
+}
