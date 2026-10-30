@@ -88,6 +88,21 @@ h2 small { color: var(--muted); font-weight: 500; font-size: .85rem; }
 .g-pat { font-family: var(--font-jp); font-weight: 700; font-size: 1.05rem; }
 .g-mean { color: var(--muted); }
 .g-card p { margin: 0; }
+.chia { display: grid; gap: 4px; min-width: 0; }
+.chia > b { font-size: .85rem; color: var(--ai); }
+.chia-wrap { overflow-x: auto; }
+.chia table { border-collapse: collapse; width: 100%; font-size: .92rem; }
+.chia th { text-align: left; font-weight: 600; font-size: .8rem; color: var(--muted); background: var(--ai-soft); padding: 5px 10px; white-space: nowrap; }
+.chia td { padding: 6px 10px; border-top: 1px solid var(--line); vertical-align: top; font-family: "Be Vietnam Pro", var(--font-jp); line-height: 1.7; }
+.chia td:first-child { font-weight: 600; }
+.chia table.ngan td:first-child { white-space: nowrap; }
+@media (max-width: 640px) {
+  .chia thead { display: none; }
+  .chia tr { display: grid; gap: 2px; padding: 6px 0; border-top: 1px solid var(--line); }
+  .chia td { border: 0; padding: 0 10px; }
+}
+.luu { margin: 0; padding-left: 20px; display: grid; gap: 3px; font-size: .92rem; }
+.luu li::marker { color: var(--ai); }
 .ex { display: grid; gap: 4px; padding-left: 12px; border-left: 2px solid var(--line); }
 .ex .jp { font-size: 1rem; }
 .ex small { color: var(--muted); display: block; }
@@ -240,7 +255,7 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 660px; }
       <h2 id="sec-g">Ngữ pháp</h2><div class="grammar">`;
     gs.forEach(g => {
       h += `<article class="g-card"><header><span class="g-id">${g.id}</span><span class="g-pat">${esc(g.p)}</span><span class="g-mean">${esc(g.m)}</span></header>
-        <p>${esc(g.n)}</p><div class="ex">${g.ex.map(e => `<div><span class="jp">${esc(e[0])}</span><small>${esc(e[1])}</small></div>`).join("")}</div></article>`;
+        <p>${esc(g.n)}</p>${(g.bang || []).map(t => `<div class="chia"><b>${esc(t.t)}</b><div class="chia-wrap"><table${t.r.every(r => r[0].length <= 14) ? ' class="ngan"' : ""}><thead><tr>${t.h.map(c => `<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${t.r.map(r => `<tr>${r.map(c => `<td>${esc(c).replace(/ ／ /g, "<br>")}</td>`).join("")}</tr>`).join("")}</tbody></table></div></div>`).join("")}${g.luu ? `<ul class="luu">${g.luu.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}<div class="ex">${g.ex.map(e => `<div><span class="jp">${esc(e[0])}</span><small>${esc(e[1])}</small></div>`).join("")}</div></article>`;
     });
     h += `</div><h2 id="sec-k">Kanji <small>${ks.length ? "chữ N4 mới trong bài" : "bài này không có kanji mới, hãy ôn kanji các bài trước"}</small></h2>`;
     if (ks.length) {
