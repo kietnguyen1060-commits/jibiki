@@ -8,6 +8,7 @@ Cách dùng: py anki_update.py <bước...>
   media_sach         tải tranh cắt từ sách kll_book_*.png (sau khi chạy cat_tranh_sach.py)
   media_n3, media_n3_hinh  tải tranh sách N3–N2 và hình thành phần/nét của chữ mới
   n3n2               thêm chữ của sách N3–N2 (sau khi chạy doc_n3n2.py)
+  sua_the            áp các sửa đổi trong tools/sua_the.txt
   fill               điền 2 trường hình cho các ghi chú KLL đã có
   extra              thêm các kanji Minna không có trong KLL (đọc tools/extra_vi_*.txt)
   template           đổi mặt sau thẻ thành bố cục giống trang sách
@@ -223,7 +224,17 @@ def n3n2():
     print("tạm ngưng", len(rev), "thẻ Nghĩa → Kanji")
 
 
-FRONT ='<div class="small">#{{Số}} · Bài {{Bài}}</div><div class="kanji">{{Kanji}}</div>'
+def sua_the():
+    """Áp các sửa đổi ghi trong tools/sua_the.txt (chữ|trường|giá trị) lên ghi chú kanji tương ứng."""
+    rows = [l.rstrip("\n").split("|", 2) for l in open(os.path.join(HERE, "sua_the.txt"), encoding="utf-8")
+            if l.strip() and not l.startswith("#")]
+    have = {n["fields"]["Kanji"]["value"]: n["noteId"] for n in call("notesInfo", notes=call("findNotes", query=f'"note:{MODEL}"'))}
+    acts = [{"action": "updateNoteFields", "params": {"note": {"id": have[k], "fields": {f: v}}}} for k, f, v in rows if k in have]
+    multi(acts)
+    print("đã sửa", len(acts), "/", len(rows), "mục; không tìm thấy chữ:", "".join(k for k, _, _ in rows if k not in have))
+
+
+FRONT = '<div class="small">#{{Số}} · Bài {{Bài}}</div><div class="kanji">{{Kanji}}</div>'
 BACK = """<div id="answer"></div>
 <div class="pg">
   <div class="pg-top">

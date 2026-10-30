@@ -1,0 +1,11 @@
+# Sửa/bổ sung thẻ kanji trong Anki: chữ|trường|giá trị  (chạy: py anki_update.py sua_the)
+# Câu gợi nhớ cho các chữ sách N3–N2 không in, soạn theo tranh của sách và các thành phần của chữ.
+商|Cách nhớ|Người lái buôn dang tay đứng sau quầy hàng mời khách — buôn bán, thương mại (商売、商人).
+堀|Cách nhớ|Người cúi khom (屈) đào đất (土) khơi thành con mương, cái hào bao quanh thành (外堀).
+湾|Cách nhớ|Nước (氵) uốn cong (弯) ôm lấy bờ, có cầu tàu và chim biển bay — vịnh (湾、台湾).
+緩|Cách nhớ|Bàn tay nới lỏng bó sợi (糸) cho chùng xuống — lỏng, chậm (緩い), hòa hoãn (緩和).
+脳|Cách nhớ|Bên trong cái đầu của cơ thể (月) là bộ óc — não (頭脳、大脳).
+裁|Cách nhớ|Cầm kéo (𢦏) cắt tấm vải may áo (衣) — cắt may; quan tòa cắt đứt phải trái: phán xử (裁判).
+詞|Cách nhớ|Lời nói (言) do người quản lý (司) chọn lựa sắp đặt — từ ngữ, ca từ (名詞、歌詞).
+# Hán Việt sai trong deck gốc.
+料|Hán Việt|LIỆU
