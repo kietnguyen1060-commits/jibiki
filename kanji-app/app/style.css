@@ -265,3 +265,4 @@ main:has(#view-minna:not([hidden])) { padding: 0; }
 .theme-pick button { border: 0; background: var(--sheet); color: var(--muted); padding: 4px 10px; cursor: pointer; font-size: .85rem; line-height: 1.4; }
 .theme-pick button + button { border-left: 1px solid var(--line); }
 .theme-pick button[aria-pressed="true"] { background: var(--ai-soft); color: var(--ai); font-weight: 600; }
+.cand-src { align-self: center; font-size: .72rem; color: var(--muted); margin-left: 4px; }

@@ -110,14 +110,14 @@
   function toPad(e) {
     const r = pad.getBoundingClientRect(), k = SIZE / r.width;
     const pressure = e.pointerType === "pen" && e.pressure > 0 ? e.pressure : 0.5;
-    return { x: (e.clientX - r.left) * k, y: (e.clientY - r.top) * k, w: 4 + pressure * 6 };
+    return { x: (e.clientX - r.left) * k, y: (e.clientY - r.top) * k, w: 4 + pressure * 6, t: Math.round(performance.now()) };
   }
   function addPoint(p) {
     const last = cur[cur.length - 1];
     const dx = p.x - last.x, dy = p.y - last.y;
     if (dx * dx + dy * dy < 2.25) return;               // bỏ rung tay < 1.5px
     // Lọc nhẹ để nét không bị răng cưa khi chuột/cảm ứng báo điểm thô.
-    cur.push({ x: last.x + dx * 0.6, y: last.y + dy * 0.6, w: last.w * 0.6 + p.w * 0.4 });
+    cur.push({ x: last.x + dx * 0.6, y: last.y + dy * 0.6, w: last.w * 0.6 + p.w * 0.4, t: p.t });
   }
   pad.addEventListener("pointerdown", e => {
     if (e.button > 0) return;
@@ -145,15 +145,31 @@
   pad.addEventListener("pointercancel", endStroke);
   window.addEventListener("resize", fitPad);
   fitPad();
-  function recognize() {
-    if (!KanjiCanvas.recordedPattern_can || !KanjiCanvas.recordedPattern_can.length) { showCands([]); return; }
-    const out = (KanjiCanvas.recognize("can") || "").trim().split(/\s+/).filter(Boolean);
-    showCands(out);
+  /* Nhận diện: hiện ngay kết quả KanjiCanvas (chạy trên máy, so từng nét), rồi thay bằng kết quả nhận diện
+     chữ viết tay của Google (qua /api/viet của server) — không phụ thuộc thứ tự nét, số nét hay nét viết liền.
+     Mất mạng thì giữ kết quả KanjiCanvas. */
+  let recSeq = 0;
+  const isOneJa = c => [...c].length === 1 && /[぀-ヿ㐀-鿿々]/.test(c);
+  async function recognize() {
+    const seq = ++recSeq;
+    if (!strokes.length) { showCands([]); return; }
+    const offline = (KanjiCanvas.recognize("can") || "").trim().split(/\s+/).filter(Boolean);
+    showCands(offline, "offline");
+    try {
+      const t0 = strokes[0][0].t || 0;
+      const ink = strokes.map(s => [s.map(p => Math.round(p.x)), s.map(p => Math.round(p.y)), s.map(p => Math.max(0, (p.t || 0) - t0))]);
+      const r = await fetch("/api/viet", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ink }) });
+      if (!r.ok) return;
+      const online = (await r.json()).filter(isOneJa);
+      if (seq !== recSeq || !online.length) return;   // đã vẽ thêm / xoá trong lúc chờ
+      showCands([...new Set([...online, ...offline])].slice(0, 10), "google");
+    } catch (e) { /* giữ kết quả KanjiCanvas */ }
   }
-  function showCands(list) {
+  function showCands(list, src) {
     const el = $("#cands");
     if (!list.length) { el.innerHTML = `<span class="muted">Chữ gợi ý sẽ hiện ở đây.</span>`; return; }
-    el.innerHTML = list.map(c => `<button class="cand" type="button" data-k="${esc(c)}" title="${kllByChar.has(c) ? "Có trong Kanji Look and Learn" : ""}">${esc(c)}${kllByChar.has(c) ? '<span class="dot"></span>' : ""}</button>`).join("");
+    el.innerHTML = list.map(c => `<button class="cand" type="button" data-k="${esc(c)}" title="${kllByChar.has(c) ? "Có trong Kanji Look and Learn" : ""}">${esc(c)}${kllByChar.has(c) ? '<span class="dot"></span>' : ""}</button>`).join("")
+      + `<span class="cand-src" title="${src === "google" ? "Nhận diện chữ viết tay của Google: không cần đúng thứ tự hay số nét" : "Nhận diện trên máy (KanjiCanvas): đang chờ Google hoặc không có mạng"}">${src === "google" ? "Google" : "trên máy"}</span>`;
   }
   $("#undo").addEventListener("click", () => { strokes.pop(); KanjiCanvas.recordedPattern_can.pop(); redrawPad(); recognize(); });
   $("#clear").addEventListener("click", () => { strokes.length = 0; KanjiCanvas.recordedPattern_can.length = 0; redrawPad(); showCands([]); });

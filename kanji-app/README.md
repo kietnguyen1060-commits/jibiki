@@ -45,7 +45,7 @@ py tools/build_data.py "<đường dẫn collection.anki2 (bản sao)>" _dl/kanj
 
 ## Nguồn và giấy phép
 
-- Nhận diện chữ viết tay: [KanjiCanvas](https://github.com/asdfjkl/kanjicanvas) — MIT (`app/lib/kanjicanvas/LICENSE.txt`).
+- Nhận diện chữ viết tay: nhận diện chữ viết tay của Google Input Tools (qua `/api/viet` của server; không cần đúng thứ tự hay số nét, viết liền vẫn đọc được), dự phòng khi mất mạng: [KanjiCanvas](https://github.com/asdfjkl/kanjicanvas) — MIT (`app/lib/kanjicanvas/LICENSE.txt`).
 - Tranh gợi nhớ: [OpenMoji](https://openmoji.org) — CC BY-SA 4.0.
 - Thứ tự nét và hình thành phần: [KanjiVG](http://kanjivg.tagaini.net) — Ulrich Apel, CC BY-SA 3.0.
 - Âm on/kun và số nét của chữ bổ sung: [KANJIDIC2](https://www.edrdg.org/wiki/index.php/KANJIDIC_Project) — EDRDG, CC BY-SA 4.0.

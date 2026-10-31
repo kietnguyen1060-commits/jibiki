@@ -2,6 +2,7 @@
 
 - Phục vụ thư mục app/ tại http://localhost:8780
 - /media/<tên file> lấy âm thanh trực tiếp từ thư mục collection.media của Anki
+- /api/viet (POST): nhận diện chữ viết tay qua Google Input Tools cho bảng vẽ (dự phòng: KanjiCanvas trên máy)
 - /api/dich?q=…: dịch máy cả câu Nhật → Việt (gửi câu tới Google Translate) cho khung quét chữ
 - /api/notes: ghi chú theo ngày, mỗi ngày một file notes/YYYY-MM-DD.md (chỉ trên máy, không đưa lên repo)
 Cách dùng: py server.py   (hoặc bấm đúp start.bat)
@@ -66,6 +67,29 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         full = os.path.join(NOTES, m.group(1) + ".md")
         text = open(full, encoding="utf-8").read() if os.path.isfile(full) else ""
         self.send_body(200, text, "text/plain; charset=utf-8")
+
+    def do_POST(self):
+        """/api/viet: nhận diện chữ viết tay qua Google Input Tools. Body: {"ink": [[[x…], [y…], [t…]], …]}
+        (toạ độ trên khung 300×300, t là mili giây từ lúc đặt bút nét đầu). Trả về danh sách chữ gợi ý."""
+        if urllib.parse.urlparse(self.path).path != "/api/viet":
+            return self.send_error(404)
+        length = int(self.headers.get("Content-Length") or 0)
+        if not length or length > 500_000:
+            return self.send_error(400)
+        try:
+            ink = json.loads(self.rfile.read(length).decode("utf-8"))["ink"]
+            body = {"options": "enable_pre_space", "requests": [{
+                "writing_guide": {"writing_area_width": 300, "writing_area_height": 300},
+                "ink": ink, "language": "ja", "max_num_results": 12, "max_completions": 0}]}
+            req = urllib.request.Request("https://inputtools.google.com/request?itc=ja-t-i0-handwrit&app=translate",
+                                         json.dumps(body).encode("utf-8"),
+                                         {"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"})
+            with urllib.request.urlopen(req, timeout=6) as r:
+                data = json.loads(r.read().decode("utf-8"))
+            cands = data[1][0][1] if data and data[0] == "SUCCESS" else []
+        except Exception as e:  # mất mạng, Google đổi API…
+            return self.send_body(502, json.dumps({"error": str(e)}, ensure_ascii=False), "application/json; charset=utf-8")
+        self.send_body(200, json.dumps(cands, ensure_ascii=False), "application/json; charset=utf-8")
 
     def do_PUT(self):
         # Chỉ nhận PUT từ chính app (trình duyệt chặn PUT khác nguồn vì server không trả CORS).
