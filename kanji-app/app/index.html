@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Old+Mincho:wght@600;700&display=swap">
+<script>try { var t = JSON.parse(localStorage.getItem("tk-theme") || "null") || "light"; if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}</script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -22,6 +23,7 @@
       <a href="#notes" data-tab="notes">Ghi chú</a>
     </nav>
     <button class="scan-toggle" id="scanToggle" type="button" aria-pressed="true" title="Bôi đen chữ Nhật ở bất kỳ đâu để xem nghĩa, Hán Việt, cách đọc">Quét chữ: Bật</button>
+    <div class="theme-pick" id="themePick" role="group" aria-label="Giao diện"><button type="button" data-theme-set="auto" title="Tự động theo hệ thống">Tự động</button><button type="button" data-theme-set="light" title="Giao diện sáng">☀ Sáng</button><button type="button" data-theme-set="dark" title="Giao diện tối">☾ Tối</button></div>
     <span class="anki-pill" id="ankiPill" title="Trạng thái kết nối với Anki">Đang kết nối Anki…</span>
   </div>
 </header>

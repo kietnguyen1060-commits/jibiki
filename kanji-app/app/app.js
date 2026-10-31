@@ -403,7 +403,7 @@
       .replace(/\[sound:([^\]]+)\]/g, (_, f) => playBtn(f));
     return `<!doctype html><html><head><meta charset="utf-8"><base href="${location.origin}/media/"><style>${css}
       html,body{margin:0} body{padding:18px} .tk-play{width:32px;height:32px;border-radius:50%;border:1px solid #ccc;background:#f4f4f4;cursor:pointer}</style></head>
-      <body class="card card${ord + 1}">${body}</body></html>`;
+      <body class="card card${ord + 1}${theme.dark() ? " nightMode night_mode" : ""}">${body}</body></html>`;
   }
   function fitFrame(f) {
     try { f.style.height = Math.max(340, f.contentDocument.documentElement.scrollHeight + 4) + "px"; } catch (e) {}
@@ -646,6 +646,36 @@
         if (!$("#view-notes").hidden && cur === day) { $("#noteText").value = body; drawList(); }
       }
     };
+  })();
+
+  /* ---------- Giao diện Sáng / Tối ----------
+     Mặc định "light"; "auto" theo hệ thống; "dark" luôn tối. Áp cả vào trang Minna (data-theme) và thẻ Anki
+     đang học (lớp nightMode / night_mode mà mẫu thẻ Anki dùng cho chế độ tối). */
+  const theme = (() => {
+    const mq = matchMedia("(prefers-color-scheme: dark)");
+    let mode = store.get("tk-theme", "light");
+    const dark = () => mode === "dark" || (mode === "auto" && mq.matches);
+    function into(doc) {
+      if (!doc || !doc.documentElement) return;
+      if (mode === "auto") delete doc.documentElement.dataset.theme; else doc.documentElement.dataset.theme = mode;
+      if (doc.body && doc.body.classList.contains("card")) {
+        doc.body.classList.toggle("nightMode", dark());
+        doc.body.classList.toggle("night_mode", dark());
+      }
+    }
+    function apply() {
+      into(document);
+      document.querySelectorAll("iframe").forEach(f => { try { into(f.contentDocument); } catch (e) {} });
+      document.querySelectorAll("[data-theme-set]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.themeSet === mode)));
+    }
+    $("#themePick").addEventListener("click", e => {
+      const b = e.target.closest("[data-theme-set]");
+      if (b) { mode = b.dataset.themeSet; store.set("tk-theme", mode); apply(); }
+    });
+    mq.addEventListener("change", apply);
+    document.addEventListener("load", e => { if (e.target.tagName === "IFRAME") { try { into(e.target.contentDocument); } catch (err) {} } }, true);
+    apply();
+    return { dark };
   })();
 
   let silent = false;

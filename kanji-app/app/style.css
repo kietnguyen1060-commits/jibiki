@@ -21,12 +21,18 @@
   --r: 10px;
   color-scheme: light;
 }
+/* Giao diện: "Tự động" theo hệ thống, hoặc người học chọn hẳn Sáng / Tối (data-theme trên <html>). */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --paper: #12151b; --sheet: #1a1e26; --ink: #e5e8ee; --muted: #9aa3b2; --line: #2c323d; --rule: #6b7486;
     --ai: #91a9ea; --ai-soft: #232c40; --shade: #2a303b; --shu: #ef7a6b; --ok: #6cc893; --ok-soft: #173023;
     --warn: #e0b04a; --bad: #f08b80; --bad-soft: #3a1d1b; color-scheme: dark;
   }
+}
+:root[data-theme="dark"] {
+    --paper: #12151b; --sheet: #1a1e26; --ink: #e5e8ee; --muted: #9aa3b2; --line: #2c323d; --rule: #6b7486;
+    --ai: #91a9ea; --ai-soft: #232c40; --shade: #2a303b; --shu: #ef7a6b; --ok: #6cc893; --ok-soft: #173023;
+    --warn: #e0b04a; --bad: #f08b80; --bad-soft: #3a1d1b; color-scheme: dark;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
@@ -249,3 +255,9 @@ main:has(#view-minna:not([hidden])) { padding: 0; }
   .note-list { max-height: 220px; }
   .note-edit textarea { min-height: 50vh; }
 }
+
+/* ---------- Chọn giao diện Sáng / Tối ---------- */
+.theme-pick { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+.theme-pick button { border: 0; background: var(--sheet); color: var(--muted); padding: 4px 10px; cursor: pointer; font-size: .85rem; line-height: 1.4; }
+.theme-pick button + button { border-left: 1px solid var(--line); }
+.theme-pick button[aria-pressed="true"] { background: var(--ai-soft); color: var(--ai); font-weight: 600; }
