@@ -2,7 +2,7 @@
 
 - Phục vụ thư mục app/ tại http://localhost:8780
 - /media/<tên file> lấy âm thanh trực tiếp từ thư mục collection.media của Anki
-- /api/dich?q=…: dịch cả câu Nhật → Việt cho khung quét chữ: Claude (cần API key), dự phòng Google Translate
+- /api/dich?q=…: dịch máy cả câu Nhật → Việt (gửi câu tới Google Translate) cho khung quét chữ
 - /api/notes: ghi chú theo ngày, mỗi ngày một file notes/YYYY-MM-DD.md (chỉ trên máy, không đưa lên repo)
 Cách dùng: py server.py   (hoặc bấm đúp start.bat)
 """
@@ -36,92 +36,6 @@ MEDIA = find_media_dir()
 NOTES = os.path.join(HERE, "notes")
 DAY = re.compile(r"^/api/notes/(\d{4}-\d{2}-\d{2})$")
 CACHE = {}  # câu đã dịch trong phiên chạy server
-
-# ---------- Dịch câu bằng Claude ----------
-# Key: biến môi trường ANTHROPIC_API_KEY, hoặc dán key vào file claude-key.txt cạnh server.py (không đưa lên repo).
-# Tuỳ chỉnh trong dich.json (không bắt buộc): {"model": "claude-opus-5-5", "effort": "low"}.
-KEY_FILE = os.path.join(HERE, "claude-key.txt")
-if not os.environ.get("ANTHROPIC_API_KEY") and os.path.isfile(KEY_FILE):
-    _key = open(KEY_FILE, encoding="utf-8").read().strip()
-    if _key:
-        os.environ["ANTHROPIC_API_KEY"] = _key
-try:
-    import anthropic
-except ImportError:  # chưa cài: py -m pip install anthropic
-    anthropic = None
-DICH = {"model": "claude-opus-5-5", "effort": "low"}
-if os.path.isfile(os.path.join(HERE, "dich.json")):
-    DICH.update(json.load(open(os.path.join(HERE, "dich.json"), encoding="utf-8")))
-CLAUDE = None
-
-SYSTEM_DICH = """Bạn là giáo viên tiếng Nhật dạy người Việt. Người học bôi đen một câu hoặc cụm từ tiếng Nhật
-trong tài liệu học (giáo trình Minna no Nihongo, Kanji Look and Learn, đề luyện JLPT) và cần hiểu thật đúng nghĩa.
-
-Trả về:
-- sat: bản dịch sát nghĩa, bám từng thành phần của câu tiếng Nhật, không thêm ý, không bỏ ý; có thể hơi cứng.
-  Giữ đúng thì, thể (bị động, sai khiến, khả năng…), kính ngữ / khiêm nhường ngữ và sắc thái của trợ từ, vĩ tố.
-- tu_nhien: câu tiếng Việt tự nhiên, đúng như người Việt sẽ nói, cùng nghĩa với câu gốc.
-- giai_thich: 0 đến 3 ghi chú rất ngắn (mỗi ghi chú dưới 25 từ, tiếng Việt) về mẫu ngữ pháp, trợ từ hay sắc thái
-  quyết định nghĩa của câu, ví dụ "～てしまいました: lỡ làm, tiếc nuối". Câu đơn giản thì để mảng rỗng.
-Nếu đoạn bôi đen không trọn câu (một cụm từ, một vế), dịch đúng phần đó, không đoán thêm phần còn thiếu."""
-
-SCHEMA_DICH = {
-    "type": "object",
-    "properties": {
-        "sat": {"type": "string"},
-        "tu_nhien": {"type": "string"},
-        "giai_thich": {"type": "array", "items": {"type": "string"}},
-    },
-    "required": ["sat", "tu_nhien", "giai_thich"],
-    "additionalProperties": False,
-}
-
-
-def dich_claude(q):
-    """→ (kết quả, lý do không dùng được). Kết quả: {"vi", "sat", "giai_thich", "nguon": "claude"}."""
-    global CLAUDE
-    if anthropic is None:
-        return None, "chưa cài thư viện anthropic"
-    if not os.environ.get("ANTHROPIC_API_KEY"):
-        return None, "chưa có API key của Claude"
-    if CLAUDE is None:
-        CLAUDE = anthropic.Anthropic(timeout=40.0)
-    try:
-        # fallbacks="default": nếu bộ lọc an toàn từ chối, API tự chạy lại trên model dự phòng Anthropic khuyến nghị.
-        r = CLAUDE.beta.messages.create(
-            model=DICH["model"],
-            max_tokens=4000,
-            system=SYSTEM_DICH,
-            output_config={"effort": DICH["effort"], "format": {"type": "json_schema", "schema": SCHEMA_DICH}},
-            betas=["server-side-fallback-2026-07-01"],
-            fallbacks="default",
-            messages=[{"role": "user", "content": q}],
-        )
-    except anthropic.AuthenticationError:
-        return None, "API key của Claude không hợp lệ"
-    except anthropic.PermissionDeniedError:
-        return None, "API key không có quyền dùng model này"
-    except anthropic.RateLimitError:
-        return None, "Claude đang giới hạn tốc độ, thử lại sau"
-    except anthropic.APIStatusError as e:
-        return None, f"Claude báo lỗi {e.status_code}"
-    except anthropic.APIConnectionError:
-        return None, "không kết nối được Claude"
-    if r.stop_reason == "refusal":
-        return None, "Claude từ chối dịch câu này"
-    text = next((b.text for b in r.content if b.type == "text"), "")
-    try:
-        d = json.loads(text)
-    except ValueError:
-        return None, "Claude trả về dữ liệu không đọc được"
-    return {"vi": d["tu_nhien"], "sat": d["sat"], "giai_thich": d["giai_thich"][:3], "nguon": "claude"}, ""
-
-
-def dich_google(q):
-    url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=ja&tl=vi&dt=t&q=" + urllib.parse.quote(q)
-    with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"}), timeout=8) as r:
-        data = json.loads(r.read().decode("utf-8"))
-    return "".join(seg[0] for seg in data[0] if seg and seg[0])
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -170,20 +84,20 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.send_body(200, "ok", "text/plain; charset=utf-8")
 
     def translate(self):
-        """Dịch cả câu Nhật → Việt cho khung quét chữ: Claude trước (sát nghĩa + tự nhiên + giải thích),
-        Google Translate dự phòng khi chưa có key, mất mạng hoặc Claude từ chối. Có bộ nhớ đệm trong phiên."""
+        """Dịch máy cả câu (Nhật → Việt) cho khung quét chữ, qua Google Translate; có bộ nhớ đệm trong phiên."""
         q = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query).get("q", [""])[0].strip()[:500]
         if not q:
             return self.send_error(400)
         if q not in CACHE:
-            res, why = dich_claude(q)
-            if not res:
-                try:
-                    res = {"vi": dich_google(q), "nguon": "google", "ly_do": why}
-                except Exception as e:  # mất mạng, bị chặn…
-                    return self.send_body(502, json.dumps({"error": str(e), "ly_do": why}, ensure_ascii=False), "application/json; charset=utf-8")
-            CACHE[q] = res
-        self.send_body(200, json.dumps(CACHE[q], ensure_ascii=False), "application/json; charset=utf-8")
+            url = ("https://translate.googleapis.com/translate_a/single?client=gtx&sl=ja&tl=vi&dt=t&q="
+                   + urllib.parse.quote(q))
+            try:
+                with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"}), timeout=8) as r:
+                    data = json.loads(r.read().decode("utf-8"))
+                CACHE[q] = "".join(seg[0] for seg in data[0] if seg and seg[0])
+            except Exception as e:  # mất mạng, bị chặn…
+                return self.send_body(502, json.dumps({"error": str(e)}, ensure_ascii=False), "application/json; charset=utf-8")
+        self.send_body(200, json.dumps({"vi": CACHE[q]}, ensure_ascii=False), "application/json; charset=utf-8")
 
     def do_GET(self):
         path = urllib.parse.unquote(urllib.parse.urlparse(self.path).path)

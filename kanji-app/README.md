@@ -11,15 +11,8 @@ Tra cứu và bộ đề Minna dùng được cả khi Anki đóng. Phần học
 
 ## Quét chữ và ghi chú
 
-- **Quét chữ** (nút ở thanh trên): bôi đen chữ Nhật ở bất kỳ đâu — thẻ tra cứu, trang đề Minna, thẻ Anki — để xem nghĩa và Hán Việt của từng chữ Hán, nghĩa của từ (nếu có trong Minna/KLL), katakana đổi sang hiragana; bôi đen cả câu (từ 5 ký tự) thì có thêm bản dịch cả câu (qua `/api/dich` của server: Claude cho bản tự nhiên, bản sát nghĩa và ghi chú ngữ pháp; Google Translate chỉ là dự phòng). Chữ ngoài bộ thẻ dùng `app/data/tu-dien.js` (tạo bằng `tools/build_tudien.py` từ KANJIDIC2 và Unihan).
+- **Quét chữ** (nút ở thanh trên): bôi đen chữ Nhật ở bất kỳ đâu — thẻ tra cứu, trang đề Minna, thẻ Anki — để xem nghĩa và Hán Việt của từng chữ Hán, nghĩa của từ (nếu có trong Minna/KLL), katakana đổi sang hiragana; bôi đen cả câu (từ 5 ký tự) thì có thêm bản dịch cả câu (dịch máy Google Translate qua `/api/dich` của server). Chữ ngoài bộ thẻ dùng `app/data/tu-dien.js` (tạo bằng `tools/build_tudien.py` từ KANJIDIC2 và Unihan).
 - **Ghi chú** (tab Ghi chú): mỗi ngày một trang, tự lưu thành `notes/YYYY-MM-DD.md` trên máy (không đưa lên repo); có tìm kiếm và nút "＋ Ghi chú hôm nay" trong khung quét chữ.
-
-### Bật dịch câu bằng Claude
-
-1. Cài thư viện (một lần): `py -m pip install anthropic`.
-2. Lấy API key ở console.anthropic.com, dán vào file `kanji-app/claude-key.txt` (hoặc đặt biến môi trường `ANTHROPIC_API_KEY`). File này nằm trong `.gitignore`.
-3. Mở lại `start.bat`. Mặc định dùng model `claude-opus-5-5` với effort `low` cho nhanh; muốn đổi thì tạo `kanji-app/dich.json`, ví dụ `{"effort": "medium"}` hoặc `{"model": "claude-haiku-5-5"}` (rẻ và nhanh hơn).
-Chưa có key, mất mạng hay Claude từ chối thì app tự dùng Google Translate và ghi rõ lý do trong khung.
 
 ## Đồng bộ với Anki
 

@@ -511,7 +511,7 @@
   // Đoạn bôi đen dài (từ 5 ký tự) mà không phải đúng một từ đã biết thì dịch cả câu.
   const isSentence = t => t.length >= 5 && !wordMap.has(t);
   function scanHtml(t) {
-    let h = isSentence(t) ? `<div class="sp-tr" id="spTr"><span class="lbl">Dịch cả câu</span><p>Đang dịch…</p></div>` : "";
+    let h = isSentence(t) ? `<div class="sp-tr"><span class="lbl">Dịch cả câu</span><p id="spTr">Đang dịch…</p><small class="ref">Dịch máy (Google Translate), nên đối chiếu với nghĩa từng phần bên dưới.</small></div>` : "";
     const w = wordOf(t);
     if (w) h += `<div class="sp-word"><b>${esc(w[0])}</b><span>${esc(w[1][0])}</span><p>${esc(w[1][1])}</p></div>`;
     if (/[ァ-ヺ]/.test(t)) h += `<div class="sp-kana"><span>${esc(t)}</span><span class="arr">→</span><b>${esc(toHira(t))}</b></div>`;
@@ -527,30 +527,19 @@
   const trCache = new Map();
   function hidePop() { pop.hidden = true; }
   // Dịch cả câu qua server (/api/dich gọi Google Translate); khung đã đổi sang câu khác thì bỏ kết quả cũ.
-  // Kết quả: {vi, nguon: "claude"|"google", sat?, giai_thich?, ly_do?} — Claude cho bản sát nghĩa + giải thích,
-  // Google chỉ là dự phòng (ly_do cho biết vì sao chưa dùng được Claude).
   async function translate(t) {
-    let d = trCache.get(t);
-    if (d === undefined) {
+    let vi = trCache.get(t);
+    if (vi === undefined) {
       try {
         const r = await fetch("/api/dich?q=" + encodeURIComponent(t));
-        d = r.ok ? await r.json() : null;
-      } catch (e) { d = null; }
-      if (d) trCache.set(t, d);
+        vi = r.ok ? (await r.json()).vi : null;
+      } catch (e) { vi = null; }
+      if (vi) trCache.set(t, vi);
     }
     const el = pop.querySelector("#spTr");
     if (!el || popText !== t) return;
-    if (!d || !d.vi) {
-      el.innerHTML = `<span class="lbl">Dịch cả câu</span><p class="muted">Chưa dịch được (cần mạng, và chạy app bằng start.bat bản mới).</p>`;
-      return;
-    }
-    popTr = d.sat ? `${d.vi}\n   (sát nghĩa: ${d.sat})` : d.vi;
-    el.innerHTML = d.nguon === "claude"
-      ? `<span class="lbl">Dịch cả câu · Claude</span><p>${esc(d.vi)}</p>
-         <div class="sp-sat"><span>Sát nghĩa</span> ${esc(d.sat)}</div>
-         ${(d.giai_thich || []).length ? `<ul class="sp-gt">${d.giai_thich.map(g => `<li>${esc(g)}</li>`).join("")}</ul>` : ""}`
-      : `<span class="lbl">Dịch cả câu · Google (dự phòng)</span><p>${esc(d.vi)}</p>
-         <small class="ref">${esc(d.ly_do ? "Chưa dùng Claude: " + d.ly_do + "." : "")} Dịch máy, nên đối chiếu với nghĩa từng phần bên dưới.</small>`;
+    if (vi) { popTr = vi; el.textContent = vi; }
+    else { el.textContent = "Chưa dịch được (cần mạng, và chạy app bằng start.bat bản mới)."; el.classList.add("muted"); }
   }
   function scanFrom(doc, frame) {
     if (!scanOn) return;

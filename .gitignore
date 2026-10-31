@@ -17,7 +17,3 @@ __pycache__/
 
 # Ghi chú theo ngày của người học (server lưu trên máy).
 kanji-app/notes/
-
-# Khoá API Claude và tuỳ chỉnh dịch của người học.
-kanji-app/claude-key.txt
-kanji-app/dich.json
