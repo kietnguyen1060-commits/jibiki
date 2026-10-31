@@ -6,6 +6,7 @@ Bộ công cụ tự học tiếng Nhật đi kèm Anki:
 - Quét chữ để xem nghĩa / Hán Việt / cách đọc, và ghi chú theo ngày ngay trong app.
 - [`minna-n5/`](minna-n5/) — 5 đề N5, mỗi đề gộp 5 bài Minna no Nihongo I, phủ toàn bộ từ vựng và ngữ pháp; có đồng hồ làm đề và lịch sử điểm.
 - [`minna-n4/`](minna-n4/) — 25 đề N4, mỗi đề một bài Minna no Nihongo II (26–50): ngữ pháp, từ vựng, kanji.
+- So sánh ngữ pháp N5 – N4 (`minna-n4/data/so-sanh-n5-n4.json`, tab "So sánh N5–N4" ở cả hai trang): 16 nhóm mẫu dễ nhầm, khác nhau thế nào, dùng khi nào, mẹo chọn.
 
 ## Dữ liệu không có trong repo
 

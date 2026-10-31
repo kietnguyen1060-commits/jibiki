@@ -855,7 +855,7 @@
   function route() {
     const h = decodeURIComponent(location.hash.replace(/^#/, "")) || "lookup";
     if (h.startsWith("minna-")) {
-      const [book, sub] = h.split("/");
+      const [book, ...rest] = h.split("/"), sub = rest.join("/");  // giữ cả đường dẫn con, vd so-sanh/te-imasu
       show(book);
       const src = `minna/${book.slice(6)}.html${sub ? "#" + sub : ""}`;
       const fr = $("#minnaFrame");

@@ -99,6 +99,23 @@ h2 { font-size: 1.15rem; margin: 32px 0 12px; }
 .g-pat { font-family: var(--font-jp); font-weight: 700; font-size: 1.05rem; }
 .g-mean { color: var(--muted); }
 .g-card p { margin: 0; }
+.ss-link { font-size: .88rem; color: var(--muted); }
+.ss-toc { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; }
+.ss-toc a { font-size: .85rem; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--sheet); text-decoration: none; }
+.ss-group { margin-top: 28px; scroll-margin-top: 80px; }
+.ss-group h2 { margin-bottom: 4px; }
+.ss-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+.ss-mau { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.ss-mau header { display: grid; gap: 4px; }
+.ss-mau p { margin: 0; }
+.ss-cap { justify-self: start; font-size: .72rem; font-weight: 700; letter-spacing: .03em; padding: 1px 8px; border-radius: 6px; text-decoration: none; border: 1px solid; }
+.ss-cap.N5 { color: #2c4a8a; border-color: #2c4a8a; }
+.ss-cap.N4 { color: #2b6a5c; border-color: #2b6a5c; }
+:root[data-theme="dark"] .ss-cap.N5 { color: #91a9ea; border-color: #91a9ea; }
+:root[data-theme="dark"] .ss-cap.N4 { color: #7cc4b1; border-color: #7cc4b1; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .ss-cap.N5 { color: #91a9ea; border-color: #91a9ea; } :root:not([data-theme="light"]) .ss-cap.N4 { color: #7cc4b1; border-color: #7cc4b1; } }
+.ss-khac { margin-top: 10px; background: var(--sheet); border: 1px solid var(--line); border-left: 3px solid var(--ai); border-radius: var(--r); padding: 10px 14px; }
+.ss-meo { margin: 8px 0 0; padding: 8px 14px; border-radius: var(--r); background: var(--ai-soft); }
 .chia { display: grid; gap: 4px; min-width: 0; }
 .chia > b { font-size: .85rem; color: var(--ai); }
 .chia-wrap { overflow-x: auto; }
@@ -205,6 +222,7 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
       <a href="#" data-nav="home">Tổng quan</a>
       <a href="#bai-1" data-nav="lesson">Bài học</a>
       <a href="#de-1" data-nav="test">Đề kiểm tra</a>
+      <a href="#so-sanh" data-nav="so-sanh">So sánh N5–N4</a>
     </nav>
   </div>
 </header>
@@ -328,7 +346,7 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
       <h2>Ngữ pháp</h2><div class="grammar">`;
     gs.forEach(g => {
       h += `<article class="g-card" id="g-${g.id}"><header><span class="g-id">${g.id}</span><span class="g-pat">${esc(g.p)}</span><span class="g-mean">${esc(g.m)}</span></header>
-        <p>${esc(g.n)}</p>${(g.bang || []).map(t => `<div class="chia"><b>${esc(t.t)}</b><div class="chia-wrap"><table class="${t.r.every(r => r[0].length <= 14) ? "ngan" : ""} ${t.h.length <= 3 ? "doc" : ""}"><thead><tr>${t.h.map(c => `<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${t.r.map(r => `<tr>${r.map(c => `<td>${esc(c).replace(/ ／ /g, "<br>")}</td>`).join("")}</tr>`).join("")}</tbody></table></div></div>`).join("")}${g.luu ? `<ul class="luu">${g.luu.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}<div class="ex">${g.ex.map(e => `<div><span class="jp">${esc(e[0])}</span><small>${esc(e[1])}</small></div>`).join("")}</div></article>`;
+        <p>${esc(g.n)}</p>${ssLinks(g.id)}${(g.bang || []).map(t => `<div class="chia"><b>${esc(t.t)}</b><div class="chia-wrap"><table class="${t.r.every(r => r[0].length <= 14) ? "ngan" : ""} ${t.h.length <= 3 ? "doc" : ""}"><thead><tr>${t.h.map(c => `<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${t.r.map(r => `<tr>${r.map(c => `<td>${esc(c).replace(/ ／ /g, "<br>")}</td>`).join("")}</tr>`).join("")}</tbody></table></div></div>`).join("")}${g.luu ? `<ul class="luu">${g.luu.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}<div class="ex">${g.ex.map(e => `<div><span class="jp">${esc(e[0])}</span><small>${esc(e[1])}</small></div>`).join("")}</div></article>`;
     });
     h += `</div><h2>Từ vựng</h2>
       <div class="tools"><input type="search" id="q-${b}" placeholder="Tìm từ, cách đọc hoặc nghĩa…" aria-label="Tìm từ vựng">
@@ -464,6 +482,37 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
     if (saved.done) grade();
   }
 
+  /* ---------- So sánh ngữ pháp N5 – N4 ----------
+     Dữ liệu dùng chung cho hai trang (minna-n4/data/so-sanh-n5-n4.json). Mẫu cùng trình độ mở ngay trong trang;
+     mẫu của trình độ kia mở được khi trang chạy trong app 字引 (trang nằm ở /minna/n4.html hay /minna/n5.html). */
+  const SS = D.soSanh || [];
+  const CAP = "N5";
+  const inApp = /\/minna\/n[45]\.html$/.test(location.pathname);
+  const ssByG = {};
+  SS.forEach(g => g.mau.forEach(m => (ssByG[m.g] = ssByG[m.g] || []).push(g)));
+  function mauLink(m) {
+    const label = `${m.cap} · bài ${m.bai} · ${m.g}`;
+    if (m.cap === CAP) return `<a class="ss-cap ${m.cap}" href="#bai-${m.bai}">${label}</a>`;
+    return inApp ? `<a class="ss-cap ${m.cap}" href="/#minna-${m.cap.toLowerCase()}/bai-${m.bai}" target="_top">${label}</a>` : `<span class="ss-cap ${m.cap}">${label}</span>`;
+  }
+  const ssLinks = gid => (ssByG[gid] || []).map(g => `<p class="ss-link">↔ So sánh với mẫu giống: <a href="#so-sanh/${g.id}">${esc(g.ten.split(":")[0])}</a></p>`).join("");
+  function soSanh(id) {
+    setNav("so-sanh");
+    let h = `<p class="eyebrow">Ngữ pháp N5 – N4</p><h1>So sánh mẫu dễ nhầm</h1>
+      <p class="lede">${SS.length} nhóm mẫu giống nghĩa giữa Minna I (N5) và Minna II (N4): khác nhau ở đâu, dùng trong trường hợp nào, mẹo chọn.</p>
+      <nav class="ss-toc" aria-label="Các nhóm so sánh">${SS.map(g => `<a href="#so-sanh/${g.id}">${esc(g.ten.split(":")[0])}</a>`).join("")}</nav>`;
+    SS.forEach(g => {
+      h += `<section class="ss-group" id="ss-${g.id}"><h2>${esc(g.ten)}</h2><p class="lede">${esc(g.tom)}</p>
+        <div class="ss-grid">${g.mau.map(m => `<article class="ss-mau"><header>${mauLink(m)}<span class="g-pat">${esc(m.p)}</span></header>
+          <p>${esc(m.y)}</p><div class="ex"><div><span class="jp">${esc(m.vd[0])}</span><small>${esc(m.vd[1])}</small></div></div></article>`).join("")}</div>
+        <div class="ss-khac"><b>Khác nhau thế nào</b><ul class="luu">${g.khac.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>
+        <p class="ss-meo"><b>Mẹo chọn:</b> ${esc(g.meo)}</p></section>`;
+    });
+    app.innerHTML = h;
+    const el = id && document.getElementById("ss-" + id);
+    if (el) [0, 400].forEach(t => setTimeout(() => el.scrollIntoView(), t));  // lần 2: chờ phông chữ dựng xong
+  }
+
   function route() {
     app.onchange = null;
     clearInterval(window.__tmr);
@@ -471,6 +520,7 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
     let m;
     if ((m = h.match(/^bai-(\d+)$/)) && +m[1] >= 1 && +m[1] <= 25) lesson(+m[1]);
     else if ((m = h.match(/^de-(\d)$/)) && +m[1] >= 1 && +m[1] <= 5) test(+m[1]);
+    else if ((m = h.match(/^so-sanh(?:\/([\w-]+))?$/))) soSanh(m[1]);
     else home();
     window.scrollTo(0, 0);
   }

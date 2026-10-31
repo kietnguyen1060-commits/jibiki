@@ -1,0 +1,165 @@
+[
+{"id": "ly-do", "ten": "Nêu lý do: から, ので, し, て",
+ "tom": "Cùng nói \"vì… nên…\" nhưng khác độ khách quan, độ lịch sự và loại vế sau.",
+ "mau": [
+  {"cap": "N5", "bai": 9, "g": "9-5", "p": "S1 から、S2", "y": "Lý do người nói đưa ra, văn nói thường ngày. Vế sau dùng được cả rủ rê, mệnh lệnh, ý chí.", "vd": ["時間が ありませんから、タクシーで 行きましょう。", "Không có thời gian nên đi taxi thôi."]},
+  {"cap": "N4", "bai": 39, "g": "39-3", "p": "S1 ので、S2", "y": "Trình bày lý do như một sự thật khách quan, nghe mềm và lịch sự. Hợp khi xin phép, xin lỗi, giải thích với người trên.", "vd": ["用事が あるので、お先に 失礼します。", "Vì có việc nên tôi xin phép về trước."]},
+  {"cap": "N4", "bai": 28, "g": "28-3", "p": "S1 し、S2 し、～", "y": "Liệt kê vài lý do (vừa… vừa…), ngầm ý còn lý do khác.", "vd": ["この 店は 安いし、おいしいし、よく 来ます。", "Quán này vừa rẻ vừa ngon nên tôi hay đến."]},
+  {"cap": "N4", "bai": 39, "g": "39-1", "p": "Vて／Vなくて／Adj くて、～", "y": "Nguyên nhân dẫn tới cảm xúc, trạng thái. Vế sau không được là ý chí, mệnh lệnh.", "vd": ["ニュースを 聞いて、びっくりしました。", "Nghe tin tức tôi giật mình."]}],
+ "khac": ["から nhấn vào lý do của người nói; ので trình bày như kết quả tự nhiên, nên lịch sự hơn.", "Xin phép, xin lỗi, nhờ người trên: dùng ので (～ので、休ませて いただけませんか).", "Vế sau là rủ rê thân mật hoặc mệnh lệnh mạnh: dùng から.", "Danh từ / tính từ な: 雨だから nhưng 雨なので.", "て/で chỉ dùng khi vế sau là cảm xúc hay trạng thái (困りました, うれしい), không dùng cho ý chí."],
+ "meo": "Nói với thầy cô, sếp: ので. Nói với bạn, hay vế sau là ～ましょう／～てください: から."},
+
+{"id": "dieu-kien", "ten": "Điều kiện: と, たら, ば, なら",
+ "tom": "Bốn cách nói \"nếu\" khác nhau ở tính tất yếu và vế sau được phép là gì.",
+ "mau": [
+  {"cap": "N5", "bai": 23, "g": "23-3", "p": "V る と、～", "y": "Hễ A là B, kết quả tất yếu: máy móc, đường đi, quy luật tự nhiên.", "vd": ["この ボタンを 押すと、お釣りが 出ます。", "Ấn nút này là tiền thừa ra."]},
+  {"cap": "N5", "bai": 25, "g": "25-1", "p": "Vたら、～", "y": "Nếu (giả định) — dùng rộng nhất; vế sau được là ý chí, rủ rê, nhờ vả.", "vd": ["雨が 降ったら、出かけません。", "Nếu trời mưa tôi sẽ không ra ngoài."]},
+  {"cap": "N4", "bai": 35, "g": "35-1", "p": "Vば、～", "y": "Nhấn vào điều kiện cần: chỉ cần A thì B. Hay dùng trong lời khuyên, câu hỏi どう すれば いいですか.", "vd": ["ボタンを 押せば、窓が 開きます。", "Ấn nút thì cửa sổ mở."]},
+  {"cap": "N4", "bai": 35, "g": "35-2", "p": "N なら、～", "y": "Tiếp chủ đề người kia vừa nói rồi khuyên, cho thông tin: nếu là N thì…", "vd": ["温泉なら、白馬が いいですよ。", "Nếu là suối nước nóng thì Hakuba hay đấy."]}],
+ "khac": ["と: vế sau không được là ý chí, rủ rê, nhờ vả (không nói ～と、行きましょう).", "たら: an toàn nhất khi không chắc — vế sau dùng gì cũng được.", "ば: hai vế cùng chủ ngữ và vế trước là hành động ý chí thì vế sau không dùng ý chí; khi đó đổi sang たら.", "なら: dựa vào lời người khác vừa nói; không dùng cho chuỗi thời gian (không nói 駅に 着くなら、電話して ください để chỉ \"khi đến ga\")."],
+ "meo": "Phân vân thì dùng たら. Chỉ đường, máy móc: と. Hỏi cách làm: どう すれば…. Đáp lại chủ đề người kia nêu: なら."},
+
+{"id": "thoi-diem", "ten": "Thời điểm: とき, たら, てから, たあとで, まえに",
+ "tom": "Đều nói về trước / sau / khi, nhưng khác về thứ tự và sắc thái.",
+ "mau": [
+  {"cap": "N5", "bai": 23, "g": "23-2", "p": "V る とき／V た とき", "y": "V る とき: lúc chưa làm xong V; V た とき: lúc đã làm xong V.", "vd": ["国へ 帰る とき、かばんを 買いました。", "Lúc sắp về nước (còn ở Nhật) tôi mua cặp."]},
+  {"cap": "N5", "bai": 25, "g": "25-2", "p": "Vたら、～ (sau khi)", "y": "Khi việc chắc chắn sẽ xảy ra xong thì làm tiếp.", "vd": ["うちへ 帰ったら、すぐ シャワーを 浴びます。", "Về đến nhà là tôi tắm ngay."]},
+  {"cap": "N5", "bai": 16, "g": "16-4", "p": "Vて から、～", "y": "Nhấn mạnh thứ tự: xong A rồi mới B.", "vd": ["仕事が 終わってから、泳ぎに 行きます。", "Xong việc rồi tôi mới đi bơi."]},
+  {"cap": "N4", "bai": 34, "g": "34-2", "p": "Vた／N の あとで、～", "y": "Sau khi A (thời điểm), không nhất thiết liền ngay.", "vd": ["仕事の あとで、飲みに 行きませんか。", "Sau giờ làm đi uống không?"]},
+  {"cap": "N5", "bai": 18, "g": "18-4", "p": "V る／N の まえに、～", "y": "Trước khi A. Động từ trước まえに luôn ở thể từ điển.", "vd": ["寝る まえに、本を 読みます。", "Trước khi ngủ tôi đọc sách."]}],
+ "khac": ["てから: nhấn \"phải xong A trước\"; あとで: chỉ mốc thời gian sau A.", "たら (sau khi) chỉ dùng cho việc tương lai chắc chắn; với quá khứ dùng とき hoặc あとで.", "まえに luôn đi với thể từ điển, kể cả khi câu ở quá khứ (日本へ 来る まえに、…).", "とき: thể của động từ trước とき quyết định việc xảy ra trước hay sau, không theo thì của câu."],
+ "meo": "Muốn nói \"xong… rồi mới…\": てから. Chỉ mốc \"sau giờ làm, sau bữa ăn\": のあとで."},
+
+{"id": "du-dinh", "ten": "Mong muốn và dự định: たい, ようと思っています, つもり, 予定",
+ "tom": "Từ muốn (cảm xúc) đến định (ý chí) đến kế hoạch đã chốt.",
+ "mau": [
+  {"cap": "N5", "bai": 13, "g": "13-2", "p": "Vます（bỏ ます）＋ たいです", "y": "Mong muốn của bản thân, chưa chắc sẽ làm.", "vd": ["沖縄へ 行きたいです。", "Tôi muốn đi Okinawa."]},
+  {"cap": "N4", "bai": 31, "g": "31-2", "p": "Vよう と 思って います", "y": "Dự định đã nghĩ từ trước, vẫn có thể đổi.", "vd": ["週末は 海へ 行こうと 思って います。", "Cuối tuần tôi định đi biển."]},
+  {"cap": "N4", "bai": 31, "g": "31-3", "p": "V る／Vない つもりです", "y": "Ý định chắc chắn hơn, đã quyết tâm.", "vd": ["あしたからは たばこを 吸わない つもりです。", "Từ mai tôi quyết không hút thuốc."]},
+  {"cap": "N4", "bai": 31, "g": "31-4", "p": "V る／N の 予定です", "y": "Lịch đã được sắp xếp, thường không do mình quyết.", "vd": ["7月の 終わりに ドイツへ 出張する 予定です。", "Theo lịch, cuối tháng 7 tôi đi công tác Đức."]}],
+ "khac": ["たい chỉ là \"muốn\"; ようと思っています và つもり là \"định làm\".", "つもり chắc chắn hơn ようと思っています.", "予定: kế hoạch đã chốt (công ty, trường xếp), không phải ý muốn riêng.", "Mong muốn của người khác không nói ～たいです; nói ～たいと 言って います (anh ấy nói là muốn…)."],
+ "meo": "Thấy \"muốn\": たい. \"Định\": ようと思っています / つもり. \"Theo lịch\": 予定."},
+
+{"id": "te-imasu", "ten": "～ています, ～てあります, ～ておきます",
+ "tom": "Ba dạng \"て + động từ phụ\" dễ nhầm nhất: đang / ở trạng thái / làm sẵn.",
+ "mau": [
+  {"cap": "N5", "bai": 14, "g": "14-3", "p": "Vて います (đang)", "y": "Hành động đang diễn ra.", "vd": ["今 電話を かけて います。", "Đang gọi điện thoại."]},
+  {"cap": "N5", "bai": 15, "g": "15-3", "p": "Vて います (trạng thái)", "y": "Kết quả của hành động còn duy trì: 結婚して います、住んで います.", "vd": ["マリアさんは 大阪に 住んで います。", "Chị Maria sống ở Osaka."]},
+  {"cap": "N4", "bai": 29, "g": "29-1", "p": "N が V(tự động từ)て います", "y": "Tả trạng thái nhìn thấy, không nói ai làm.", "vd": ["窓が 開いて います。", "Cửa sổ đang mở."]},
+  {"cap": "N4", "bai": 30, "g": "30-1", "p": "N が V(tha động từ)て あります", "y": "Có người đã làm có chủ ý và để nguyên kết quả.", "vd": ["窓が 開けて あります。", "Cửa sổ đã được (ai đó) mở sẵn."]},
+  {"cap": "N4", "bai": 30, "g": "30-2", "p": "N を Vて おきます", "y": "Làm sẵn để chuẩn bị, hoặc để nguyên như thế.", "vd": ["旅行の まえに、切符を 買って おきます。", "Trước chuyến đi tôi mua sẵn vé."]}],
+ "khac": ["ています đi với tự động từ (開きます、閉まります…); てあります đi với tha động từ (開けます、閉めます…).", "窓が 開いて います chỉ tả cửa đang mở; 窓が 開けて あります hàm ý có người cố ý mở (để thông gió…).", "てあります là trạng thái kết quả; ておきます là hành động chuẩn bị của chủ ngữ (có を).", "Cùng ています nhưng nghĩa \"đang\" hay \"trạng thái\" tuỳ động từ: 食べて います (đang ăn) vs 結婚して います (đã kết hôn)."],
+ "meo": "Tự động từ + ています: tả cảnh. Tha động từ + てあります: ai đó cố ý để vậy. ておきます: mình chuẩn bị trước."},
+
+{"id": "nho-va", "ten": "Nhờ vả: てください, てくれませんか, てくださいませんか, ていただけませんか",
+ "tom": "Cùng là \"hãy làm giúp\", khác nhau ở độ lịch sự.",
+ "mau": [
+  {"cap": "N5", "bai": 14, "g": "14-2", "p": "Vて ください", "y": "Nhờ, chỉ thị lịch sự cơ bản; với người trên vẫn hơi giống ra lệnh.", "vd": ["この 漢字の 読み方を 教えて ください。", "Hãy chỉ cho tôi cách đọc chữ này."]},
+  {"cap": "N4", "bai": 43, "g": "43-4", "p": "Vて くれませんか", "y": "Nhờ bạn bè, người ngang hàng, thân mật.", "vd": ["ちょっと 手伝って くれませんか。", "Giúp mình một chút được không?"]},
+  {"cap": "N4", "bai": 41, "g": "41-3", "p": "Vて くださいませんか", "y": "Nhờ người trên, lịch sự.", "vd": ["コピー機の 使い方を 教えて くださいませんか。", "Anh chỉ giúp tôi cách dùng máy photo được không ạ?"]},
+  {"cap": "N4", "bai": 26, "g": "26-2", "p": "～んですが、Vて いただけませんか", "y": "Lịch sự nhất, thường mở đầu bằng ～んですが để nêu hoàn cảnh.", "vd": ["日本語で 手紙を 書いたんですが、ちょっと 見て いただけませんか。", "Tôi viết thư bằng tiếng Nhật, anh xem giúp được không ạ?"]}],
+ "khac": ["Độ lịch sự tăng dần: てください < てくれませんか (thân) < てくださいませんか < ていただけませんか.", "Câu hỏi phủ định (～ませんか) mềm hơn câu khẳng định.", "～んですが、～ trước lời nhờ giúp người nghe hiểu vì sao mình nhờ."],
+ "meo": "Bạn bè: てくれない？/てくれませんか. Thầy cô, sếp, người lạ: ていただけませんか."},
+
+{"id": "cam-phai", "ten": "Cấm, bắt buộc, khuyên: てはいけません, ないでください, Vるな, なければなりません, なくてもいいです, ほうがいい",
+ "tom": "Phân biệt mức độ: cấm – nhờ đừng – bắt buộc – không cần – nên.",
+ "mau": [
+  {"cap": "N5", "bai": 15, "g": "15-2", "p": "Vては いけません", "y": "Cấm theo quy định, luật lệ; người trên nói với người dưới.", "vd": ["ここで たばこを 吸っては いけません。", "Không được hút thuốc ở đây."]},
+  {"cap": "N5", "bai": 17, "g": "17-2", "p": "Vないで ください", "y": "Nhờ người nghe đừng làm, lịch sự.", "vd": ["ここで 写真を 撮らないで ください。", "Xin đừng chụp ảnh ở đây."]},
+  {"cap": "N4", "bai": 33, "g": "33-1", "p": "V る な (cấm chỉ)", "y": "Cấm mạnh, thô: biển báo, khẩn cấp, nam giới với người dưới.", "vd": ["ここに 車を 止めるな。", "Không được đỗ xe ở đây!"]},
+  {"cap": "N5", "bai": 17, "g": "17-3", "p": "Vなければ なりません", "y": "Bắt buộc phải làm.", "vd": ["薬を 飲まなければ なりません。", "Phải uống thuốc."]},
+  {"cap": "N5", "bai": 17, "g": "17-4", "p": "Vなくても いいです", "y": "Không làm cũng được, không bắt buộc.", "vd": ["あした 来なくても いいです。", "Mai không đến cũng được."]},
+  {"cap": "N4", "bai": 32, "g": "32-1", "p": "Vた／Vない ほうが いいです", "y": "Lời khuyên: nên / không nên.", "vd": ["毎日 運動した ほうが いいです。", "Nên tập thể dục mỗi ngày."]}],
+ "khac": ["てはいけません là quy tắc; ないでください là lời nhờ, mềm hơn; Vるな mạnh và thô nhất.", "Trả lời câu hỏi ～なければなりませんか: không bắt buộc thì nói ～なくても いいです.", "ほうがいい là lời khuyên, người nghe có thể không làm; なければなりません là bắt buộc.", "Khuyên làm: Vた ほうが いい (thể た) — không phải V る ほうが."],
+ "meo": "Biển báo: Vるな / 禁止. Nội quy: てはいけません. Nhờ lịch sự: ないでください. Khuyên: たほうがいい."},
+
+{"id": "kha-nang", "ten": "Khả năng: ことができます và động từ khả năng",
+ "tom": "Hai cách nói \"có thể\", cùng nghĩa nhưng khác độ trang trọng và trợ từ.",
+ "mau": [
+  {"cap": "N5", "bai": 18, "g": "18-2", "p": "N／V る こと が できます", "y": "Có thể làm (năng lực hoặc hoàn cảnh cho phép); hơi trang trọng, hay gặp trong văn viết, thông báo.", "vd": ["カードで 払う ことが できます。", "Có thể thanh toán bằng thẻ."]},
+  {"cap": "N4", "bai": 27, "g": "27-1", "p": "Động từ khả năng（書けます、食べられます）", "y": "Cùng nghĩa, gọn hơn, dùng nhiều trong hội thoại. Tân ngữ thường đổi を → が.", "vd": ["わたしは 日本語が 話せます。", "Tôi nói được tiếng Nhật."]},
+  {"cap": "N4", "bai": 27, "g": "27-2", "p": "見えます／聞こえます", "y": "Tự nhiên nhìn thấy / nghe thấy, không do cố gắng. Khác với 見られます／聞けます (có điều kiện để xem, nghe).", "vd": ["部屋から 海が 見えます。", "Từ phòng nhìn thấy biển."]}],
+ "khac": ["日本語を 話す ことが できます = 日本語が 話せます; dạng sau tự nhiên hơn khi nói chuyện.", "見えます: hình ảnh tự lọt vào mắt; 見られます: được phép, có cơ hội xem (映画館で 映画が 見られます).", "Động từ khả năng là động từ nhóm II: 話せる、話せない、話せた."],
+ "meo": "Nói chuyện: dùng động từ khả năng. Thông báo, văn bản: ことができます."},
+
+{"id": "thay-doi", "ten": "Thay đổi: くなります / になります, ようになります, くします / にします",
+ "tom": "Tự thay đổi, thay đổi về năng lực/thói quen, và chủ động làm thay đổi.",
+ "mau": [
+  {"cap": "N5", "bai": 19, "g": "19-4", "p": "いAdj（～い）→ ～く なります", "y": "Trạng thái tự thay đổi.", "vd": ["寒く なりました。", "Trời đã trở lạnh."]},
+  {"cap": "N5", "bai": 19, "g": "19-5", "p": "なAdj／N に なります", "y": "Trở thành, trở nên.", "vd": ["25歳に なりました。", "Tôi đã 25 tuổi."]},
+  {"cap": "N4", "bai": 36, "g": "36-2", "p": "V る ように なります", "y": "Thay đổi về khả năng hay thói quen: trước không làm được / không làm, giờ thì làm.", "vd": ["毎日 練習すれば、泳げる ように なります。", "Tập mỗi ngày thì sẽ bơi được."]},
+  {"cap": "N4", "bai": 44, "g": "44-3", "p": "Adj く／Adj に／N に します", "y": "Chủ thể chủ động làm cho thay đổi.", "vd": ["部屋を きれいに します。", "Tôi làm cho phòng sạch sẽ."]}],
+ "khac": ["なります: tự biến đổi; します: có người tác động.", "Động từ thì không nói 泳げる に なります; phải là 泳げる ように なります.", "Phủ định của ようになります: ～なく なりました (読まなく なりました: không còn đọc nữa)."],
+ "meo": "Tính từ / danh từ: く・に なります. Động từ: ように なります."},
+
+{"id": "cho-nhan", "ten": "Cho – nhận: あげます, もらいます, くれます và dạng kính ngữ",
+ "tom": "Chọn động từ theo hướng của món quà và quan hệ trên dưới.",
+ "mau": [
+  {"cap": "N5", "bai": 7, "g": "7-3", "p": "N（người）に あげます", "y": "Mình (hoặc người khác) cho đi.", "vd": ["木村さんに 花を あげました。", "Tôi tặng hoa cho chị Kimura."]},
+  {"cap": "N5", "bai": 7, "g": "7-4", "p": "N（người）に／から もらいます", "y": "Nhận từ ai.", "vd": ["カリナさんに CDを 借りました。", "Tôi mượn CD của chị Karina."]},
+  {"cap": "N5", "bai": 24, "g": "24-1", "p": "くれます", "y": "Người khác cho mình (hoặc người nhà mình).", "vd": ["佐藤さんは わたしに クリスマスカードを くれました。", "Chị Sato tặng tôi thiệp Giáng sinh."]},
+  {"cap": "N5", "bai": 24, "g": "24-3", "p": "Vて もらいます／Vて くれます", "y": "Được ai làm cho / ai làm cho mình, thể hiện biết ơn.", "vd": ["母は わたしに セーターを 送って くれました。", "Mẹ gửi áo len cho tôi."]},
+  {"cap": "N4", "bai": 41, "g": "41-1", "p": "いただきます／くださいます／やります", "y": "Dạng kính ngữ: nhận từ người trên / người trên cho mình / cho người dưới, con vật, cây.", "vd": ["わたしは 社長に お土産を いただきました。", "Tôi nhận quà của giám đốc."]}],
+ "khac": ["Người khác cho MÌNH thì dùng くれます, không dùng あげます (không nói 佐藤さんは わたしに あげました).", "Với người trên: もらいます → いただきます, くれます → くださいます.", "Cho con vật, cây, người dưới: やります (犬に えさを やります).", "Vて あげます với người trên nghe kể công, nên tránh."],
+ "meo": "Hỏi \"món đồ đi về phía ai?\": về phía mình → くれる / もらう; rời khỏi mình → あげる. Có người trên → いただく / くださる."},
+
+{"id": "phong-doan", "ten": "Phỏng đoán: でしょう, かもしれません, はずです, そうです, ようです",
+ "tom": "Khác ở độ chắc chắn và căn cứ của phỏng đoán.",
+ "mau": [
+  {"cap": "N4", "bai": 32, "g": "32-2", "p": "～でしょう (dự đoán)", "y": "Có lẽ — khá chắc; hay dùng trong dự báo thời tiết.", "vd": ["あしたは 雨が 降るでしょう。", "Ngày mai có lẽ trời mưa."]},
+  {"cap": "N4", "bai": 32, "g": "32-3", "p": "～かも しれません", "y": "Không chừng — khả năng thấp hơn でしょう.", "vd": ["約束の 時間に 間に合わないかも しれません。", "Không chừng tôi không kịp giờ hẹn."]},
+  {"cap": "N4", "bai": 46, "g": "46-5", "p": "～はずです", "y": "Chắc chắn là (suy luận có căn cứ rõ).", "vd": ["来る はずですよ。きのう 電話が ありましたから。", "Chắc chắn sẽ đến, vì hôm qua đã gọi điện."]},
+  {"cap": "N4", "bai": 43, "g": "43-1", "p": "Vます／Adj ＋ そうです (dáng vẻ)", "y": "Trông có vẻ (dựa vào cái nhìn thấy trước mắt).", "vd": ["この 料理は 辛そうです。", "Món này trông có vẻ cay."]},
+  {"cap": "N4", "bai": 47, "g": "47-2", "p": "Thể thông thường ＋ ようです", "y": "Có vẻ như (suy ra từ nhiều dấu hiệu, cảm nhận).", "vd": ["人が 大勢 集まって いますね。…事故のようですね。", "Đông người tụ tập nhỉ. …Hình như có tai nạn."]},
+  {"cap": "N4", "bai": 47, "g": "47-1", "p": "Thể thông thường ＋ そうです (truyền đạt)", "y": "Nghe nói là (thông tin từ nguồn khác, không phải đoán).", "vd": ["天気予報に よると、あしたは 寒く なるそうです。", "Theo dự báo, nghe nói mai trời sẽ lạnh."]}],
+ "khac": ["Độ chắc: はず > でしょう > ようです / そうです (dáng vẻ) > かもしれません.", "Hai そうです khác cách nối: dáng vẻ: 降りそうです、辛そうです (bỏ ます, bỏ い); truyền đạt: 降るそうです、辛いそうです (thể thông thường).", "そうです (dáng vẻ) dựa vào cái thấy ngay trước mắt; ようです dựa vào nhiều dấu hiệu để suy ra.", "でしょう? lên giọng ở N5 (21-3) là xác nhận \"…phải không?\", khác でしょう dự đoán ở N4."],
+ "meo": "Thấy tận mắt: そう. Suy từ dấu hiệu: よう. Nghe người khác nói: thể thông thường + そう. Có căn cứ chắc: はず."},
+
+{"id": "muc-dich", "ten": "Mục đích: に行きます, ために, ように",
+ "tom": "Ba cách nói \"để…\" khác ở loại động từ phía trước.",
+ "mau": [
+  {"cap": "N5", "bai": 13, "g": "13-3", "p": "Vます（bỏ ます）／N に 行きます／来ます", "y": "Đi đâu đó để làm gì — chỉ đi với động từ di chuyển.", "vd": ["神戸へ インド料理を 食べに 行きます。", "Tôi đến Kobe để ăn món Ấn."]},
+  {"cap": "N4", "bai": 42, "g": "42-1", "p": "V る／N の ために、～", "y": "Để đạt mục đích có chủ ý (động từ ý chí); N のために còn là vì lợi ích của N.", "vd": ["自分の 店を 持つ ために、貯金して います。", "Tôi để dành tiền để có cửa hàng riêng."]},
+  {"cap": "N4", "bai": 36, "g": "36-1", "p": "V る／Vない ように、～", "y": "Để (có thể) đạt tới trạng thái: động từ khả năng, động từ không ý chí, thể phủ định.", "vd": ["忘れない ように、メモして ください。", "Hãy ghi lại để không quên."]}],
+ "khac": ["ために: động từ ý chí (買う、行く、持つ…). ように: động từ khả năng (泳げる), không ý chí (わかる、忘れない), thể ない.", "Hai vế của ために thường cùng chủ ngữ; ように thì không bắt buộc.", "に行きます chỉ dùng khi vế sau là 行きます／来ます／帰ります."],
+ "meo": "Trước có ～れる／～ない／わかる → ように. Động từ hành động bình thường → ために."},
+
+{"id": "dong-thoi", "ten": "Nối hành động: て, ながら, たり～たり, し",
+ "tom": "Nối nhiều hành động hay lý do theo những cách khác nhau.",
+ "mau": [
+  {"cap": "N5", "bai": 16, "g": "16-1", "p": "Vて、Vて、～", "y": "Liệt kê theo thứ tự thời gian.", "vd": ["朝 ジョギングを して、シャワーを 浴びて、会社へ 行きます。", "Sáng tôi chạy bộ, tắm rồi đi làm."]},
+  {"cap": "N4", "bai": 28, "g": "28-1", "p": "Vます（bỏ ます）＋ ながら", "y": "Hai hành động cùng lúc của cùng một người; hành động chính ở vế sau.", "vd": ["音楽を 聞きながら、食事します。", "Vừa nghe nhạc vừa ăn."]},
+  {"cap": "N5", "bai": 19, "g": "19-3", "p": "Vたり、Vたり します", "y": "Liệt kê vài ví dụ tiêu biểu, không theo thứ tự.", "vd": ["日曜日は テニスを したり、映画を 見たり します。", "Chủ nhật tôi chơi tennis, xem phim…"]},
+  {"cap": "N4", "bai": 28, "g": "28-3", "p": "～し、～し", "y": "Liệt kê tính chất hoặc lý do.", "vd": ["駅に 近いし、安いし、この 部屋に します。", "Gần ga, lại rẻ nên tôi chọn phòng này."]}],
+ "khac": ["て: có thứ tự; たり: không thứ tự, chỉ là ví dụ; ながら: cùng lúc.", "ながら chỉ dùng khi một người làm hai việc; hai người thì không dùng.", "し nối lý do / tính chất, không nối chuỗi hành động."],
+ "meo": "Làm xong cái này rồi cái kia: て. Làm cùng lúc: ながら. Kể vài việc: たり."},
+
+{"id": "trai-nguoc", "ten": "Trái ngược: が, ても, のに",
+ "tom": "\"Nhưng\", \"dù… cũng\", \"vậy mà\" — khác ở cảm xúc người nói.",
+ "mau": [
+  {"cap": "N5", "bai": 8, "g": "8-6", "p": "S1 が、S2", "y": "Nhưng — nối hai ý trái nhau, trung tính.", "vd": ["日本の 食べ物は おいしいですが、高いです。", "Đồ ăn Nhật ngon nhưng đắt."]},
+  {"cap": "N5", "bai": 25, "g": "25-3", "p": "Vても／Adj くても／N でも、～", "y": "Dù (giả định) … vẫn — kết quả không đổi.", "vd": ["雨が 降っても、出かけます。", "Dù trời mưa tôi vẫn ra ngoài."]},
+  {"cap": "N4", "bai": 45, "g": "45-2", "p": "Thể thông thường ＋ のに、～", "y": "Vậy mà — sự việc đã xảy ra trái mong đợi, kèm bất mãn, tiếc nuối.", "vd": ["約束を したのに、彼女は 来ませんでした。", "Đã hẹn rồi vậy mà cô ấy không đến."]}],
+ "khac": ["ても: giả định, chưa xảy ra; のに: chuyện đã / đang xảy ra.", "のに mang cảm xúc (bực, tiếc); が trung tính.", "Vế sau của のに không dùng ý chí, nhờ vả, mệnh lệnh."],
+ "meo": "Có cảm giác \"thật đáng tiếc / bực mình\": のに. Chỉ nối ý trái ngược: が."},
+
+{"id": "truyen-loi", "ten": "Truyền lời: と言いました, と言っていました, そうです, と伝えていただけませんか",
+ "tom": "Kể lại lời người khác hay nhờ chuyển lời.",
+ "mau": [
+  {"cap": "N5", "bai": 21, "g": "21-2", "p": "「câu」／Thể thông thường ＋ と 言います", "y": "Trích dẫn trực tiếp hoặc gián tiếp lời ai đó.", "vd": ["ミラーさんは 来週 東京へ 出張すると 言いました。", "Anh Miller nói tuần sau đi công tác Tokyo."]},
+  {"cap": "N4", "bai": 33, "g": "33-4", "p": "～と 言って いました", "y": "Chuyển lại lời nhắn của người thứ ba cho người nghe.", "vd": ["田中さんは 「あした 休みます」と 言って いました。", "Anh Tanaka bảo là mai nghỉ."]},
+  {"cap": "N4", "bai": 47, "g": "47-1", "p": "Thể thông thường ＋ そうです", "y": "Nghe nói (tin tức, dự báo, lời đồn), không nêu chính xác lời ai.", "vd": ["天気予報に よると、あしたは 寒く なるそうです。", "Nghe nói mai trời lạnh."]},
+  {"cap": "N4", "bai": 33, "g": "33-5", "p": "～と 伝えて いただけませんか", "y": "Nhờ chuyển lời tới người thứ ba.", "vd": ["田中さんに あしたの 会議は 10時からだと 伝えて いただけませんか。", "Nhắn giúp anh Tanaka là họp mai bắt đầu lúc 10 giờ được không ạ?"]}],
+ "khac": ["と言いました: kể lại sự việc \"ai đã nói gì\"; と言っていました: chuyển lời nhắn tới người nghe.", "そうです (truyền đạt): thông tin nghe được, thường kèm nguồn ～によると.", "Phần nội dung trước と / そうです ở thể thông thường."],
+ "meo": "Chuyển lời nhắn: と言っていました. Tin nghe được: そうです. Nhờ nhắn: と伝えていただけませんか."},
+
+{"id": "giai-doan", "ten": "Giai đoạn của hành động: もう / まだ, ところです, たばかりです",
+ "tom": "Nói hành động đang ở thời điểm nào: sắp, đang, vừa xong.",
+ "mau": [
+  {"cap": "N5", "bai": 7, "g": "7-5", "p": "もう Vました／まだです", "y": "Đã làm rồi / chưa.", "vd": ["もう 荷物を 送りましたか。…いいえ、まだです。", "Gửi hành lý chưa? …Chưa."]},
+  {"cap": "N4", "bai": 31, "g": "31-5", "p": "まだ Vて いません", "y": "Vẫn chưa làm (việc dự kiến sẽ làm).", "vd": ["銀行は まだ 開いて いません。", "Ngân hàng vẫn chưa mở cửa."]},
+  {"cap": "N4", "bai": 46, "g": "46-1", "p": "V る／Vて いる／Vた ところです", "y": "Sắp làm / đang làm đúng lúc này / vừa làm xong (thời điểm khách quan).", "vd": ["たった今 帰った ところです。", "Vừa mới về xong."]},
+  {"cap": "N4", "bai": 46, "g": "46-4", "p": "Vた ばかりです", "y": "Mới… (cảm nhận chủ quan của người nói, có thể cách cả tháng).", "vd": ["先月 この 会社に 入った ばかりです。", "Mới vào công ty tháng trước."]}],
+ "khac": ["Vた ところ: vừa xong ngay trước lúc nói; Vた ばかり: người nói thấy còn mới, dù đã lâu.", "Vて いる ところ nhấn \"đúng lúc này đang làm\", mạnh hơn Vて います.", "Trả lời \"chưa\": まだです hoặc まだ Vて いません (không nói まだ Vませんでした)."],
+ "meo": "Hỏi \"xong chưa?\": もう Vましたか → まだ Vて いません. Vừa xong vài phút: たところ. Mới được ít lâu: たばかり."}
+]

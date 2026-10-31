@@ -40,7 +40,9 @@ for b in range(26, 51):
                    "kanji": [sum(k in ktext for k in ks), len(ks)]}
     tests[b] = t
 
-payload = json.dumps({"vocab": vocab, "kanji": check.kanji, "grammar": check.grammar, "tests": tests, "coverage": coverage},
+# So sánh ngữ pháp N5 – N4: dùng chung một tệp cho cả hai trang.
+so_sanh = json.load(open(os.path.join(HERE, "..", "data", "so-sanh-n5-n4.json"), encoding="utf-8"))
+payload = json.dumps({"soSanh": so_sanh, "vocab": vocab, "kanji": check.kanji, "grammar": check.grammar, "tests": tests, "coverage": coverage},
                      ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
 tpl = open(os.path.join(HERE, "template.html"), encoding="utf-8").read()
 out = tpl.replace("/*__DATA__*/{}", payload)

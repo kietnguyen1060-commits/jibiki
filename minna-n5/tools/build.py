@@ -40,7 +40,9 @@ for n in range(1, 6):
     coverage.append({"id": n, "vocab": [used, total], "grammar": [sum(g in gram for g in gids), len(gids)]})
     tests.append(t)
 
-payload = json.dumps({"vocab": vocab, "grammar": check.grammar, "tests": tests, "coverage": coverage},
+# So sánh ngữ pháp N5 – N4: dùng chung một tệp cho cả hai trang.
+so_sanh = json.load(open(os.path.join(HERE, "..", "..", "minna-n4", "data", "so-sanh-n5-n4.json"), encoding="utf-8"))
+payload = json.dumps({"soSanh": so_sanh, "vocab": vocab, "grammar": check.grammar, "tests": tests, "coverage": coverage},
                      ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
 tpl = open(os.path.join(HERE, "template.html"), encoding="utf-8").read()
 out = tpl.replace("/*__DATA__*/{}", payload)
