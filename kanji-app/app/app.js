@@ -541,8 +541,10 @@
     studyEl.innerHTML = `<div class="reviewer"><div class="rv-top"><div><b>${esc(s.title)}</b> <span class="muted">· ${esc(c.deckName || "")} · đã chấm ${s.done}</span></div>
       <span class="counts"><span class="new">${counts.new_count}</span><span class="lrn">${counts.learn_count}</span><span class="rev">${counts.review_count}</span></span>
       <span class="row-actions">${modeBtn}${s.back ? `<a class="btn small" href="#${esc(s.back)}">← Thẻ kanji</a>` : ""}<button class="btn small" id="endS" type="button">Dừng</button></span></div>
-      ${writeUI}
-      <iframe class="cardframe" id="cf" title="Thẻ Anki" ${s.mode === "viet" ? "hidden" : ""}></iframe>
+      ${s.mode === "viet"
+        // Viết kanji: bảng viết bên trái, mặt sau thẻ hiện bên phải sau khi kiểm tra (màn hình hẹp thì xếp dọc).
+        ? `<div class="write-wrap" id="writeWrap"><div class="write-left">${writeUI}</div><iframe class="cardframe" id="cf" title="Thẻ Anki" hidden></iframe></div>`
+        : `<iframe class="cardframe" id="cf" title="Thẻ Anki"></iframe>`}
       <div id="ansArea"><button class="btn primary show-ans" id="showAns" type="button">${s.mode === "viet" ? "Kiểm tra chữ vừa viết <small>(Enter)</small>" : "Hiện đáp án <small>(Space)</small>"}</button></div></div>`;
     const f = $("#cf");
     f.addEventListener("load", () => fitFrame(f));
@@ -577,6 +579,8 @@
     s.shown = true;
     const c = s.cur, f = $("#cf");
     f.hidden = false;
+    const ww = $("#writeWrap");
+    if (ww) ww.classList.add("da-hien");
     f.srcdoc = cardDoc(c.answer, c.css, s.ord, s.av);
     const eases = (c.buttons && c.buttons.length ? c.buttons : [1, 2, 3, 4]);
     $("#ansArea").innerHTML = `<div class="answers">${eases.map((e, i) => {
