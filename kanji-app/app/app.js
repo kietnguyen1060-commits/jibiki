@@ -71,96 +71,117 @@
     })();
   }
 
-  /* ---------- Bảng trắng ----------
-     Vẽ trên #pad (Pointer Events, nét làm mượt bằng đường cong bậc hai, nét theo lực bút),
-     còn #can ẩn chỉ giữ dữ liệu nét cho KanjiCanvas nhận diện (toạ độ 300×300). */
-  KanjiCanvas.init("can");
-  const pad = $("#pad"), pctx = pad.getContext("2d"), SIZE = 300;
-  const strokes = [];          // mỗi nét: [{x, y, w}] theo toạ độ 300×300 (đã làm mượt)
-  let cur = null, recTimer = null;
-  function fitPad() {
-    const dpr = Math.max(1, window.devicePixelRatio || 1), css = pad.getBoundingClientRect().width || SIZE;
-    pad.width = Math.round(css * dpr); pad.height = Math.round(css * dpr);
-    pctx.setTransform(pad.width / SIZE, 0, 0, pad.height / SIZE, 0, 0);
-    redrawPad();
-  }
-  function inkColor() { return getComputedStyle(pad).getPropertyValue("--ink-draw").trim() || "#1b1b1b"; }
-  function drawStroke(pts, color) {
-    pctx.strokeStyle = pctx.fillStyle = color;
-    pctx.lineCap = pctx.lineJoin = "round";
-    if (pts.length === 1) { pctx.beginPath(); pctx.arc(pts[0].x, pts[0].y, pts[0].w / 2, 0, Math.PI * 2); pctx.fill(); return; }
-    // Đi qua trung điểm các đoạn, lấy điểm gốc làm điểm điều khiển → đường cong liền, không gãy khúc.
-    for (let i = 1; i < pts.length; i++) {
-      const a = pts[i - 1], b = pts[i], p0 = i === 1 ? a : { x: (pts[i - 2].x + a.x) / 2, y: (pts[i - 2].y + a.y) / 2 };
-      const m = i === pts.length - 1 ? b : { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
-      pctx.lineWidth = (a.w + b.w) / 2;
-      pctx.beginPath(); pctx.moveTo(p0.x, p0.y); pctx.quadraticCurveTo(a.x, a.y, m.x, m.y); pctx.stroke();
+  /* ---------- Bảng vẽ dùng chung (bảng trắng tra cứu và bảng tập viết khi học thẻ) ----------
+     Pointer Events, nét làm mượt bằng đường cong bậc hai, dày theo lực bút, nét lưu theo toạ độ 300×300
+     kèm thời điểm từng điểm (để nhận diện chữ viết tay). */
+  const SIZE = 300;
+  function makeBoard(canvas, onStroke) {
+    const ctx = canvas.getContext("2d"), strokes = [];
+    let cur = null;
+    function fit() {
+      const dpr = Math.max(1, window.devicePixelRatio || 1), css = canvas.getBoundingClientRect().width || SIZE;
+      canvas.width = Math.round(css * dpr); canvas.height = Math.round(css * dpr);
+      ctx.setTransform(canvas.width / SIZE, 0, 0, canvas.height / SIZE, 0, 0);
+      redraw();
     }
-  }
-  function redrawPad() {
-    pctx.clearRect(0, 0, SIZE, SIZE);
-    const ink = inkColor();
-    strokes.forEach((s, i) => {
-      drawStroke(s, ink);
-      pctx.font = "600 12px system-ui, sans-serif"; pctx.fillStyle = "#c0392b";
-      pctx.fillText(String(i + 1), s[0].x + 6, s[0].y - 6);
+    const inkColor = () => getComputedStyle(canvas).getPropertyValue("--ink-draw").trim() || "#1b1b1b";
+    function drawStroke(pts, color) {
+      ctx.strokeStyle = ctx.fillStyle = color;
+      ctx.lineCap = ctx.lineJoin = "round";
+      if (pts.length === 1) { ctx.beginPath(); ctx.arc(pts[0].x, pts[0].y, pts[0].w / 2, 0, Math.PI * 2); ctx.fill(); return; }
+      // Đi qua trung điểm các đoạn, lấy điểm gốc làm điểm điều khiển → đường cong liền, không gãy khúc.
+      for (let i = 1; i < pts.length; i++) {
+        const a = pts[i - 1], b = pts[i], p0 = i === 1 ? a : { x: (pts[i - 2].x + a.x) / 2, y: (pts[i - 2].y + a.y) / 2 };
+        const m = i === pts.length - 1 ? b : { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+        ctx.lineWidth = (a.w + b.w) / 2;
+        ctx.beginPath(); ctx.moveTo(p0.x, p0.y); ctx.quadraticCurveTo(a.x, a.y, m.x, m.y); ctx.stroke();
+      }
+    }
+    function redraw() {
+      ctx.clearRect(0, 0, SIZE, SIZE);
+      const ink = inkColor();
+      strokes.forEach((s, i) => {
+        drawStroke(s, ink);
+        ctx.font = "600 12px system-ui, sans-serif"; ctx.fillStyle = "#c0392b";
+        ctx.fillText(String(i + 1), s[0].x + 6, s[0].y - 6);
+      });
+      if (cur) drawStroke(cur, ink);
+    }
+    function toPad(e) {
+      const r = canvas.getBoundingClientRect(), k = SIZE / r.width;
+      const pressure = e.pointerType === "pen" && e.pressure > 0 ? e.pressure : 0.5;
+      return { x: (e.clientX - r.left) * k, y: (e.clientY - r.top) * k, w: 4 + pressure * 6, t: Math.round(performance.now()) };
+    }
+    function addPoint(p) {
+      const last = cur[cur.length - 1];
+      const dx = p.x - last.x, dy = p.y - last.y;
+      if (dx * dx + dy * dy < 2.25) return;               // bỏ rung tay < 1.5px
+      // Lọc nhẹ để nét không bị răng cưa khi chuột/cảm ứng báo điểm thô.
+      cur.push({ x: last.x + dx * 0.6, y: last.y + dy * 0.6, w: last.w * 0.6 + p.w * 0.4, t: p.t });
+    }
+    canvas.addEventListener("pointerdown", e => {
+      if (e.button > 0) return;
+      e.preventDefault();
+      canvas.setPointerCapture(e.pointerId);
+      cur = [toPad(e)];
+      redraw();
     });
-    if (cur) drawStroke(cur, ink);
+    canvas.addEventListener("pointermove", e => {
+      if (!cur) return;
+      const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+      (evs.length ? evs : [e]).forEach(ev => addPoint(toPad(ev)));
+      redraw();
+    });
+    function endStroke(e) {
+      if (!cur) return;
+      if (e && e.type === "pointerup") { const p = toPad(e), l = cur[cur.length - 1]; if (Math.hypot(p.x - l.x, p.y - l.y) > 1) cur.push(p); }
+      strokes.push(cur);
+      const s = cur;
+      cur = null;
+      redraw();
+      if (onStroke) onStroke(s);
+    }
+    canvas.addEventListener("pointerup", endStroke);
+    canvas.addEventListener("pointercancel", endStroke);
+    window.addEventListener("resize", () => { if (canvas.isConnected) fit(); });
+    fit();
+    return {
+      strokes, fit,
+      undo() { strokes.pop(); redraw(); },
+      clear() { strokes.length = 0; redraw(); },
+    };
   }
-  function toPad(e) {
-    const r = pad.getBoundingClientRect(), k = SIZE / r.width;
-    const pressure = e.pointerType === "pen" && e.pressure > 0 ? e.pressure : 0.5;
-    return { x: (e.clientX - r.left) * k, y: (e.clientY - r.top) * k, w: 4 + pressure * 6, t: Math.round(performance.now()) };
+  // Nhận diện chữ viết tay của Google (qua /api/viet của server): không phụ thuộc thứ tự nét, số nét, nét viết liền.
+  // Trả về danh sách chữ gợi ý (một ký tự Nhật mỗi gợi ý); lỗi mạng thì ném lỗi để nơi gọi dùng phương án khác.
+  const isOneJa = c => [...c].length === 1 && /[぀-ヿ㐀-鿿々]/.test(c);
+  async function readInk(strokes) {
+    const t0 = strokes[0][0].t || 0;
+    const ink = strokes.map(s => [s.map(p => Math.round(p.x)), s.map(p => Math.round(p.y)), s.map(p => Math.max(0, (p.t || 0) - t0))]);
+    const r = await fetch("/api/viet", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ink }) });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    return (await r.json()).filter(isOneJa);
   }
-  function addPoint(p) {
-    const last = cur[cur.length - 1];
-    const dx = p.x - last.x, dy = p.y - last.y;
-    if (dx * dx + dy * dy < 2.25) return;               // bỏ rung tay < 1.5px
-    // Lọc nhẹ để nét không bị răng cưa khi chuột/cảm ứng báo điểm thô.
-    cur.push({ x: last.x + dx * 0.6, y: last.y + dy * 0.6, w: last.w * 0.6 + p.w * 0.4, t: p.t });
-  }
-  pad.addEventListener("pointerdown", e => {
-    if (e.button > 0) return;
-    e.preventDefault();
-    pad.setPointerCapture(e.pointerId);
-    cur = [toPad(e)];
-    redrawPad();
-  });
-  pad.addEventListener("pointermove", e => {
-    if (!cur) return;
-    const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
-    (evs.length ? evs : [e]).forEach(ev => addPoint(toPad(ev)));
-    redrawPad();
-  });
-  function endStroke(e) {
-    if (!cur) return;
-    if (e && e.type === "pointerup") { const p = toPad(e), l = cur[cur.length - 1]; if (Math.hypot(p.x - l.x, p.y - l.y) > 1) cur.push(p); }
-    strokes.push(cur);
-    KanjiCanvas.recordedPattern_can.push(cur.map(p => [Math.round(p.x), Math.round(p.y)]));
-    cur = null;
-    redrawPad();
+
+  /* ---------- Bảng trắng tra cứu ----------
+     Vẽ trên #pad; #can ẩn chỉ giữ dữ liệu nét cho KanjiCanvas (nhận diện trên máy, dùng khi mất mạng). */
+  KanjiCanvas.init("can");
+  let recTimer = null;
+  const board = makeBoard($("#pad"), s => {
+    KanjiCanvas.recordedPattern_can.push(s.map(p => [Math.round(p.x), Math.round(p.y)]));
     clearTimeout(recTimer); recTimer = setTimeout(recognize, 30);
-  }
-  pad.addEventListener("pointerup", endStroke);
-  pad.addEventListener("pointercancel", endStroke);
-  window.addEventListener("resize", fitPad);
-  fitPad();
+  });
+  const strokes = board.strokes;
   /* Nhận diện: hiện ngay kết quả KanjiCanvas (chạy trên máy, so từng nét), rồi thay bằng kết quả nhận diện
      chữ viết tay của Google (qua /api/viet của server) — không phụ thuộc thứ tự nét, số nét hay nét viết liền.
      Mất mạng thì giữ kết quả KanjiCanvas. */
   let recSeq = 0;
-  const isOneJa = c => [...c].length === 1 && /[぀-ヿ㐀-鿿々]/.test(c);
   async function recognize() {
     const seq = ++recSeq;
     if (!strokes.length) { showCands([]); return; }
     const offline = (KanjiCanvas.recognize("can") || "").trim().split(/\s+/).filter(Boolean);
     showCands(offline, "offline");
     try {
-      const t0 = strokes[0][0].t || 0;
-      const ink = strokes.map(s => [s.map(p => Math.round(p.x)), s.map(p => Math.round(p.y)), s.map(p => Math.max(0, (p.t || 0) - t0))]);
-      const r = await fetch("/api/viet", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ink }) });
-      if (!r.ok) return;
-      const online = (await r.json()).filter(isOneJa);
+      const online = await readInk(strokes);
       if (seq !== recSeq || !online.length) return;   // đã vẽ thêm / xoá trong lúc chờ
       showCands([...new Set([...online, ...offline])].slice(0, 10), "google");
     } catch (e) { /* giữ kết quả KanjiCanvas */ }
@@ -171,8 +192,8 @@
     el.innerHTML = list.map(c => `<button class="cand" type="button" data-k="${esc(c)}" title="${kllByChar.has(c) ? "Có trong Kanji Look and Learn" : ""}">${esc(c)}${kllByChar.has(c) ? '<span class="dot"></span>' : ""}</button>`).join("")
       + `<span class="cand-src" title="${src === "google" ? "Nhận diện chữ viết tay của Google: không cần đúng thứ tự hay số nét" : "Nhận diện trên máy (KanjiCanvas): đang chờ Google hoặc không có mạng"}">${src === "google" ? "Google" : "trên máy"}</span>`;
   }
-  $("#undo").addEventListener("click", () => { strokes.pop(); KanjiCanvas.recordedPattern_can.pop(); redrawPad(); recognize(); });
-  $("#clear").addEventListener("click", () => { strokes.length = 0; KanjiCanvas.recordedPattern_can.length = 0; redrawPad(); showCands([]); });
+  $("#undo").addEventListener("click", () => { board.undo(); KanjiCanvas.recordedPattern_can.pop(); recognize(); });
+  $("#clear").addEventListener("click", () => { board.clear(); KanjiCanvas.recordedPattern_can.length = 0; showCands([]); });
   document.addEventListener("keydown", e => {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z" && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) { e.preventDefault(); $("#undo").click(); }
   });
@@ -425,6 +446,66 @@
     try { f.style.height = Math.max(340, f.contentDocument.documentElement.scrollHeight + 4) + "px"; } catch (e) {}
   }
   const EASE = { 1: ["again", "Lại"], 2: ["hard", "Khó"], 3: ["good", "Tốt"], 4: ["easy", "Dễ"] };
+
+  /* ---------- Học ngược: nhìn mặt sau, nhớ mặt trước ----------
+     - Thẻ kanji (ghi chú có trường Kanji / 漢字 / character là đúng một chữ Hán): hiện Hán Việt + nghĩa,
+       người học viết chữ lên bảng, bấm kiểm tra thì máy đọc chữ vừa viết rồi hiện đáp án.
+     - Thẻ khác: hiện phần mặt sau của thẻ (sau <hr id=answer>), che các chữ thuộc mặt trước; nhớ ra rồi lật xem.
+     Vẫn chấm trên chính thẻ Anki đang ôn, nên lịch ôn của thẻ đó tính theo cách học này. */
+  let hocNguoc = store.get("tk-hoc-nguoc", false);
+  const plain = html => new DOMParser().parseFromString(String(html || ""), "text/html").body.textContent.trim();
+  const fieldOf = (c, ...names) => { for (const n of names) { const f = c.fields && c.fields[n]; if (f && plain(f.value)) return f.value; } return ""; };
+  function kanjiOf(c) {
+    const v = plain(fieldOf(c, "Kanji", "漢字", "character"));
+    return [...v].length === 1 && isKanji(v) && v !== "々" ? v : null;
+  }
+  // Mặt sau không có mặt trước: lấy phần sau <hr id=answer>, che chữ của các trường ở mặt trước, bỏ âm thanh.
+  async function backOnly(c, ord) {
+    const parts = String(c.answer || "").split(/<hr[^>]*id=["']?answer["']?[^>]*>/i);
+    if (parts.length < 2) return "";
+    const tpl = Object.values(await templatesOf(c.modelName))[ord] || { Front: "" };
+    const hide = new Set();
+    for (const m of tpl.Front.matchAll(/\{\{([^}]+)\}\}/g)) {
+      const name = m[1].trim().replace(/^[#^/]/, "").split(":").pop().trim();
+      const v = plain(fieldOf(c, name)).replace(/［[^］]*］/g, "").trim();
+      if (!v || v.length > 30) continue;
+      v.split(/[、,／/]\s*/).forEach(x => {
+        x = x.trim();
+        if (!x) return;
+        hide.add(x);
+        if (x.endsWith("ます") && x.length > 3) hide.add(x.slice(0, -2));   // che cả dạng chia: 逃げます → 逃げろ
+      });
+    }
+    const doc = new DOMParser().parseFromString(parts.slice(1).join(""), "text/html");
+    doc.querySelectorAll("audio, script").forEach(n => n.remove());
+    const words = [...hide].sort((x, y) => y.length - x.length).map(x => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+    if (words.length) {
+      const re = new RegExp(words.join("|"), "g");
+      const walk = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
+      const nodes = [];
+      while (walk.nextNode()) nodes.push(walk.currentNode);
+      nodes.forEach(n => {
+        if (!n.nodeValue.match(re)) return;
+        const span = doc.createElement("span");
+        span.innerHTML = esc(n.nodeValue).replace(re, '<span class="tk-blank">＿＿</span>');
+        n.replaceWith(span);
+      });
+    }
+    return doc.body.innerHTML.replace(/\[sound:[^\]]+\]|\[anki:play:[qa]:\d+\]/g, "").trim();
+  }
+  let wboard = null;
+  // Máy đọc chữ người học vừa viết rồi so với chữ đúng.
+  async function inkVerdict(k) {
+    if (!wboard || !wboard.strokes.length) return `<div class="wr-res none">Bạn chưa viết gì. Chữ đúng là <b class="jp-big">${esc(k)}</b>.</div>`;
+    let cands = null;
+    try { cands = await readInk(wboard.strokes); } catch (e) { cands = null; }
+    if (!cands) return `<div class="wr-res none">Không nhận diện được (mất mạng). Tự so chữ bạn viết với chữ đúng: <b class="jp-big">${esc(k)}</b>.</div>`;
+    const i = cands.indexOf(k);
+    if (i === 0) return `<div class="wr-res ok">✓ Đúng: máy đọc ra <b class="jp-big">${esc(k)}</b>.</div>`;
+    if (i > 0 && i < 5) return `<div class="wr-res near">Gần đúng: máy đọc ra <b class="jp-big">${esc(cands[0])}</b>, chữ đúng <b class="jp-big">${esc(k)}</b> đứng thứ ${i + 1} trong gợi ý — xem lại nét.</div>`;
+    return `<div class="wr-res no">✗ Máy đọc ra <b class="jp-big">${esc(cands[0] || "?")}</b>; chữ đúng là <b class="jp-big">${esc(k)}</b>.</div>`;
+  }
+
   async function nextCard() {
     const s = session;
     if (!s) return;
@@ -443,24 +524,59 @@
     if (c.css === undefined) { const [ci] = await anki.call("cardsInfo", { cards: [c.cardId] }); c.css = ci ? ci.css : ""; }
     s.cur = c; s.ord = ord; s.shown = false;
     try { s.av = await avLists(c, ord); } catch (e) { s.av = null; }
+    s.kanji = hocNguoc ? kanjiOf(c) : null;
+    const back = hocNguoc && !s.kanji ? await backOnly(c, ord) : "";
+    s.mode = s.kanji ? "viet" : back ? "nguoc" : "thuong";
+    const modeBtn = `<button class="btn small mode-btn" id="modeS" type="button" aria-pressed="${hocNguoc}" title="Học ngược: kanji thì nhìn Hán Việt + nghĩa rồi viết chữ; từ vựng thì nhìn mặt sau để nhớ mặt trước">Học ngược: ${hocNguoc ? "Bật" : "Tắt"}</button>`;
+    const so = plain(fieldOf(c, "Số"));
+    const writeUI = s.mode !== "viet" ? "" : `<div class="write-q">
+        <div class="small muted">${so ? "#" + esc(so) + " · " : ""}Viết chữ Hán có nghĩa này</div>
+        ${fieldOf(c, "Hán Việt") ? `<div class="wq-hv">${esc(plain(fieldOf(c, "Hán Việt")))}</div>` : ""}
+        <div class="wq-mean">${esc(plain(fieldOf(c, "Nghĩa", "Translate", "meaning", "English")))}</div>
+        ${fieldOf(c, "Cách nhớ") ? `<details class="wq-hint"><summary>Gợi ý cách nhớ</summary>${esc(plain(fieldOf(c, "Cách nhớ")))}</details>` : ""}
+      </div>
+      <div class="write-area"><div class="canvas-box"><canvas id="wpad" aria-label="Bảng viết chữ"></canvas><div class="guide" aria-hidden="true"></div></div>
+        <div class="board-actions"><button class="btn" id="wUndo" type="button">↶ Xoá nét cuối</button><button class="btn" id="wClear" type="button">Xoá hết</button></div>
+        <div id="wResult"></div></div>`;
     studyEl.innerHTML = `<div class="reviewer"><div class="rv-top"><div><b>${esc(s.title)}</b> <span class="muted">· ${esc(c.deckName || "")} · đã chấm ${s.done}</span></div>
       <span class="counts"><span class="new">${counts.new_count}</span><span class="lrn">${counts.learn_count}</span><span class="rev">${counts.review_count}</span></span>
-      <span class="row-actions">${s.back ? `<a class="btn small" href="#${esc(s.back)}">← Thẻ kanji</a>` : ""}<button class="btn small" id="endS" type="button">Dừng</button></span></div>
-      <iframe class="cardframe" id="cf" title="Thẻ Anki"></iframe>
-      <div id="ansArea"><button class="btn primary show-ans" id="showAns" type="button">Hiện đáp án <small>(Space)</small></button></div></div>`;
+      <span class="row-actions">${modeBtn}${s.back ? `<a class="btn small" href="#${esc(s.back)}">← Thẻ kanji</a>` : ""}<button class="btn small" id="endS" type="button">Dừng</button></span></div>
+      ${writeUI}
+      <iframe class="cardframe" id="cf" title="Thẻ Anki" ${s.mode === "viet" ? "hidden" : ""}></iframe>
+      <div id="ansArea"><button class="btn primary show-ans" id="showAns" type="button">${s.mode === "viet" ? "Kiểm tra chữ vừa viết <small>(Enter)</small>" : "Hiện đáp án <small>(Space)</small>"}</button></div></div>`;
     const f = $("#cf");
     f.addEventListener("load", () => fitFrame(f));
-    f.srcdoc = cardDoc(c.question, c.css, ord, s.av);
+    if (s.mode === "viet") {
+      wboard = makeBoard($("#wpad"));
+      $("#wUndo").addEventListener("click", () => wboard.undo());
+      $("#wClear").addEventListener("click", () => wboard.clear());
+    } else {
+      wboard = null;
+      f.srcdoc = s.mode === "nguoc"
+        ? cardDoc(`<div class="tk-nguoc">${back}</div>`, c.css + " .tk-blank{color:#999;letter-spacing:.1em}", ord, null)
+        : cardDoc(c.question, c.css, ord, s.av);
+    }
     $("#showAns").addEventListener("click", showAnswer);
     $("#endS").addEventListener("click", endSession);
+    $("#modeS").addEventListener("click", () => {
+      hocNguoc = !hocNguoc;
+      store.set("tk-hoc-nguoc", hocNguoc);
+      if (!s.shown) nextCard(); else { $("#modeS").textContent = "Học ngược: " + (hocNguoc ? "Bật" : "Tắt"); $("#modeS").setAttribute("aria-pressed", String(hocNguoc)); }
+    });
   }
   async function showAnswer() {
     const s = session; if (!s || s.shown || s.busy) return;
     s.busy = true;
+    if (s.mode === "viet") {
+      $("#showAns").disabled = true;
+      $("#showAns").textContent = "Đang đọc chữ…";
+      $("#wResult").innerHTML = await inkVerdict(s.kanji);
+    }
     try { await anki.call("guiShowAnswer"); } catch (e) {}
     s.busy = false;
     s.shown = true;
     const c = s.cur, f = $("#cf");
+    f.hidden = false;
     f.srcdoc = cardDoc(c.answer, c.css, s.ord, s.av);
     const eases = (c.buttons && c.buttons.length ? c.buttons : [1, 2, 3, 4]);
     $("#ansArea").innerHTML = `<div class="answers">${eases.map((e, i) => {
@@ -488,7 +604,9 @@
   }
   document.addEventListener("keydown", e => {
     if (!session || $("#view-study").hidden || /input|textarea/i.test(e.target.tagName)) return;
-    if (!session.shown && (e.key === " " || e.key === "Enter")) { e.preventDefault(); showAnswer(); }
+    // Đang viết kanji thì Space không lật thẻ (dễ bấm nhầm), dùng Enter; Ctrl+Z xoá nét cuối trên bảng viết.
+    if (!session.shown && (e.key === "Enter" || (e.key === " " && session.mode !== "viet"))) { e.preventDefault(); showAnswer(); }
+    else if (!session.shown && session.mode === "viet" && (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") { e.preventDefault(); if (wboard) wboard.undo(); }
     else if (session.shown && /^[1-4]$/.test(e.key)) answer(+e.key);
     else if (session.shown && e.key === " ") { e.preventDefault(); answer(3); }
   });

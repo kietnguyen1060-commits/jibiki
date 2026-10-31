@@ -266,3 +266,19 @@ main:has(#view-minna:not([hidden])) { padding: 0; }
 .theme-pick button + button { border-left: 1px solid var(--line); }
 .theme-pick button[aria-pressed="true"] { background: var(--ai-soft); color: var(--ai); font-weight: 600; }
 .cand-src { align-self: center; font-size: .72rem; color: var(--muted); margin-left: 4px; }
+
+/* ---------- Học ngược: viết kanji từ Hán Việt + nghĩa ---------- */
+.mode-btn[aria-pressed="true"] { color: var(--ai); border-color: var(--ai); background: var(--ai-soft); }
+.write-q { text-align: center; display: grid; gap: 4px; margin: 6px 0 10px; }
+.write-q .wq-hv { font-size: 1.6rem; font-weight: 700; letter-spacing: .08em; color: var(--ai); }
+.write-q .wq-mean { font-size: 1.15rem; }
+.write-q .wq-hint { font-size: .9rem; color: var(--muted); max-width: 520px; margin: 4px auto 0; }
+.write-q .wq-hint summary { cursor: pointer; }
+.write-area { display: grid; gap: 10px; justify-items: center; margin-bottom: 12px; }
+.write-area .canvas-box { width: min(300px, 100%); height: auto; aspect-ratio: 1; }
+#wpad { width: 100%; height: 100%; --ink-draw: #1b1b1b; }
+.wr-res { padding: 8px 12px; border-radius: 10px; border: 1px solid var(--line); text-align: center; max-width: 520px; }
+.wr-res.ok { color: var(--ok); border-color: var(--ok); background: var(--ok-soft); }
+.wr-res.near { color: var(--warn); border-color: var(--warn); }
+.wr-res.no { color: var(--bad); border-color: var(--bad); background: var(--bad-soft); }
+.wr-res .jp-big { font-family: var(--font-mincho); font-size: 1.6rem; margin: 0 2px; }

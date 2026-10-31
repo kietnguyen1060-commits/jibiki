@@ -14,6 +14,13 @@ Tra cứu và bộ đề Minna dùng được cả khi Anki đóng. Phần học
 - **Quét chữ** (nút ở thanh trên): bôi đen chữ Nhật ở bất kỳ đâu — thẻ tra cứu, trang đề Minna, thẻ Anki — để xem nghĩa và Hán Việt của từng chữ Hán, nghĩa của từ (nếu có trong Minna/KLL), katakana đổi sang hiragana; bôi đen cả câu (từ 5 ký tự) thì có thêm bản dịch cả câu (dịch máy Google Translate qua `/api/dich` của server). Chữ ngoài bộ thẻ dùng `app/data/tu-dien.js` (tạo bằng `tools/build_tudien.py` từ KANJIDIC2 và Unihan).
 - **Ghi chú** (tab Ghi chú): mỗi ngày một trang, tự lưu thành `notes/YYYY-MM-DD.md` trên máy (không đưa lên repo); có tìm kiếm và nút "＋ Ghi chú hôm nay" trong khung quét chữ.
 
+## Học ngược (Học với Anki)
+
+Nút **Học ngược** trên thanh ôn tập:
+- Thẻ kanji (trường Kanji / 漢字 / character là một chữ Hán): hiện Hán Việt + nghĩa (có nút xem gợi ý cách nhớ) và một bảng viết; viết xong bấm "Kiểm tra" (Enter), máy đọc chữ vừa viết (nhận diện của Google) và so với chữ đúng, rồi hiện mặt sau thẻ để chấm.
+- Thẻ khác: hiện phần mặt sau của thẻ, các chữ thuộc mặt trước (cả trong câu ví dụ) được che bằng ＿＿; nhớ ra rồi lật xem.
+Điểm vẫn chấm trên chính thẻ Anki đang ôn.
+
 ## Đồng bộ với Anki
 
 Anki là nơi giữ dữ liệu duy nhất. App không có cơ sở dữ liệu thẻ riêng:
