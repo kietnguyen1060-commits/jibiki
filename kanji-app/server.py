@@ -2,10 +2,11 @@
 
 - Phục vụ thư mục app/ tại http://localhost:8780
 - /media/<tên file> lấy âm thanh trực tiếp từ thư mục collection.media của Anki
+- /api/dich?q=…: dịch máy cả câu Nhật → Việt (gửi câu tới Google Translate) cho khung quét chữ
 - /api/notes: ghi chú theo ngày, mỗi ngày một file notes/YYYY-MM-DD.md (chỉ trên máy, không đưa lên repo)
 Cách dùng: py server.py   (hoặc bấm đúp start.bat)
 """
-import http.server, json, os, re, socketserver, sys, urllib.parse, webbrowser
+import http.server, json, os, re, socketserver, sys, urllib.parse, urllib.request, webbrowser
 
 for _s in (sys.stdout, sys.stderr):
     try:
@@ -34,6 +35,7 @@ def find_media_dir():
 MEDIA = find_media_dir()
 NOTES = os.path.join(HERE, "notes")
 DAY = re.compile(r"^/api/notes/(\d{4}-\d{2}-\d{2})$")
+CACHE = {}  # câu đã dịch trong phiên chạy server
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -81,8 +83,26 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             os.remove(full)  # ghi chú trống thì bỏ file của ngày đó
         self.send_body(200, "ok", "text/plain; charset=utf-8")
 
+    def translate(self):
+        """Dịch máy cả câu (Nhật → Việt) cho khung quét chữ, qua Google Translate; có bộ nhớ đệm trong phiên."""
+        q = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query).get("q", [""])[0].strip()[:500]
+        if not q:
+            return self.send_error(400)
+        if q not in CACHE:
+            url = ("https://translate.googleapis.com/translate_a/single?client=gtx&sl=ja&tl=vi&dt=t&q="
+                   + urllib.parse.quote(q))
+            try:
+                with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"}), timeout=8) as r:
+                    data = json.loads(r.read().decode("utf-8"))
+                CACHE[q] = "".join(seg[0] for seg in data[0] if seg and seg[0])
+            except Exception as e:  # mất mạng, bị chặn…
+                return self.send_body(502, json.dumps({"error": str(e)}, ensure_ascii=False), "application/json; charset=utf-8")
+        self.send_body(200, json.dumps({"vi": CACHE[q]}, ensure_ascii=False), "application/json; charset=utf-8")
+
     def do_GET(self):
         path = urllib.parse.unquote(urllib.parse.urlparse(self.path).path)
+        if path == "/api/dich":
+            return self.translate()
         if path.startswith("/api/notes"):
             return self.notes_get(path)
         if path.startswith("/media/"):

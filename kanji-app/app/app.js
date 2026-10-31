@@ -508,8 +508,10 @@
     for (let n = t.length; n >= 2; n--) { const w = wordMap.get(t.slice(0, n)); if (w) return [t.slice(0, n), w]; }
     return null;
   }
+  // Đoạn bôi đen dài (từ 5 ký tự) mà không phải đúng một từ đã biết thì dịch cả câu.
+  const isSentence = t => t.length >= 5 && !wordMap.has(t);
   function scanHtml(t) {
-    let h = "";
+    let h = isSentence(t) ? `<div class="sp-tr"><span class="lbl">Dịch cả câu</span><p id="spTr">Đang dịch…</p><small class="ref">Dịch máy (Google Translate), nên đối chiếu với nghĩa từng phần bên dưới.</small></div>` : "";
     const w = wordOf(t);
     if (w) h += `<div class="sp-word"><b>${esc(w[0])}</b><span>${esc(w[1][0])}</span><p>${esc(w[1][1])}</p></div>`;
     if (/[ァ-ヺ]/.test(t)) h += `<div class="sp-kana"><span>${esc(t)}</span><span class="arr">→</span><b>${esc(toHira(t))}</b></div>`;
@@ -521,20 +523,38 @@
     });
     return h ? h + `<div class="sp-act"><button type="button" class="btn small" data-note>＋ Ghi chú hôm nay</button></div>` : "";
   }
-  let popText = "";
+  let popText = "", popTr = "";
+  const trCache = new Map();
   function hidePop() { pop.hidden = true; }
+  // Dịch cả câu qua server (/api/dich gọi Google Translate); khung đã đổi sang câu khác thì bỏ kết quả cũ.
+  async function translate(t) {
+    let vi = trCache.get(t);
+    if (vi === undefined) {
+      try {
+        const r = await fetch("/api/dich?q=" + encodeURIComponent(t));
+        vi = r.ok ? (await r.json()).vi : null;
+      } catch (e) { vi = null; }
+      if (vi) trCache.set(t, vi);
+    }
+    const el = pop.querySelector("#spTr");
+    if (!el || popText !== t) return;
+    if (vi) { popTr = vi; el.textContent = vi; }
+    else { el.textContent = "Chưa dịch được (cần mạng, và chạy app bằng start.bat bản mới)."; el.classList.add("muted"); }
+  }
   function scanFrom(doc, frame) {
     if (!scanOn) return;
     const a = doc.activeElement;
     if (a && /INPUT|TEXTAREA/.test(a.tagName)) return;
-    const sel = doc.getSelection(), t = (sel ? sel.toString() : "").replace(/\s+/g, "").slice(0, 30);
+    const sel = doc.getSelection(), t = (sel ? sel.toString() : "").replace(/\s+/g, "").slice(0, 300);
     if (!t || !hasJa(t) || !sel.rangeCount) return;
     const html = scanHtml(t);
     if (!html) return;
     const r = sel.getRangeAt(0).getBoundingClientRect(), off = frame ? frame.getBoundingClientRect() : { left: 0, top: 0 };
     popText = t;
+    popTr = "";
     pop.innerHTML = html;
     pop.hidden = false;
+    if (isSentence(t)) translate(t);
     const w = pop.offsetWidth, hgt = pop.offsetHeight;
     const left = Math.min(Math.max(8, r.left + off.left), innerWidth - w - 8);
     let top = r.bottom + off.top + 8;
@@ -571,7 +591,8 @@
       });
       const kana = /[ァ-ヺ]/.test(popText) ? [`${popText} → ${toHira(popText)}`] : [];
       nb.disabled = true;
-      try { await notes.append([w ? `${w[0]}（${w[1][0]}）${w[1][1]}` : popText, ...kana, ...lines].join("\n")); nb.textContent = "✓ Đã thêm vào ghi chú"; }
+      const head = popTr ? [popText, "→ " + popTr] : [w ? `${w[0]}（${w[1][0]}）${w[1][1]}` : popText];
+      try { await notes.append([...head, ...kana, ...lines].join("\n")); nb.textContent = "✓ Đã thêm vào ghi chú"; }
       catch (err) { nb.textContent = "Không lưu được"; nb.disabled = false; }
     }
   });

@@ -11,7 +11,7 @@ Tra cứu và bộ đề Minna dùng được cả khi Anki đóng. Phần học
 
 ## Quét chữ và ghi chú
 
-- **Quét chữ** (nút ở thanh trên): bôi đen chữ Nhật ở bất kỳ đâu — thẻ tra cứu, trang đề Minna, thẻ Anki — để xem nghĩa và Hán Việt của từng chữ Hán, nghĩa của từ (nếu có trong Minna/KLL), katakana đổi sang hiragana. Chữ ngoài bộ thẻ dùng `app/data/tu-dien.js` (tạo bằng `tools/build_tudien.py` từ KANJIDIC2 và Unihan).
+- **Quét chữ** (nút ở thanh trên): bôi đen chữ Nhật ở bất kỳ đâu — thẻ tra cứu, trang đề Minna, thẻ Anki — để xem nghĩa và Hán Việt của từng chữ Hán, nghĩa của từ (nếu có trong Minna/KLL), katakana đổi sang hiragana; bôi đen cả câu (từ 5 ký tự) thì có thêm bản dịch cả câu (dịch máy Google Translate qua `/api/dich` của server). Chữ ngoài bộ thẻ dùng `app/data/tu-dien.js` (tạo bằng `tools/build_tudien.py` từ KANJIDIC2 và Unihan).
 - **Ghi chú** (tab Ghi chú): mỗi ngày một trang, tự lưu thành `notes/YYYY-MM-DD.md` trên máy (không đưa lên repo); có tìm kiếm và nút "＋ Ghi chú hôm nay" trong khung quét chữ.
 
 ## Đồng bộ với Anki
