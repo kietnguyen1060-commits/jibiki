@@ -143,6 +143,16 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
 .progress { flex: 1 1 160px; height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; min-width: 0; }
 .progress i { display: block; height: 100%; background: var(--ai); width: 0; transition: width .2s; }
 .count { font-variant-numeric: tabular-nums; color: var(--muted); font-size: .9rem; }
+.timer { display: inline-flex; align-items: center; gap: 6px; font-variant-numeric: tabular-nums; }
+.timer b { font-size: 1.05rem; min-width: 3.6em; text-align: right; }
+.timer.run b { color: var(--ai); }
+.timer.warn b { color: var(--bad); animation: nhay 1s steps(2) infinite; }
+.timer select { font: inherit; font-size: .85rem; padding: 6px; border: 1px solid var(--line); border-radius: 8px; background: var(--sheet); color: var(--ink); }
+.hist table { border-collapse: collapse; font-size: .9rem; margin-top: 6px; }
+.hist th, .hist td { padding: 3px 10px; border-bottom: 1px solid var(--line); text-align: left; font-variant-numeric: tabular-nums; }
+.hist summary { cursor: pointer; color: var(--muted); }
+@keyframes nhay { 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { .timer.warn b { animation: none; } }
 .result { margin-top: 16px; background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 10px; }
 .result .score { font-family: var(--font-mincho); font-size: 2rem; font-variant-numeric: tabular-nums; }
 .result .parts { display: flex; gap: 16px; flex-wrap: wrap; color: var(--muted); font-size: .9rem; }
@@ -223,6 +233,57 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
   function setNav(which) {
     document.querySelectorAll("[data-nav]").forEach(a => a.toggleAttribute("aria-current", a.dataset.nav === which));
     document.querySelectorAll("[data-nav]").forEach(a => { if (a.dataset.nav === which) a.setAttribute("aria-current", "page"); });
+  }
+
+  /* ---------- Đồng hồ làm đề ----------
+     Thời gian lưu trong cùng bản ghi của đề (saved.tm): tải lại trang hay tạm dừng vẫn giữ đúng
+     số giây đã làm. Mặc định ~0,75 phút mỗi câu, làm tròn 5 phút; chọn 0 = không giới hạn (đếm lên). */
+  const fmt = s => {
+    s = Math.max(0, Math.round(s));
+    const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60;
+    return (h ? h + ":" + String(m).padStart(2, "0") : m) + ":" + String(x).padStart(2, "0");
+  };
+  function setupTimer(saved, save, total, onTimeout) {
+    const tm = saved.tm = saved.tm || { len: Math.max(10, Math.round(total * 0.75 / 5) * 5), used: 0, at: 0 };
+    const el = id => document.getElementById(id);
+    const sel = el("tmrLen"), btn = el("tmrBtn"), out = el("tmrT"), box = el("tmr");
+    const opts = [0, 10, 15, 20, 25, 30, 40, 50, 60, 75, 90];
+    if (!opts.includes(tm.len)) opts.push(tm.len);
+    sel.innerHTML = opts.sort((a, b) => a - b).map(m => `<option value="${m}" ${m === tm.len ? "selected" : ""}>${m ? m + " phút" : "Không giới hạn"}</option>`).join("");
+    const used = () => tm.used + (tm.at ? (Date.now() - tm.at) / 1000 : 0);
+    function draw() {
+      const u = used(), left = tm.len * 60 - u;
+      out.textContent = tm.len ? fmt(left) : fmt(u);
+      box.classList.toggle("warn", !!tm.len && !!tm.at && left <= 300);
+      box.classList.toggle("run", !!tm.at);
+      btn.textContent = saved.done ? "Đã nộp" : tm.at ? "⏸ Tạm dừng" : u > 0 ? "▶ Tiếp tục" : "▶ Bắt đầu";
+      btn.disabled = !!saved.done;
+      sel.disabled = !!saved.done || u > 0;
+      if (tm.len && tm.at && left <= 0) { stop(); onTimeout(); }
+    }
+    function start() { if (!tm.at && !saved.done) { tm.at = Date.now(); save(); draw(); } }
+    function pause() { if (tm.at) { tm.used = used(); tm.at = 0; save(); } draw(); }
+    function stop() { clearInterval(window.__tmr); pause(); return tm.used; }
+    btn.addEventListener("click", () => tm.at ? pause() : start());
+    sel.addEventListener("change", () => { tm.len = +sel.value; save(); draw(); });
+    clearInterval(window.__tmr);
+    window.__tmr = setInterval(draw, 1000);
+    draw();
+    return { start, stop };
+  }
+  // Ghi lần làm vào lịch sử của đề (mỗi lần nộp một dòng) và trả về khối "Thời gian" cho phần kết quả.
+  function runInfo(key, saved, total) {
+    const tm = saved.tm || {}, used = tm.used || 0;
+    const hist = store.get(key + "-lich-su") || [];
+    if (!saved.logged) {
+      const d = new Date(), p = n => String(n).padStart(2, "0");
+      hist.unshift({ d: `${p(d.getDate())}/${p(d.getMonth() + 1)} ${p(d.getHours())}:${p(d.getMinutes())}`, s: saved.score, n: total, t: Math.round(used), len: tm.len || 0 });
+      store.set(key + "-lich-su", hist.slice(0, 20));
+      saved.logged = true;
+    }
+    const over = tm.len && used >= tm.len * 60;
+    return `<div><span class="eyebrow">Thời gian</span><div>${fmt(used)}${tm.len ? ` / ${tm.len} phút${over ? " · hết giờ, bài tự nộp" : ""}` : ""}</div></div>` +
+      (hist.length ? `<details class="hist" ${hist.length > 1 ? "open" : ""}><summary>Các lần làm đề này (${hist.length})</summary><table><tr><th>Lúc</th><th>Điểm</th><th>Thời gian</th></tr>${hist.map(r => `<tr><td>${r.d}</td><td>${r.s}/${r.n}</td><td>${fmt(r.t)}${r.len ? " / " + r.len + "′" : ""}</td></tr>`).join("")}</table></details>` : "");
   }
 
   function home() {
@@ -321,7 +382,7 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
       <div class="test-head"><div><p class="eyebrow">Bài ${t.lessons[0]}–${t.lessons[1]} · dạng đề JLPT N5</p><h1>${t.title}</h1></div>
       <div class="badges"><span class="badge">Từ vựng ${cov.vocab[0]}/${cov.vocab[1]}</span><span class="badge">Ngữ pháp ${cov.grammar[0]}/${cov.grammar[1]}</span></div></div>
       <div class="bar" id="bar"><div class="progress"><i id="prog"></i></div><span class="count" id="cnt"></span>
-      <button class="btn primary" id="submit" type="button">Nộp bài</button><button class="btn" id="reset" type="button">Làm lại</button></div>
+      <span class="timer" id="tmr" title="Đồng hồ làm đề"><b id="tmrT"></b><select id="tmrLen" aria-label="Thời gian làm bài"></select><button class="btn" id="tmrBtn" type="button"></button></span><button class="btn primary" id="submit" type="button">Nộp bài</button><button class="btn" id="reset" type="button">Làm lại</button></div>
       <div id="res"></div>`;
     let part = "", n = 0;
     t.sections.forEach((s, si) => {
@@ -352,6 +413,7 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
       document.getElementById("prog").style.width = (100 * c / total) + "%";
       document.getElementById("cnt").textContent = `${c}/${total} câu`;
     }
+    let timer = null;
     function grade() {
       let score = 0; const per = {}; const weak = new Set();
       all.forEach(({ qid, it, part }) => {
@@ -376,12 +438,16 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
         <div class="parts">${Object.entries(per).map(([p, v]) => `<span>${PARTS[p]} <b>${v[0]}/${v[1]}</b></span>`).join("")}</div>
         ${weakList.length ? `<div><span class="eyebrow">Mẫu ngữ pháp nên ôn lại</span><div class="weak">${weakList.map(g => `<a href="#bai-${gLesson(g)}">${g}</a>`).join("")}</div></div>` : `<div>Không sai câu nào về ngữ pháp. Rất tốt!</div>`}</div>`;
       document.getElementById("submit").disabled = true;
+      if (timer) timer.stop();
+      document.querySelector("#res .result").insertAdjacentHTML("beforeend", runInfo(key, saved, total));
+      store.set(key, saved);
     }
     app.onchange = e => {
       const inp = e.target.closest('input[type="radio"]');
       if (!inp || saved.done) return;
       saved.ans[inp.closest(".q").dataset.q] = Number(inp.value);
       store.set(key, saved); refresh();
+      if (timer) timer.start();  // chọn đáp án đầu tiên là bắt đầu tính giờ
     };
     document.getElementById("submit").addEventListener("click", () => {
       grade();
@@ -392,11 +458,15 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
       test(id);
     });
     refresh();
+    timer = setupTimer(saved, () => store.set(key, saved), total, () => {
+      grade(); document.getElementById("res").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
     if (saved.done) grade();
   }
 
   function route() {
     app.onchange = null;
+    clearInterval(window.__tmr);
     const h = location.hash.replace("#", "");
     let m;
     if ((m = h.match(/^bai-(\d+)$/)) && +m[1] >= 1 && +m[1] <= 25) lesson(+m[1]);

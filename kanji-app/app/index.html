@@ -19,7 +19,9 @@
       <a href="#study" data-tab="study">Học với Anki</a>
       <a href="#minna-n5" data-tab="minna-n5">Minna N5</a>
       <a href="#minna-n4" data-tab="minna-n4">Minna N4</a>
+      <a href="#notes" data-tab="notes">Ghi chú</a>
     </nav>
+    <button class="scan-toggle" id="scanToggle" type="button" aria-pressed="true" title="Bôi đen chữ Nhật ở bất kỳ đâu để xem nghĩa, Hán Việt, cách đọc">Quét chữ: Bật</button>
     <span class="anki-pill" id="ankiPill" title="Trạng thái kết nối với Anki">Đang kết nối Anki…</span>
   </div>
 </header>
@@ -60,6 +62,25 @@
     <div id="study"></div>
   </section>
 
+  <!-- Ghi chú theo ngày -->
+  <section class="view wrap" id="view-notes" hidden>
+    <div class="notes">
+      <aside class="notes-side">
+        <div class="notes-tools">
+          <button class="btn primary" id="noteToday" type="button">Hôm nay</button>
+          <input type="date" id="noteDate" aria-label="Chọn ngày">
+        </div>
+        <input type="search" id="noteSearch" placeholder="Tìm trong ghi chú…" autocomplete="off">
+        <div class="note-list" id="noteList"></div>
+      </aside>
+      <article class="note-edit">
+        <header><h1 id="noteTitle"></h1><span class="muted" id="noteState"></span></header>
+        <textarea id="noteText" spellcheck="false" placeholder="Ghi gì đó cho ngày này: chữ mới học, ngữ pháp còn nhầm, điểm đề…  (tự lưu)"></textarea>
+        <p class="muted small-note">Mẹo: bôi đen chữ ở bất kỳ đâu rồi bấm "＋ Ghi chú" trong khung nghĩa để thêm vào ghi chú hôm nay. Ghi chú lưu thành file trong thư mục <code>kanji-app/notes</code> trên máy.</p>
+      </article>
+    </div>
+  </section>
+
   <!-- Minna -->
   <section class="view minna" id="view-minna" hidden>
     <iframe id="minnaFrame" title="Bộ tài liệu Minna no Nihongo"></iframe>
@@ -70,6 +91,7 @@
 <script src="lib/kanjicanvas/ref-patterns.js"></script>
 <script src="data/app-data.js"></script>
 <script src="data/strokes.js"></script>
+<script src="data/tu-dien.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

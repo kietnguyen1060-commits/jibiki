@@ -205,3 +205,47 @@ main:has(#view-minna:not([hidden])) { padding: 0; }
   .answers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* ---------- Quét chữ ---------- */
+.scan-toggle { border: 1px solid var(--line); background: var(--sheet); color: var(--muted); border-radius: 999px; padding: 5px 12px; font: inherit; font-size: .82rem; cursor: pointer; }
+.scan-toggle[aria-pressed="true"] { color: var(--ai); border-color: var(--ai); background: var(--ai-soft); }
+.scan-pop { position: fixed; z-index: 50; width: min(340px, calc(100vw - 16px)); max-height: min(60vh, 420px); overflow: auto; background: var(--sheet); color: var(--ink);
+  border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, .18); padding: 10px 12px; display: grid; gap: 8px; font-size: .92rem; }
+.scan-pop .sp-word { border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+.scan-pop .sp-word b { font-family: var(--font-jp); font-size: 1.25rem; margin-right: 8px; }
+.scan-pop .sp-word span { font-family: var(--font-jp); color: var(--ai); }
+.scan-pop .sp-word p { margin: 2px 0 0; }
+.scan-pop .sp-kana { font-family: var(--font-jp); font-size: 1.05rem; display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.scan-pop .sp-kana b { color: var(--ai); }
+.scan-pop .sp-kana .arr { color: var(--muted); }
+.scan-pop .sp-k { display: grid; grid-template-columns: 2.4rem 1fr; gap: 8px; align-items: start; }
+.scan-pop .ch { font-family: var(--font-mincho); font-size: 1.9rem; line-height: 1; border: 0; background: none; color: var(--ink); padding: 0; cursor: pointer; }
+.scan-pop button.ch:hover { color: var(--ai); }
+.scan-pop .hv { color: var(--ai); letter-spacing: .03em; }
+.scan-pop small { display: block; color: var(--muted); font-family: var(--font-jp); font-size: .8rem; }
+.scan-pop small.ref { display: inline; font-family: var(--font-vi); }
+.scan-pop .en { color: var(--muted); }
+.scan-pop .sp-act { display: flex; justify-content: flex-end; }
+
+/* ---------- Ghi chú theo ngày ---------- */
+.notes { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 18px; align-items: start; }
+.notes-side { display: grid; gap: 10px; position: sticky; top: 76px; }
+.notes-tools { display: flex; gap: 8px; }
+.notes-tools input, .notes-side input[type="search"] { flex: 1; min-width: 0; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--sheet); color: var(--ink); font: inherit; }
+.note-list { display: grid; gap: 6px; max-height: calc(100vh - 220px); overflow: auto; }
+.note-list button { text-align: left; border: 1px solid var(--line); border-radius: 10px; background: var(--sheet); padding: 8px 10px; cursor: pointer; display: grid; gap: 2px; font: inherit; color: var(--ink); }
+.note-list button[aria-current="true"] { border-color: var(--ai); background: var(--ai-soft); }
+.note-list button span { color: var(--muted); font-size: .85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.note-edit { display: grid; gap: 8px; }
+.note-edit header { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.note-edit h1 { margin: 0; font-size: 1.3rem; }
+.note-edit textarea { width: 100%; min-height: 62vh; resize: vertical; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--sheet); color: var(--ink);
+  font: 1rem/1.7 var(--font-vi), var(--font-jp); }
+.note-edit textarea:focus { outline: 2px solid var(--ai); outline-offset: 1px; }
+.small-note { font-size: .85rem; margin: 0; }
+@media (max-width: 760px) {
+  .notes { grid-template-columns: 1fr; }
+  .notes-side { position: static; }
+  .note-list { max-height: 220px; }
+  .note-edit textarea { min-height: 50vh; }
+}

@@ -3,7 +3,8 @@
 Bộ công cụ tự học tiếng Nhật đi kèm Anki:
 
 - [`kanji-app/`](kanji-app/) — web app chạy trên máy: vẽ chữ lên bảng trắng để nhận diện kanji, mở thẻ kiểu Kanji Look and Learn (hình thành phần, thứ tự nét, từ ví dụ), học thẻ trực tiếp trên bộ sưu tập Anki qua AnkiConnect.
-- [`minna-n5/`](minna-n5/) — 5 đề N5, mỗi đề gộp 5 bài Minna no Nihongo I, phủ toàn bộ từ vựng và ngữ pháp.
+- Quét chữ để xem nghĩa / Hán Việt / cách đọc, và ghi chú theo ngày ngay trong app.
+- [`minna-n5/`](minna-n5/) — 5 đề N5, mỗi đề gộp 5 bài Minna no Nihongo I, phủ toàn bộ từ vựng và ngữ pháp; có đồng hồ làm đề và lịch sử điểm.
 - [`minna-n4/`](minna-n4/) — 25 đề N4, mỗi đề một bài Minna no Nihongo II (26–50): ngữ pháp, từ vựng, kanji.
 
 ## Dữ liệu không có trong repo

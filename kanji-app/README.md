@@ -9,6 +9,11 @@ App chạy trên máy để tra kanji bằng chữ viết tay, xem thẻ kiểu 
 
 Tra cứu và bộ đề Minna dùng được cả khi Anki đóng. Phần học thẻ, lịch ôn và sửa cách nhớ cần Anki đang mở.
 
+## Quét chữ và ghi chú
+
+- **Quét chữ** (nút ở thanh trên): bôi đen chữ Nhật ở bất kỳ đâu — thẻ tra cứu, trang đề Minna, thẻ Anki — để xem nghĩa và Hán Việt của từng chữ Hán, nghĩa của từ (nếu có trong Minna/KLL), katakana đổi sang hiragana. Chữ ngoài bộ thẻ dùng `app/data/tu-dien.js` (tạo bằng `tools/build_tudien.py` từ KANJIDIC2 và Unihan).
+- **Ghi chú** (tab Ghi chú): mỗi ngày một trang, tự lưu thành `notes/YYYY-MM-DD.md` trên máy (không đưa lên repo); có tìm kiếm và nút "＋ Ghi chú hôm nay" trong khung quét chữ.
+
 ## Đồng bộ với Anki
 
 Anki là nơi giữ dữ liệu duy nhất. App không có cơ sở dữ liệu thẻ riêng:

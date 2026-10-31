@@ -478,6 +478,176 @@
   });
 
   /* ---------- Điều hướng ---------- */
+  /* ---------- Quét chữ: bôi đen chữ Nhật ở bất kỳ đâu (cả trong trang Minna và thẻ Anki) ----------
+     Chữ Hán: nghĩa + Hán Việt từ bộ thẻ của người học; chữ ngoài bộ thẻ lấy KANJIDIC2/Unihan (tham khảo).
+     Katakana: đổi sang hiragana. Nếu đoạn bôi đen bắt đầu bằng một từ có trong Minna / KLL thì hiện nghĩa từ. */
+  const TD = window.TUDIEN || {};
+  const wordMap = new Map();
+  const addWord = (w, r, m) => { w = String(w || "").replace(/［[^］]*］|～/g, "").trim(); if (w && !wordMap.has(w)) wordMap.set(w, [r, m]); };
+  D.minna.forEach(m => { String(m[0]).split(/[、,／]/).forEach(w => addWord(w, m[1], m[2])); addWord(m[1], m[1], m[2]); });
+  D.words.forEach(w => addWord(w[0], w[1], w[2]));
+  D.kll.forEach(x => x.ex.forEach(e => addWord(e[0], e[1], e[2])));
+  const toHira = s => s.replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60));
+  const hasJa = s => /[぀-ヿ㐀-鿿々]/.test(s);
+  let scanOn = store.get("tk-quet", true);
+  const pop = document.createElement("div");
+  pop.className = "scan-pop";
+  pop.hidden = true;
+  pop.setAttribute("role", "dialog");
+  pop.setAttribute("aria-label", "Nghĩa của chữ đã chọn");
+  document.body.appendChild(pop);
+  function drawToggle() {
+    const b = $("#scanToggle");
+    b.textContent = "Quét chữ: " + (scanOn ? "Bật" : "Tắt");
+    b.setAttribute("aria-pressed", String(scanOn));
+  }
+  $("#scanToggle").addEventListener("click", () => { scanOn = !scanOn; store.set("tk-quet", scanOn); drawToggle(); if (!scanOn) hidePop(); });
+  drawToggle();
+  function wordOf(t) {
+    // Đúng cả đoạn, không thì bỏ dần đuôi (okurigana, trợ từ) để tìm từ dài nhất ở đầu.
+    for (let n = t.length; n >= 2; n--) { const w = wordMap.get(t.slice(0, n)); if (w) return [t.slice(0, n), w]; }
+    return null;
+  }
+  function scanHtml(t) {
+    let h = "";
+    const w = wordOf(t);
+    if (w) h += `<div class="sp-word"><b>${esc(w[0])}</b><span>${esc(w[1][0])}</span><p>${esc(w[1][1])}</p></div>`;
+    if (/[ァ-ヺ]/.test(t)) h += `<div class="sp-kana"><span>${esc(t)}</span><span class="arr">→</span><b>${esc(toHira(t))}</b></div>`;
+    [...new Set([...t].filter(isKanji))].slice(0, 8).forEach(c => {
+      const x = kllByChar.get(c), d = TD[c];
+      if (x) h += `<div class="sp-k"><button type="button" class="ch" data-k="${esc(c)}" title="Mở thẻ chữ ${esc(c)}">${esc(c)}</button><div><b class="hv">${esc(x.hv)}</b> ${esc(x.nghia)}<small>${esc(x.on)}${x.kun ? " · " + esc(x.kun) : ""}</small></div></div>`;
+      else if (d) h += `<div class="sp-k"><button type="button" class="ch" data-k="${esc(c)}" title="Mở thẻ chữ ${esc(c)}">${esc(c)}</button><div>${d[0] ? `<b class="hv">${esc(d[0])}</b> <small class="ref">Hán Việt tham khảo</small> ` : ""}<span class="en">${esc(d[1])}</span><small>${esc(d[2])}${d[3] ? " · " + esc(d[3]) : ""}</small></div></div>`;
+      else h += `<div class="sp-k"><span class="ch">${esc(c)}</span><div class="muted">Chưa có trong từ điển của app.</div></div>`;
+    });
+    return h ? h + `<div class="sp-act"><button type="button" class="btn small" data-note>＋ Ghi chú hôm nay</button></div>` : "";
+  }
+  let popText = "";
+  function hidePop() { pop.hidden = true; }
+  function scanFrom(doc, frame) {
+    if (!scanOn) return;
+    const a = doc.activeElement;
+    if (a && /INPUT|TEXTAREA/.test(a.tagName)) return;
+    const sel = doc.getSelection(), t = (sel ? sel.toString() : "").replace(/\s+/g, "").slice(0, 30);
+    if (!t || !hasJa(t) || !sel.rangeCount) return;
+    const html = scanHtml(t);
+    if (!html) return;
+    const r = sel.getRangeAt(0).getBoundingClientRect(), off = frame ? frame.getBoundingClientRect() : { left: 0, top: 0 };
+    popText = t;
+    pop.innerHTML = html;
+    pop.hidden = false;
+    const w = pop.offsetWidth, hgt = pop.offsetHeight;
+    const left = Math.min(Math.max(8, r.left + off.left), innerWidth - w - 8);
+    let top = r.bottom + off.top + 8;
+    if (top + hgt > innerHeight - 8) top = Math.max(8, r.top + off.top - hgt - 8);
+    pop.style.left = left + "px";
+    pop.style.top = top + "px";
+  }
+  function bindScan(doc, frame) {
+    if (!doc || doc.__quet) return;
+    doc.__quet = true;
+    const later = () => setTimeout(() => scanFrom(doc, frame), 10);
+    doc.addEventListener("mouseup", later);
+    doc.addEventListener("touchend", later);
+    doc.addEventListener("mousedown", e => { if (!pop.contains(e.target)) hidePop(); });
+    doc.addEventListener("keydown", e => { if (e.key === "Escape") hidePop(); });
+    doc.addEventListener("scroll", hidePop, { passive: true });
+  }
+  bindScan(document, null);
+  // Khung Minna và khung thẻ Anki cùng nguồn với app nên gắn được bộ quét vào tài liệu bên trong.
+  document.addEventListener("load", e => {
+    const f = e.target;
+    if (f && f.tagName === "IFRAME") { try { bindScan(f.contentDocument, f); } catch (err) {} }
+  }, true);
+  window.addEventListener("resize", hidePop);
+  pop.addEventListener("click", async e => {
+    const k = e.target.closest("[data-k]");
+    if (k) { hidePop(); go("lookup/" + k.dataset.k); return; }
+    const nb = e.target.closest("[data-note]");
+    if (nb) {
+      const w = wordOf(popText);
+      const lines = [...new Set([...popText].filter(isKanji))].map(c => {
+        const x = kllByChar.get(c), d = TD[c];
+        return x ? `${c} ${x.hv} — ${x.nghia}` : d ? `${c} ${d[0]} — ${d[1]}` : c;
+      });
+      const kana = /[ァ-ヺ]/.test(popText) ? [`${popText} → ${toHira(popText)}`] : [];
+      nb.disabled = true;
+      try { await notes.append([w ? `${w[0]}（${w[1][0]}）${w[1][1]}` : popText, ...kana, ...lines].join("\n")); nb.textContent = "✓ Đã thêm vào ghi chú"; }
+      catch (err) { nb.textContent = "Không lưu được"; nb.disabled = false; }
+    }
+  });
+
+  /* ---------- Ghi chú theo ngày (lưu thành file notes/YYYY-MM-DD.md qua server) ---------- */
+  const notes = (() => {
+    const pad = n => String(n).padStart(2, "0");
+    const today = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
+    const WD = ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"];
+    const title = day => { const [y, m, d] = day.split("-").map(Number); return `${WD[new Date(y, m - 1, d).getDay()]}, ${d}/${m}/${y}`; };
+    let list = [], cur = today(), timer = null, dirty = false;
+    const api = (day, opt) => fetch(day ? `/api/notes/${day}` : "/api/notes", opt).then(r => { if (!r.ok) throw new Error(r.status); return r; });
+    const put = (day, body) => api(day, { method: "PUT", headers: { "Content-Type": "text/plain; charset=utf-8" }, body });
+    function remember(day, text) {
+      const i = list.findIndex(n => n.date === day);
+      if (i >= 0) { if (text.trim()) list[i].text = text; else list.splice(i, 1); }
+      else if (text.trim()) list.push({ date: day, text });
+    }
+    async function loadList() {
+      try { list = await (await api()).json(); } catch (e) { list = []; }
+      drawList();
+    }
+    function drawList() {
+      const q = fold($("#noteSearch").value.trim());
+      const days = list.filter(n => !q || fold(n.text).includes(q) || n.date.includes(q));
+      if (!q && !days.some(n => n.date === cur)) days.push({ date: cur, text: $("#noteText").value });
+      days.sort((a, b) => b.date.localeCompare(a.date));
+      $("#noteList").innerHTML = days.map(n => `<button type="button" data-day="${n.date}" ${n.date === cur ? 'aria-current="true"' : ""}><b>${title(n.date)}</b><span>${esc((n.text.split("\n").find(l => l.trim()) || "(trống)").slice(0, 60))}</span></button>`).join("")
+        || `<span class="muted">Không thấy ghi chú nào.</span>`;
+    }
+    async function open(day) {
+      await save();
+      cur = day;
+      $("#noteDate").value = day;
+      $("#noteTitle").textContent = title(day) + (day === today() ? " · hôm nay" : "");
+      let text = "";
+      try { text = await (await api(day)).text(); $("#noteState").textContent = text ? "Đã lưu" : ""; }
+      catch (e) { $("#noteState").textContent = "Không kết nối được server"; }
+      $("#noteText").value = text;
+      drawList();
+    }
+    async function save() {
+      clearTimeout(timer);
+      if (!dirty) return;
+      dirty = false;
+      const text = $("#noteText").value;
+      try {
+        await put(cur, text);
+        $("#noteState").textContent = "Đã lưu " + new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
+        remember(cur, text);
+        drawList();
+      } catch (e) { dirty = true; $("#noteState").textContent = "Chưa lưu được — kiểm tra server"; }
+    }
+    $("#noteText").addEventListener("input", () => { dirty = true; $("#noteState").textContent = "Đang gõ…"; clearTimeout(timer); timer = setTimeout(save, 700); });
+    $("#noteText").addEventListener("blur", save);
+    $("#noteText").addEventListener("keydown", e => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") { e.preventDefault(); save(); } });
+    $("#noteToday").addEventListener("click", () => go("notes/" + today()));
+    $("#noteDate").addEventListener("change", e => { if (e.target.value) go("notes/" + e.target.value); });
+    $("#noteSearch").addEventListener("input", drawList);
+    $("#noteList").addEventListener("click", e => { const b = e.target.closest("[data-day]"); if (b) go("notes/" + b.dataset.day); });
+    return {
+      async show(day) { await loadList(); await open(/^\d{4}-\d{2}-\d{2}$/.test(day || "") ? day : today()); },
+      // Thêm một đoạn vào cuối ghi chú hôm nay (dùng từ khung quét chữ).
+      async append(text) {
+        const day = today();
+        if (cur === day && dirty) await save();
+        const old = await (await api(day)).text();
+        const t = new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
+        const body = (old.trimEnd() ? old.trimEnd() + "\n\n" : "") + `[${t}] ${text}`;
+        await put(day, body);
+        remember(day, body);
+        if (!$("#view-notes").hidden && cur === day) { $("#noteText").value = body; drawList(); }
+      }
+    };
+  })();
+
   let silent = false;
   function go(route, quiet) {
     if (decodeURIComponent(location.hash.replace(/^#/, "")) === route) { if (!quiet) window.dispatchEvent(new HashChangeEvent("hashchange")); return; }
@@ -491,6 +661,7 @@
     $("#view-lookup").hidden = tab !== "lookup";
     $("#view-study").hidden = tab !== "study";
     $("#view-minna").hidden = !tab.startsWith("minna");
+    $("#view-notes").hidden = tab !== "notes";
   }
   function route() {
     const h = decodeURIComponent(location.hash.replace(/^#/, "")) || "lookup";
@@ -502,6 +673,7 @@
       if (fr.dataset.src !== src) { fr.dataset.src = src; fr.src = src; }
       return;
     }
+    if (h === "notes" || h.startsWith("notes/")) { show("notes"); notes.show(h.slice(6)); return; }
     if (h === "study") { show("study"); if (silent) { silent = false; return; } renderDecks(); return; }
     show("lookup");
     const ch = h.startsWith("lookup/") ? h.slice(7) : "";
