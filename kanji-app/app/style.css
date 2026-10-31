@@ -222,6 +222,10 @@ main:has(#view-minna:not([hidden])) { padding: 0; }
 .scan-pop .sp-tr .lbl { font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
 .scan-pop .sp-tr p { margin: 2px 0 4px; font-size: 1rem; font-weight: 500; }
 .scan-pop .sp-tr small.ref { display: block; }
+.scan-pop .sp-sat { font-size: .88rem; color: var(--muted); }
+.scan-pop .sp-sat span { font-weight: 600; color: var(--ai); margin-right: 4px; }
+.scan-pop .sp-gt { margin: 6px 0 0; padding-left: 18px; font-size: .86rem; display: grid; gap: 2px; }
+.scan-pop .sp-gt li::marker { color: var(--ai); }
 .scan-pop .sp-word b { font-family: var(--font-jp); font-size: 1.25rem; margin-right: 8px; }
 .scan-pop .sp-word span { font-family: var(--font-jp); color: var(--ai); }
 .scan-pop .sp-word p { margin: 2px 0 0; }
