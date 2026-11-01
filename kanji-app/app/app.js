@@ -578,16 +578,20 @@
     // Nên so thêm số nét với KanjiVG; cho thiếu tới 1/4 số nét vì có người viết liền nét.
     const need = (STROKES[k] || []).length, drawn = wboard.strokes.length;
     const thieu = need && drawn < need - Math.floor(need / 4);
-    const net = need && drawn !== need ? ` Bạn viết ${drawn} nét, chữ đúng có ${need} nét.` : "";
     const i = cands.indexOf(k);
-    const hinh = i === 0 ? shapeCheck(k, wboard.strokes) : null;
-    if (i === 0 && (thieu || (hinh && hinh.lech)) && hinh) wboard.showGuide(hinh.guide);
-    const doTren = hinh ? " Nét mẫu đã đặt chồng lên bảng: nét đỏ là chỗ thiếu hoặc lệch." : "";
-    if (i === 0 && thieu) return `<div class="wr-res near">Thiếu nét: máy đoán ra <b class="jp-big">${esc(k)}</b> nhưng bạn mới viết ${drawn}/${need} nét — có thể thiếu một bộ phận.${doTren}</div>`;
-    if (i === 0 && hinh && hinh.lech) return `<div class="wr-res near">Chưa giống mẫu: máy đoán ra <b class="jp-big">${esc(k)}</b> nhưng chữ bạn viết chỉ khớp ${hinh.khop}% nét mẫu.${doTren}</div>`;
-    if (i === 0) return `<div class="wr-res ok">✓ Đúng: máy đọc ra <b class="jp-big">${esc(k)}</b>.</div>`;
-    if (i > 0 && i < 5) return `<div class="wr-res near">Gần đúng: máy đọc ra <b class="jp-big">${esc(cands[0])}</b>, chữ đúng <b class="jp-big">${esc(k)}</b> đứng thứ ${i + 1} trong gợi ý — xem lại nét.${net}</div>`;
-    return `<div class="wr-res no">✗ Máy đọc ra <b class="jp-big">${esc(cands[0] || "?")}</b>; chữ đúng là <b class="jp-big">${esc(k)}</b>.${net}</div>`;
+    const hinh = shapeCheck(k, wboard.strokes);
+    const dung = i === 0 && !thieu && !(hinh && hinh.lech);
+    if (dung) return `<div class="wr-res ok"><b class="wr-head">✓ Đúng rồi!</b></div>`;
+    // Chưa đúng: một câu gợi ý ngắn, kèm nét mẫu đặt chồng lên bảng (nét đỏ là chỗ cần sửa).
+    if (hinh) wboard.showGuide(hinh.guide);
+    const soNet = need && drawn !== need ? ` Chữ này có ${need} nét, bạn viết ${drawn}.` : "";
+    const xemDo = hinh ? " Nét đỏ trên bảng là chỗ cần sửa." : "";
+    let tip;
+    if (i === 0 && thieu) tip = `Còn thiếu nét — chữ này có ${need} nét, bạn mới viết ${drawn}.${xemDo}`;
+    else if (i === 0) tip = `Vài nét chưa đúng chỗ.${xemDo || " So lại với đáp án nhé."}`;
+    else if (i > 0 && i < 5) tip = `Gần đúng rồi, xem lại từng nét nhé.${soNet}${xemDo}`;
+    else tip = `Chữ bạn viết trông giống <b class="jp-big">${esc(cands[0] || "?")}</b> hơn.${soNet}${xemDo}`;
+    return `<div class="wr-res no"><b class="wr-head">Chưa đúng</b><span class="wr-tip">${tip}</span></div>`;
   }
 
   async function nextCard() {

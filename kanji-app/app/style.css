@@ -279,9 +279,10 @@ main:has(#view-minna:not([hidden])) { padding: 0; }
 #wpad { width: 100%; height: 100%; --ink-draw: #1b1b1b; }
 .wr-res { padding: 8px 12px; border-radius: 10px; border: 1px solid var(--line); text-align: center; max-width: 520px; }
 .wr-res.ok { color: var(--ok); border-color: var(--ok); background: var(--ok-soft); }
-.wr-res.near { color: var(--warn); border-color: var(--warn); }
 .wr-res.no { color: var(--bad); border-color: var(--bad); background: var(--bad-soft); }
 .wr-res .jp-big { font-family: var(--font-mincho); font-size: 1.6rem; margin: 0 2px; }
+.wr-res .wr-head { display: block; font-size: 1.15rem; }
+.wr-res .wr-tip { display: block; margin-top: 2px; font-size: .92rem; color: var(--ink); }
 /* Sau khi kiểm tra: bảng viết bên trái, đáp án bên phải để so ngay, không phải cuộn. */
 .write-wrap.da-hien { display: grid; grid-template-columns: minmax(300px, 560px) minmax(0, 1fr); gap: 18px; align-items: start; }
 .write-wrap.da-hien .write-left { position: sticky; top: 76px; }
