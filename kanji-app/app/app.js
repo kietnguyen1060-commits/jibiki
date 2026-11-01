@@ -500,10 +500,16 @@
     let cands = null;
     try { cands = await readInk(wboard.strokes); } catch (e) { cands = null; }
     if (!cands) return `<div class="wr-res none">Không nhận diện được (mất mạng). Tự so chữ bạn viết với chữ đúng: <b class="jp-big">${esc(k)}</b>.</div>`;
+    // Google đoán theo chữ thông dụng gần nhất: viết thiếu một bộ phận (夋 thay vì 後) vẫn ra chữ đủ.
+    // Nên so thêm số nét với KanjiVG; cho thiếu tới 1/4 số nét vì có người viết liền nét.
+    const need = (STROKES[k] || []).length, drawn = wboard.strokes.length;
+    const thieu = need && drawn < need - Math.floor(need / 4);
+    const net = need && drawn !== need ? ` Bạn viết ${drawn} nét, chữ đúng có ${need} nét.` : "";
     const i = cands.indexOf(k);
+    if (i === 0 && thieu) return `<div class="wr-res near">Thiếu nét: máy đoán ra <b class="jp-big">${esc(k)}</b> nhưng bạn mới viết ${drawn}/${need} nét — có thể thiếu một bộ phận, so lại với đáp án.</div>`;
     if (i === 0) return `<div class="wr-res ok">✓ Đúng: máy đọc ra <b class="jp-big">${esc(k)}</b>.</div>`;
-    if (i > 0 && i < 5) return `<div class="wr-res near">Gần đúng: máy đọc ra <b class="jp-big">${esc(cands[0])}</b>, chữ đúng <b class="jp-big">${esc(k)}</b> đứng thứ ${i + 1} trong gợi ý — xem lại nét.</div>`;
-    return `<div class="wr-res no">✗ Máy đọc ra <b class="jp-big">${esc(cands[0] || "?")}</b>; chữ đúng là <b class="jp-big">${esc(k)}</b>.</div>`;
+    if (i > 0 && i < 5) return `<div class="wr-res near">Gần đúng: máy đọc ra <b class="jp-big">${esc(cands[0])}</b>, chữ đúng <b class="jp-big">${esc(k)}</b> đứng thứ ${i + 1} trong gợi ý — xem lại nét.${net}</div>`;
+    return `<div class="wr-res no">✗ Máy đọc ra <b class="jp-big">${esc(cands[0] || "?")}</b>; chữ đúng là <b class="jp-big">${esc(k)}</b>.${net}</div>`;
   }
 
   async function nextCard() {
