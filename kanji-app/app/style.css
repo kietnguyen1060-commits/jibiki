@@ -275,7 +275,7 @@ main:has(#view-minna:not([hidden])) { padding: 0; }
 .write-q .wq-hint { font-size: .9rem; color: var(--muted); max-width: 520px; margin: 4px auto 0; }
 .write-q .wq-hint summary { cursor: pointer; }
 .write-area { display: grid; gap: 10px; justify-items: center; margin-bottom: 12px; }
-.write-area .canvas-box { width: min(300px, 100%); height: auto; aspect-ratio: 1; }
+.write-area .canvas-box { width: min(560px, 100%); height: auto; aspect-ratio: 1; }
 #wpad { width: 100%; height: 100%; --ink-draw: #1b1b1b; }
 .wr-res { padding: 8px 12px; border-radius: 10px; border: 1px solid var(--line); text-align: center; max-width: 520px; }
 .wr-res.ok { color: var(--ok); border-color: var(--ok); background: var(--ok-soft); }
@@ -283,7 +283,22 @@ main:has(#view-minna:not([hidden])) { padding: 0; }
 .wr-res.no { color: var(--bad); border-color: var(--bad); background: var(--bad-soft); }
 .wr-res .jp-big { font-family: var(--font-mincho); font-size: 1.6rem; margin: 0 2px; }
 /* Sau khi kiểm tra: bảng viết bên trái, đáp án bên phải để so ngay, không phải cuộn. */
-.write-wrap.da-hien { display: grid; grid-template-columns: minmax(280px, 380px) minmax(0, 1fr); gap: 18px; align-items: start; }
+.write-wrap.da-hien { display: grid; grid-template-columns: minmax(300px, 560px) minmax(0, 1fr); gap: 18px; align-items: start; }
 .write-wrap.da-hien .write-left { position: sticky; top: 76px; }
 .write-wrap.da-hien .cardframe { margin: 0; }
 @media (max-width: 860px) { .write-wrap.da-hien { grid-template-columns: 1fr; } .write-wrap.da-hien .write-left { position: static; } }
+
+/* Màn hình rộng: đề bài + nút bên trái, bảng viết to bên phải (cao theo màn hình, 320–600px) để không phải cuộn.
+   Sau khi kiểm tra: đề bài xếp trên bảng (bảng nhỏ lại một chút), đáp án ở cột bên phải. */
+@media (min-width: 861px) {
+  .write-left { display: grid; grid-template-columns: minmax(200px, 260px) auto; gap: 28px; justify-content: center; align-items: center; }
+  .write-left .write-q { text-align: left; margin: 0; }
+  .write-left .write-q .wq-hint { margin: 4px 0 0; }
+  .write-left .board-actions { justify-content: flex-start; margin-top: 10px; }
+  .write-left #wResult { margin-top: 6px; }
+  .write-left .write-area { margin: 0; }
+  .write-left .write-area .canvas-box { width: clamp(320px, calc(100vh - 250px), 600px); }
+  .write-wrap.da-hien .write-left { grid-template-columns: 1fr; gap: 10px; }
+  .write-wrap.da-hien .write-left .write-area .canvas-box { width: clamp(300px, calc(100vh - 420px), 460px); }
+  .write-wrap.da-hien { grid-template-columns: auto minmax(0, 1fr); }
+}

@@ -534,10 +534,10 @@
         ${fieldOf(c, "Hán Việt") ? `<div class="wq-hv">${esc(plain(fieldOf(c, "Hán Việt")))}</div>` : ""}
         <div class="wq-mean">${esc(plain(fieldOf(c, "Nghĩa", "Translate", "meaning", "English")))}</div>
         ${fieldOf(c, "Cách nhớ") ? `<details class="wq-hint"><summary>Gợi ý cách nhớ</summary>${esc(plain(fieldOf(c, "Cách nhớ")))}</details>` : ""}
-      </div>
-      <div class="write-area"><div class="canvas-box"><canvas id="wpad" aria-label="Bảng viết chữ"></canvas><div class="guide" aria-hidden="true"></div></div>
         <div class="board-actions"><button class="btn" id="wUndo" type="button">↶ Xoá nét cuối</button><button class="btn" id="wClear" type="button">Xoá hết</button></div>
-        <div id="wResult"></div></div>`;
+        <div id="wResult"></div>
+      </div>
+      <div class="write-area"><div class="canvas-box"><canvas id="wpad" aria-label="Bảng viết chữ"></canvas><div class="guide" aria-hidden="true"></div></div></div>`;
     studyEl.innerHTML = `<div class="reviewer"><div class="rv-top"><div><b>${esc(s.title)}</b> <span class="muted">· ${esc(c.deckName || "")} · đã chấm ${s.done}</span></div>
       <span class="counts"><span class="new">${counts.new_count}</span><span class="lrn">${counts.learn_count}</span><span class="rev">${counts.review_count}</span></span>
       <span class="row-actions">${modeBtn}${s.back ? `<a class="btn small" href="#${esc(s.back)}">← Thẻ kanji</a>` : ""}<button class="btn small" id="endS" type="button">Dừng</button></span></div>
@@ -580,7 +580,7 @@
     const c = s.cur, f = $("#cf");
     f.hidden = false;
     const ww = $("#writeWrap");
-    if (ww) ww.classList.add("da-hien");
+    if (ww) { ww.classList.add("da-hien"); if (wboard) wboard.fit(); }  // bảng nhỏ lại: vẽ lại nét theo kích thước mới
     f.srcdoc = cardDoc(c.answer, c.css, s.ord, s.av);
     const eases = (c.buttons && c.buttons.length ? c.buttons : [1, 2, 3, 4]);
     $("#ansArea").innerHTML = `<div class="answers">${eases.map((e, i) => {
