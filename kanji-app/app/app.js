@@ -653,22 +653,18 @@
     try { cands = await readInk(wboard.strokes); } catch (e) { cands = null; }
     if (!cands) return `<div class="wr-res none">Không nhận diện được (mất mạng). Tự so chữ bạn viết với chữ đúng: <b class="jp-big">${esc(k)}</b>.</div>`;
     // Google đoán theo chữ thông dụng gần nhất: viết thiếu một bộ phận (夋 thay vì 後) vẫn ra chữ đủ.
-    // Nên so thêm số nét với KanjiVG; cho thiếu tới 1/4 số nét vì có người viết liền nét.
-    const need = (STROKES[k] || []).length, drawn = wboard.strokes.length;
-    const thieu = need && drawn < need - Math.floor(need / 4);
+    // Nên so thêm hình chữ với nét mẫu. Không so số nét: viết liền nét (口 một nét) vẫn là đúng.
     const i = cands.indexOf(k);
     const hinh = shapeCheck(k, wboard.strokes);
-    const dung = i === 0 && !thieu && !(hinh && hinh.lech);
+    const dung = i === 0 && !(hinh && hinh.lech);
     if (dung) return `<div class="wr-res ok"><b class="wr-head">✓ Đúng rồi!</b></div>`;
     // Chưa đúng: một câu gợi ý ngắn, kèm nét mẫu đặt chồng lên bảng (nét đỏ là chỗ cần sửa).
     if (hinh) wboard.showGuide(hinh.guide);
-    const soNet = need && drawn !== need ? ` Chữ này có ${need} nét, bạn viết ${drawn}.` : "";
     const xemDo = hinh ? " Nét đỏ trên bảng là chỗ cần sửa." : "";
     let tip;
-    if (i === 0 && thieu) tip = `Còn thiếu nét — chữ này có ${need} nét, bạn mới viết ${drawn}.${xemDo}`;
-    else if (i === 0) tip = `Vài nét chưa đúng chỗ.${xemDo || " So lại với đáp án nhé."}`;
-    else if (i > 0 && i < 5) tip = `Gần đúng rồi, xem lại từng nét nhé.${soNet}${xemDo}`;
-    else tip = `Chữ bạn viết trông giống <b class="jp-big">${esc(cands[0] || "?")}</b> hơn.${soNet}${xemDo}`;
+    if (i === 0) tip = `Vài nét chưa đúng chỗ.${xemDo || " So lại với đáp án nhé."}`;
+    else if (i > 0 && i < 5) tip = `Gần đúng rồi, xem lại từng nét nhé.${xemDo}`;
+    else tip = `Chữ bạn viết trông giống <b class="jp-big">${esc(cands[0] || "?")}</b> hơn.${xemDo}`;
     return `<div class="wr-res no"><b class="wr-head">Chưa đúng</b><span class="wr-tip">${tip}</span></div>`;
   }
 
