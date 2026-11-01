@@ -120,7 +120,7 @@
     function toPad(e) {
       const r = canvas.getBoundingClientRect(), k = SIZE / r.width;
       const pressure = e.pointerType === "pen" && e.pressure > 0 ? e.pressure : 0.5;
-      return { x: (e.clientX - r.left) * k, y: (e.clientY - r.top) * k, w: 4 + pressure * 6, t: Math.round(performance.now()) };
+      return { x: (e.clientX - r.left) * k, y: (e.clientY - r.top) * k, w: 3 + pressure * 4.5, t: Math.round(performance.now()) };
     }
     function addPoint(p) {
       const last = cur[cur.length - 1];
@@ -511,10 +511,12 @@
      chữ viết nghiêng / tỉ lệ khác vẫn khớp. Sau đó, trong bán kính 0,25, chữ là "chưa đúng" khi:
      - hơn 15% nét mẫu không có mực nào ở gần (thiếu bộ phận: 夋 thay cho 後, phần trong 南 viết sai);
      - một nét dài viết ngắn hẳn: đầu nét mẫu cách mực quá 0,65;
-     - một đoạn nét nhô qua nét khác (dài từ 0,6) mà người viết không nhô (sổ dọc 生 dừng ở nét ngang đầu).
+     - một đoạn nét nhô qua nét khác (dài từ 0,6) mà người viết không nhô (sổ dọc 生 dừng ở nét ngang đầu);
+     - hơn 15% nét mẫu không có mực cùng hướng (lệch dưới 40°) trong bán kính 0,2 (飲 viết nguệch ngoạc: chữ
+       nhiều nét thì nét mẫu nằm sát nhau, chỉ xét khoảng cách thì nét nào cũng "chạm").
      Ngưỡng chọn bằng cách thử chữ in Yu Gothic / MS Gothic và nét KanjiVG làm méo như chữ viết tay (xoay,
-     nghiêng, lệch từng nét): báo nhầm khoảng 1%; 去 viết đúng mà nghiêng được tính đúng; bốn chữ viết sai
-     thật (後, 南 hai lần, 生) đều bị bắt. */
+     nghiêng, lệch từng nét, có hoặc không viết liền): méo vừa không báo nhầm chữ nào trong 200 chữ; 去 viết
+     đúng mà nghiêng được tính đúng; năm chữ viết sai thật (後, 南 hai lần, 生, 飲) đều bị bắt. */
   function refPoints(paths) {
     const NS = "http://www.w3.org/2000/svg", svg = document.createElementNS(NS, "svg");
     svg.style.cssText = "position:absolute;width:0;height:0";
@@ -569,6 +571,14 @@
     const X = solve(bx), Y = solve(by);
     return [[X[0], X[1]], [Y[0], Y[1]]];
   }
+  // Xoay + co giãn đều (Procrustes), dùng khi affine suy biến (chữ một nét thẳng như 一: điểm gần như thẳng hàng).
+  function fitSimilarity(src, dst) {
+    const n = src.length, cs = [0, 1].map(a => src.reduce((t, p) => t + p[a], 0) / n), cd = [0, 1].map(a => dst.reduce((t, p) => t + p[a], 0) / n);
+    let p = 0, q = 0, ss = 0;
+    src.forEach(([x, y], i) => { const sx = x - cs[0], sy = y - cs[1], dx = dst[i][0] - cd[0], dy = dst[i][1] - cd[1]; p += sx * dx + sy * dy; q += sx * dy - sy * dx; ss += sx * sx + sy * sy; });
+    const k = Math.hypot(p, q) / (ss || 1), th = Math.atan2(q, p);
+    return [[k * Math.cos(th), -k * Math.sin(th)], [k * Math.sin(th), k * Math.cos(th)]];
+  }
   function shapeCheck(k, strokes) {
     const paths = STROKES[k];
     if (!paths || !paths.length) return null;
@@ -577,12 +587,12 @@
     const refN = refs.map(st => st.map(([x, y]) => [(x - r0.c[0]) / g, (y - r0.c[1]) / g]));
     const flatN = refN.flat(), rs = spread(flatN).s;
     // Mực người viết: chấm dày mỗi 2 đơn vị cho đều, rồi đưa về cùng tỉ lệ với mẫu.
-    const ink = [];
-    strokes.forEach(st => {
-      ink.push([st[0].x, st[0].y]);
+    const ink = [], sid = [];
+    strokes.forEach((st, k) => {
+      ink.push([st[0].x, st[0].y]); sid.push(k);
       for (let i = 1; i < st.length; i++) {
         const a = st[i - 1], b = st[i], n = Math.ceil(Math.hypot(b.x - a.x, b.y - a.y) / 2);
-        for (let j = 1; j <= n; j++) ink.push([a.x + (b.x - a.x) * j / n, a.y + (b.y - a.y) * j / n]);
+        for (let j = 1; j <= n; j++) { ink.push([a.x + (b.x - a.x) * j / n, a.y + (b.y - a.y) * j / n]); sid.push(k); }
       }
     });
     const u0 = spread(ink), f0 = 1 / (Math.hypot(u0.s[0], u0.s[1]) || 1);
@@ -606,8 +616,8 @@
       u.forEach(([x, y], j) => { const [d, i] = nearest(flatN, x, y); if (d < 3 * R) { src.push(base[j]); dst.push(flatN[i]); } });
       flatN.forEach(([x, y]) => { const [d, j] = nearest(u, x, y); if (d < 3 * R) { src.push(base[j]); dst.push([x, y]); } });
       if (src.length < 10) break;
-      const fit = fitAffine(src, dst);
-      if (!fit) break;
+      let fit = fitAffine(src, dst);
+      if (!fit || Math.abs(fit[0][0] * fit[1][1] - fit[0][1] * fit[1][0]) < 0.2 * fit.flat().reduce((t, v) => t + v * v, 0) / 2) fit = fitSimilarity(src, dst);
       A = clampAffine(fit, 1.25, Math.PI / 12);
       t = [0, 1].map(a => dst.reduce((s, p, i) => s + p[a] - (A[a][0] * src[i][0] + A[a][1] * src[i][1]), 0) / src.length);
       u = base.map(ap);
@@ -619,10 +629,31 @@
       const bx = (A[1][1] * qx - A[0][1] * qy) / det, by = (-A[1][0] * qx + A[0][0] * qy) / det;
       return [(bx - shift[0]) / f[0] + u0.c[0], (by - shift[1]) / f[1] + u0.c[1]];
     };
-    let miss = 0, sai = false;
+    // Hướng nét (0–180°). Mực: theo chiều kéo bút (±3 điểm cùng nét), điểm lẻ thì theo các điểm mực lân cận.
+    const angDiff = (a, b) => { const d = Math.abs(a - b) % Math.PI; return Math.min(d, Math.PI - d); };
+    const pcaDir = (P, x, y, r) => {
+      let sxx = 0, syy = 0, sxy = 0;
+      P.forEach(([px, py]) => { const dx = px - x, dy = py - y; if (dx * dx + dy * dy < r * r) { sxx += dx * dx; syy += dy * dy; sxy += dx * dy; } });
+      return 0.5 * Math.atan2(2 * sxy, sxx - syy);
+    };
+    const ud = u.map(([x, y], i) => {
+      let a = i, b = i;
+      while (a > i - 3 && a > 0 && sid[a - 1] === sid[i]) a--;
+      while (b < i + 3 && b < u.length - 1 && sid[b + 1] === sid[i]) b++;
+      return b > a ? Math.atan2(u[b][1] - u[a][1], u[b][0] - u[a][0]) : pcaDir(u, x, y, 0.06);
+    });
+    // Phủ có hướng: điểm mẫu chỉ tính là có mực khi trong bán kính 0,2 có mực đi cùng hướng (lệch dưới 40°).
+    // Chữ nhiều nét (飲) các nét mẫu nằm sát nhau, nét viết nguệch ngoạc vẫn "chạm" gần hết; xét hướng thì không.
+    const R2 = 0.2, ANG = Math.PI * 40 / 180;
+    let miss = 0, missDir = 0, sai = false;
     const guide = refN.map((st, si) => {
       const d = st.map(([x, y]) => nearest(u, x, y)[0]);
       miss += d.filter(v => v >= R).length;
+      const lacHuong = st.map(([x, y], i) => {
+        const p = st[Math.max(0, i - 2)], q = st[Math.min(st.length - 1, i + 2)], rd = Math.atan2(q[1] - p[1], q[0] - p[0]);
+        return !u.some(([ux, uy], j) => (ux - x) ** 2 + (uy - y) ** 2 < R2 * R2 && angDiff(ud[j], rd) < ANG);
+      });
+      missDir += lacHuong.filter(Boolean).length;
       // Nét dài viết ngắn hẳn. Chấm ngắn như ở 心 không xét: mỗi người đặt một kiểu.
       if (st.length / g >= 0.6 && Math.max(d[0], d[d.length - 1]) > 0.65) sai = true;
       // Đoạn đầu nét nhô qua nét khác: tìm chỗ chạm nét khác gần đầu nét nhất; đoạn từ đó ra đầu nét dài từ 0,6
@@ -642,9 +673,9 @@
           if (arc >= 0.6 && test >= 2 && !phu) sai = true;
         });
       }
-      return { miss: d.map(v => v >= R), pts: st.map(toPad) };
+      return { miss: lacHuong, pts: st.map(toPad) };
     });
-    return { lech: miss / flatN.length > 0.15 || sai, guide };
+    return { lech: missDir / flatN.length > 0.15 || miss / flatN.length > 0.15 || sai, guide };
   }
   // Máy đọc chữ người học vừa viết rồi so với chữ đúng.
   async function inkVerdict(k) {
