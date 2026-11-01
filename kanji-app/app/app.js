@@ -506,12 +506,15 @@
   }
   let wboard = null;
   /* So hình chữ người viết với nét mẫu KanjiVG, không phụ thuộc thứ tự hay số nét.
-     Mẫu chuẩn hoá theo trọng tâm và bán kính trung bình; chữ người viết co giãn từng trục về độ trải của mẫu
-     (tỉ lệ hai trục lệch tối đa 15%), dịch cho khớp 3 lần. Rồi đo trong bán kính 0,25:
-     - phần nét mẫu không có mực nào ở gần (bắt thiếu bộ phận: 夋 thay cho 後, phần trong 南 viết sai);
-     - đầu nét mẫu cách mực gần nhất bao xa (bắt nét ngắn hơn mẫu: sổ dọc của 生 không nhô lên trên).
-     Ngưỡng (trên 15% hoặc một đầu nét lệch quá 0,5) chọn bằng cách thử 2.100 chữ in Yu Gothic / MS Gothic so
-     với KanjiVG: báo nhầm 0,1%; bốn chữ viết sai thật đều bị bắt. */
+     Căn chữ: mẫu chuẩn hoá theo trọng tâm và bán kính trung bình; chữ người viết co giãn về độ trải của mẫu,
+     dịch cho khớp, rồi căn affine có giới hạn (xoay tối đa 15°, co giãn lệch tối đa 25% giữa hai hướng) để
+     chữ viết nghiêng / tỉ lệ khác vẫn khớp. Sau đó, trong bán kính 0,25, chữ là "chưa đúng" khi:
+     - hơn 15% nét mẫu không có mực nào ở gần (thiếu bộ phận: 夋 thay cho 後, phần trong 南 viết sai);
+     - một nét dài viết ngắn hẳn: đầu nét mẫu cách mực quá 0,65;
+     - một đoạn nét nhô qua nét khác (dài từ 0,6) mà người viết không nhô (sổ dọc 生 dừng ở nét ngang đầu).
+     Ngưỡng chọn bằng cách thử chữ in Yu Gothic / MS Gothic và nét KanjiVG làm méo như chữ viết tay (xoay,
+     nghiêng, lệch từng nét): báo nhầm khoảng 1%; 去 viết đúng mà nghiêng được tính đúng; bốn chữ viết sai
+     thật (後, 南 hai lần, 生) đều bị bắt. */
   function refPoints(paths) {
     const NS = "http://www.w3.org/2000/svg", svg = document.createElementNS(NS, "svg");
     svg.style.cssText = "position:absolute;width:0;height:0";
@@ -536,6 +539,36 @@
     for (let i = 0; i < P.length; i++) { const d = (P[i][0] - x) ** 2 + (P[i][1] - y) ** 2; if (d < best) { best = d; bi = i; } }
     return [Math.sqrt(best), bi];
   }
+  // Giới hạn ma trận affine 2×2: tách thành xoay × co giãn đối xứng, kẹp góc xoay và tỉ lệ hai hướng co giãn.
+  function clampAffine([[a, b], [c, d]], smax, rot) {
+    if (a * d - b * c <= 0) return [[1, 0], [0, 1]];
+    let th = Math.atan2(c - b, a + d);
+    const co = Math.cos(th), si = Math.sin(th);
+    const p = co * a + si * c, q = co * b + si * d, r = co * d - si * b;   // P = Rᵀ·A = [[p, q], [q, r]]
+    const m = (p + r) / 2, h = Math.hypot((p - r) / 2, q);
+    let l1 = m + h, l2 = m - h;
+    const gm = Math.sqrt(Math.max(l1 * l2, 1e-9));
+    l1 = Math.min(gm * smax, Math.max(gm / smax, l1)); l2 = Math.min(gm * smax, Math.max(gm / smax, l2));
+    const ang = 0.5 * Math.atan2(2 * q, p - r), ec = Math.cos(ang), es = Math.sin(ang);
+    const P = [[l1 * ec * ec + l2 * es * es, (l1 - l2) * ec * es], [(l1 - l2) * ec * es, l1 * es * es + l2 * ec * ec]];
+    th = Math.max(-rot, Math.min(rot, th));
+    const C = Math.cos(th), S = Math.sin(th);
+    return [[C * P[0][0] - S * P[1][0], C * P[0][1] - S * P[1][1]], [S * P[0][0] + C * P[1][0], S * P[0][1] + C * P[1][1]]];
+  }
+  // Bình phương tối thiểu dst ≈ A·src + t (affine 2D) qua phương trình chuẩn 3×3.
+  function fitAffine(src, dst) {
+    const M = [[0, 0, 0], [0, 0, 0], [0, 0, 0]], bx = [0, 0, 0], by = [0, 0, 0];
+    src.forEach(([x, y], i) => {
+      const v = [x, y, 1];
+      for (let r = 0; r < 3; r++) { for (let c = 0; c < 3; c++) M[r][c] += v[r] * v[c]; bx[r] += v[r] * dst[i][0]; by[r] += v[r] * dst[i][1]; }
+    });
+    const det3 = m => m[0][0] * (m[1][1] * m[2][2] - m[1][2] * m[2][1]) - m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0]) + m[0][2] * (m[1][0] * m[2][1] - m[1][1] * m[2][0]);
+    const D = det3(M);
+    if (Math.abs(D) < 1e-12) return null;
+    const solve = b => [0, 1, 2].map(k => det3(M.map((row, r) => row.map((v, c) => (c === k ? b[r] : v)))) / D);
+    const X = solve(bx), Y = solve(by);
+    return [[X[0], X[1]], [Y[0], Y[1]]];
+  }
   function shapeCheck(k, strokes) {
     const paths = STROKES[k];
     if (!paths || !paths.length) return null;
@@ -556,25 +589,62 @@
     const f = [0, 1].map(a => f0 * (u0.s[a] > 1e-6 ? Math.min(1.15, Math.max(1 / 1.15, rs[a] / u0.s[a] / f0)) : 1.15));
     let shift = [0, 0];
     const toN = ([x, y]) => [(x - u0.c[0]) * f[0] + shift[0], (y - u0.c[1]) * f[1] + shift[1]];
-    let u = ink.map(toN);
+    let base = ink.map(toN);
     for (let it = 0; it < 3; it++) {
       let dx = 0, dy = 0, m = 0;
-      u.forEach(([x, y]) => { const [d, i] = nearest(flatN, x, y); if (d < 2 * R) { dx += flatN[i][0] - x; dy += flatN[i][1] - y; m++; } });
+      base.forEach(([x, y]) => { const [d, i] = nearest(flatN, x, y); if (d < 2 * R) { dx += flatN[i][0] - x; dy += flatN[i][1] - y; m++; } });
       if (m <= 5) break;
       shift = [shift[0] + dx / m * 0.8, shift[1] + dy / m * 0.8];
-      u = ink.map(toN);
+      base = ink.map(toN);
     }
-    let miss = 0, dauLech = false;
-    const guide = refN.map(st => {
+    // Căn affine: ghép mực ↔ mẫu theo điểm gần nhất (cả hai chiều), giải affine, kẹp giới hạn, lặp 12 lần.
+    let A = [[1, 0], [0, 1]], t = [0, 0];
+    const ap = ([x, y]) => [A[0][0] * x + A[0][1] * y + t[0], A[1][0] * x + A[1][1] * y + t[1]];
+    let u = base;
+    for (let it = 0; it < 12; it++) {
+      const src = [], dst = [];
+      u.forEach(([x, y], j) => { const [d, i] = nearest(flatN, x, y); if (d < 3 * R) { src.push(base[j]); dst.push(flatN[i]); } });
+      flatN.forEach(([x, y]) => { const [d, j] = nearest(u, x, y); if (d < 3 * R) { src.push(base[j]); dst.push([x, y]); } });
+      if (src.length < 10) break;
+      const fit = fitAffine(src, dst);
+      if (!fit) break;
+      A = clampAffine(fit, 1.25, Math.PI / 12);
+      t = [0, 1].map(a => dst.reduce((s, p, i) => s + p[a] - (A[a][0] * src[i][0] + A[a][1] * src[i][1]), 0) / src.length);
+      u = base.map(ap);
+    }
+    // Ngược lại: toạ độ chuẩn hoá → toạ độ bảng (để vẽ nét mẫu chồng lên chữ người viết).
+    const det = A[0][0] * A[1][1] - A[0][1] * A[1][0];
+    const toPad = ([x, y]) => {
+      const qx = x - t[0], qy = y - t[1];
+      const bx = (A[1][1] * qx - A[0][1] * qy) / det, by = (-A[1][0] * qx + A[0][0] * qy) / det;
+      return [(bx - shift[0]) / f[0] + u0.c[0], (by - shift[1]) / f[1] + u0.c[1]];
+    };
+    let miss = 0, sai = false;
+    const guide = refN.map((st, si) => {
       const d = st.map(([x, y]) => nearest(u, x, y)[0]);
       miss += d.filter(v => v >= R).length;
-      // Đầu nét chỉ xét với nét dài (từ 0,6 bán kính chữ): chấm ngắn như ở 心 mỗi người đặt một kiểu.
-      if (st.length / g >= 0.6 && Math.max(d[0], d[d.length - 1]) > 0.5) dauLech = true;
-      // Đưa nét mẫu về toạ độ bảng để vẽ chồng lên chữ người viết.
-      return { miss: d.map(v => v >= R), pts: st.map(([x, y]) => [(x - shift[0]) / f[0] + u0.c[0], (y - shift[1]) / f[1] + u0.c[1]]) };
+      // Nét dài viết ngắn hẳn. Chấm ngắn như ở 心 không xét: mỗi người đặt một kiểu.
+      if (st.length / g >= 0.6 && Math.max(d[0], d[d.length - 1]) > 0.65) sai = true;
+      // Đoạn đầu nét nhô qua nét khác: tìm chỗ chạm nét khác gần đầu nét nhất; đoạn từ đó ra đầu nét dài từ 0,6
+      // thì người viết cũng phải có mực ở đó (bỏ khúc sát chỗ giao, nơi mực của nét kia nằm).
+      const others = refN.filter((_, j) => j !== si).flat();
+      if (others.length) {
+        const dk = st.map(([x, y]) => nearest(others, x, y)[0]);
+        [[...st.keys()], [...st.keys()].reverse()].forEach(idx => {
+          const j = idx.findIndex(i => dk[i] < 0.06);
+          if (j <= 0) return;
+          let arc = 0, test = 0, phu = 0;
+          for (let p = j - 1; p >= 0; p--) {
+            const a = st[idx[p]], b = st[idx[p + 1]];
+            arc += Math.hypot(a[0] - b[0], a[1] - b[1]);
+            if (arc >= R) { test++; if (d[idx[p]] < R) phu++; }
+          }
+          if (arc >= 0.6 && test >= 2 && !phu) sai = true;
+        });
+      }
+      return { miss: d.map(v => v >= R), pts: st.map(toPad) };
     });
-    const unc = miss / flatN.length;
-    return { lech: unc > 0.15 || dauLech, guide };
+    return { lech: miss / flatN.length > 0.15 || sai, guide };
   }
   // Máy đọc chữ người học vừa viết rồi so với chữ đúng.
   async function inkVerdict(k) {
