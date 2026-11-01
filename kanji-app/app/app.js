@@ -77,7 +77,7 @@
   const SIZE = 300;
   function makeBoard(canvas, onStroke) {
     const ctx = canvas.getContext("2d"), strokes = [];
-    let cur = null;
+    let cur = null, guide = null;
     function fit() {
       const dpr = Math.max(1, window.devicePixelRatio || 1), css = canvas.getBoundingClientRect().width || SIZE;
       canvas.width = Math.round(css * dpr); canvas.height = Math.round(css * dpr);
@@ -99,6 +99,12 @@
     }
     function redraw() {
       ctx.clearRect(0, 0, SIZE, SIZE);
+      // Nét mẫu đặt chồng sau khi kiểm tra: xanh nhạt là nét khớp, đỏ là nét thiếu hoặc lệch.
+      if (guide) guide.forEach(g => {
+        ctx.strokeStyle = g.lech ? "rgba(214, 48, 49, .55)" : "rgba(52, 120, 220, .28)";
+        ctx.lineWidth = 7; ctx.lineCap = ctx.lineJoin = "round";
+        ctx.beginPath(); g.pts.forEach(([x, y], j) => j ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke();
+      });
       const ink = inkColor();
       strokes.forEach((s, i) => {
         drawStroke(s, ink);
@@ -148,7 +154,8 @@
     return {
       strokes, fit,
       undo() { strokes.pop(); redraw(); },
-      clear() { strokes.length = 0; redraw(); },
+      clear() { strokes.length = 0; guide = null; redraw(); },
+      showGuide(g) { guide = g; redraw(); },
     };
   }
   // Nhận diện chữ viết tay của Google (qua /api/viet của server): không phụ thuộc thứ tự nét, số nét, nét viết liền.
@@ -494,6 +501,73 @@
     return doc.body.innerHTML.replace(/\[sound:[^\]]+\]|\[anki:play:[qa]:\d+\]/g, "").trim();
   }
   let wboard = null;
+  /* So hình chữ người viết với nét mẫu KanjiVG, không phụ thuộc thứ tự hay số nét.
+     Hai bên chuẩn hoá theo trọng tâm và độ trải (cho méo tỉ lệ tới 15%), dịch cho khớp 3 lần, rồi đo phần
+     nét mẫu không có mực nào trong bán kính 0,25 độ trải. Ngưỡng 25% chọn bằng cách thử: chữ in Yu Gothic /
+     MS Gothic so với KanjiVG (600 mẫu đúng) có 99% dưới 17%; hai chữ viết sai thật (夋 cho 後, 南 sai phần
+     trong) là 41–44%. */
+  function refPoints(paths) {
+    const NS = "http://www.w3.org/2000/svg", svg = document.createElementNS(NS, "svg");
+    svg.style.cssText = "position:absolute;width:0;height:0";
+    document.body.appendChild(svg);
+    const out = paths.map(d => {
+      const p = document.createElementNS(NS, "path");
+      p.setAttribute("d", d); svg.appendChild(p);
+      const L = p.getTotalLength(), n = Math.max(2, Math.ceil(L)), pts = [];
+      for (let i = 0; i <= n; i++) { const q = p.getPointAtLength(L * i / n); pts.push([q.x, q.y]); }
+      return pts;
+    });
+    svg.remove();
+    return out;
+  }
+  function spread(P) {
+    const c = [0, 1].map(a => P.reduce((t, p) => t + p[a], 0) / P.length);
+    const s = [0, 1].map(a => Math.sqrt(P.reduce((t, p) => t + (p[a] - c[a]) ** 2, 0) / P.length) || 1);
+    return { c, s };
+  }
+  function nearest(P, x, y) {
+    let best = Infinity, bi = 0;
+    for (let i = 0; i < P.length; i++) { const d = (P[i][0] - x) ** 2 + (P[i][1] - y) ** 2; if (d < best) { best = d; bi = i; } }
+    return [Math.sqrt(best), bi];
+  }
+  function shapeCheck(k, strokes) {
+    const paths = STROKES[k];
+    if (!paths || !paths.length) return null;
+    const R = 0.25, refs = refPoints(paths), all = refs.flat();
+    const r0 = spread(all), g = Math.sqrt(r0.s[0] * r0.s[1]);
+    const refN = refs.map(st => st.map(([x, y]) => [(x - r0.c[0]) / g, (y - r0.c[1]) / g]));
+    const flatN = refN.flat(), rs = spread(flatN).s;
+    // Mực người viết: chấm dày mỗi 2 đơn vị cho đều, rồi đưa về cùng tỉ lệ với mẫu.
+    const ink = [];
+    strokes.forEach(st => {
+      ink.push([st[0].x, st[0].y]);
+      for (let i = 1; i < st.length; i++) {
+        const a = st[i - 1], b = st[i], n = Math.ceil(Math.hypot(b.x - a.x, b.y - a.y) / 2);
+        for (let j = 1; j <= n; j++) ink.push([a.x + (b.x - a.x) * j / n, a.y + (b.y - a.y) * j / n]);
+      }
+    });
+    const u0 = spread(ink), gu = Math.sqrt(u0.s[0] * u0.s[1]);
+    const su = u0.s.map(v => gu * Math.min(1.15, Math.max(1 / 1.15, v / gu)));
+    let shift = [0, 0];
+    const toN = ([x, y]) => [(x - u0.c[0]) / su[0] * rs[0] + shift[0], (y - u0.c[1]) / su[1] * rs[1] + shift[1]];
+    let u = ink.map(toN);
+    for (let it = 0; it < 3; it++) {
+      let dx = 0, dy = 0, m = 0;
+      u.forEach(([x, y]) => { const [d, i] = nearest(flatN, x, y); if (d < 2 * R) { dx += flatN[i][0] - x; dy += flatN[i][1] - y; m++; } });
+      if (m <= 5) break;
+      shift = [shift[0] + dx / m * 0.8, shift[1] + dy / m * 0.8];
+      u = ink.map(toN);
+    }
+    let miss = 0;
+    const guide = refN.map(st => {
+      const bad = st.filter(([x, y]) => nearest(u, x, y)[0] >= R).length;
+      miss += bad;
+      // Đưa nét mẫu về toạ độ bảng để vẽ chồng lên chữ người viết.
+      return { lech: bad / st.length > 0.5, pts: st.map(([x, y]) => [(x - shift[0]) / rs[0] * su[0] + u0.c[0], (y - shift[1]) / rs[1] * su[1] + u0.c[1]]) };
+    });
+    const unc = miss / flatN.length;
+    return { lech: unc > 0.25, khop: Math.round((1 - unc) * 100), guide };
+  }
   // Máy đọc chữ người học vừa viết rồi so với chữ đúng.
   async function inkVerdict(k) {
     if (!wboard || !wboard.strokes.length) return `<div class="wr-res none">Bạn chưa viết gì. Chữ đúng là <b class="jp-big">${esc(k)}</b>.</div>`;
@@ -506,7 +580,11 @@
     const thieu = need && drawn < need - Math.floor(need / 4);
     const net = need && drawn !== need ? ` Bạn viết ${drawn} nét, chữ đúng có ${need} nét.` : "";
     const i = cands.indexOf(k);
-    if (i === 0 && thieu) return `<div class="wr-res near">Thiếu nét: máy đoán ra <b class="jp-big">${esc(k)}</b> nhưng bạn mới viết ${drawn}/${need} nét — có thể thiếu một bộ phận, so lại với đáp án.</div>`;
+    const hinh = i === 0 ? shapeCheck(k, wboard.strokes) : null;
+    if (i === 0 && (thieu || (hinh && hinh.lech)) && hinh) wboard.showGuide(hinh.guide);
+    const doTren = hinh ? " Nét mẫu đã đặt chồng lên bảng: nét đỏ là chỗ thiếu hoặc lệch." : "";
+    if (i === 0 && thieu) return `<div class="wr-res near">Thiếu nét: máy đoán ra <b class="jp-big">${esc(k)}</b> nhưng bạn mới viết ${drawn}/${need} nét — có thể thiếu một bộ phận.${doTren}</div>`;
+    if (i === 0 && hinh && hinh.lech) return `<div class="wr-res near">Chưa giống mẫu: máy đoán ra <b class="jp-big">${esc(k)}</b> nhưng chữ bạn viết chỉ khớp ${hinh.khop}% nét mẫu.${doTren}</div>`;
     if (i === 0) return `<div class="wr-res ok">✓ Đúng: máy đọc ra <b class="jp-big">${esc(k)}</b>.</div>`;
     if (i > 0 && i < 5) return `<div class="wr-res near">Gần đúng: máy đọc ra <b class="jp-big">${esc(cands[0])}</b>, chữ đúng <b class="jp-big">${esc(k)}</b> đứng thứ ${i + 1} trong gợi ý — xem lại nét.${net}</div>`;
     return `<div class="wr-res no">✗ Máy đọc ra <b class="jp-big">${esc(cands[0] || "?")}</b>; chữ đúng là <b class="jp-big">${esc(k)}</b>.${net}</div>`;
