@@ -99,11 +99,15 @@
     }
     function redraw() {
       ctx.clearRect(0, 0, SIZE, SIZE);
-      // Nét mẫu đặt chồng sau khi kiểm tra: xanh nhạt là nét khớp, đỏ là nét thiếu hoặc lệch.
+      // Nét mẫu đặt chồng sau khi kiểm tra: xanh nhạt là phần khớp, đỏ là đoạn bạn thiếu hoặc viết lệch.
       if (guide) guide.forEach(g => {
-        ctx.strokeStyle = g.lech ? "rgba(214, 48, 49, .55)" : "rgba(52, 120, 220, .28)";
         ctx.lineWidth = 7; ctx.lineCap = ctx.lineJoin = "round";
+        ctx.strokeStyle = "rgba(52, 120, 220, .28)";
         ctx.beginPath(); g.pts.forEach(([x, y], j) => j ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke();
+        ctx.strokeStyle = "rgba(214, 48, 49, .6)";
+        ctx.beginPath();
+        g.pts.forEach(([x, y], j) => { if (!g.miss[j]) return; if (j && g.miss[j - 1]) ctx.lineTo(x, y); else ctx.moveTo(x, y); });
+        ctx.stroke();
       });
       const ink = inkColor();
       strokes.forEach((s, i) => {
@@ -502,10 +506,12 @@
   }
   let wboard = null;
   /* So hình chữ người viết với nét mẫu KanjiVG, không phụ thuộc thứ tự hay số nét.
-     Hai bên chuẩn hoá theo trọng tâm và độ trải (cho méo tỉ lệ tới 15%), dịch cho khớp 3 lần, rồi đo phần
-     nét mẫu không có mực nào trong bán kính 0,25 độ trải. Ngưỡng 25% chọn bằng cách thử: chữ in Yu Gothic /
-     MS Gothic so với KanjiVG (600 mẫu đúng) có 99% dưới 17%; hai chữ viết sai thật (夋 cho 後, 南 sai phần
-     trong) là 41–44%. */
+     Mẫu chuẩn hoá theo trọng tâm và bán kính trung bình; chữ người viết co giãn từng trục về độ trải của mẫu
+     (tỉ lệ hai trục lệch tối đa 15%), dịch cho khớp 3 lần. Rồi đo trong bán kính 0,25:
+     - phần nét mẫu không có mực nào ở gần (bắt thiếu bộ phận: 夋 thay cho 後, phần trong 南 viết sai);
+     - đầu nét mẫu cách mực gần nhất bao xa (bắt nét ngắn hơn mẫu: sổ dọc của 生 không nhô lên trên).
+     Ngưỡng (trên 15% hoặc một đầu nét lệch quá 0,5) chọn bằng cách thử 2.100 chữ in Yu Gothic / MS Gothic so
+     với KanjiVG: báo nhầm 0,1%; bốn chữ viết sai thật đều bị bắt. */
   function refPoints(paths) {
     const NS = "http://www.w3.org/2000/svg", svg = document.createElementNS(NS, "svg");
     svg.style.cssText = "position:absolute;width:0;height:0";
@@ -522,7 +528,7 @@
   }
   function spread(P) {
     const c = [0, 1].map(a => P.reduce((t, p) => t + p[a], 0) / P.length);
-    const s = [0, 1].map(a => Math.sqrt(P.reduce((t, p) => t + (p[a] - c[a]) ** 2, 0) / P.length) || 1);
+    const s = [0, 1].map(a => Math.sqrt(P.reduce((t, p) => t + (p[a] - c[a]) ** 2, 0) / P.length));
     return { c, s };
   }
   function nearest(P, x, y) {
@@ -534,7 +540,7 @@
     const paths = STROKES[k];
     if (!paths || !paths.length) return null;
     const R = 0.25, refs = refPoints(paths), all = refs.flat();
-    const r0 = spread(all), g = Math.sqrt(r0.s[0] * r0.s[1]);
+    const r0 = spread(all), g = Math.hypot(r0.s[0], r0.s[1]) || 1;
     const refN = refs.map(st => st.map(([x, y]) => [(x - r0.c[0]) / g, (y - r0.c[1]) / g]));
     const flatN = refN.flat(), rs = spread(flatN).s;
     // Mực người viết: chấm dày mỗi 2 đơn vị cho đều, rồi đưa về cùng tỉ lệ với mẫu.
@@ -546,10 +552,10 @@
         for (let j = 1; j <= n; j++) ink.push([a.x + (b.x - a.x) * j / n, a.y + (b.y - a.y) * j / n]);
       }
     });
-    const u0 = spread(ink), gu = Math.sqrt(u0.s[0] * u0.s[1]);
-    const su = u0.s.map(v => gu * Math.min(1.15, Math.max(1 / 1.15, v / gu)));
+    const u0 = spread(ink), f0 = 1 / (Math.hypot(u0.s[0], u0.s[1]) || 1);
+    const f = [0, 1].map(a => f0 * (u0.s[a] > 1e-6 ? Math.min(1.15, Math.max(1 / 1.15, rs[a] / u0.s[a] / f0)) : 1.15));
     let shift = [0, 0];
-    const toN = ([x, y]) => [(x - u0.c[0]) / su[0] * rs[0] + shift[0], (y - u0.c[1]) / su[1] * rs[1] + shift[1]];
+    const toN = ([x, y]) => [(x - u0.c[0]) * f[0] + shift[0], (y - u0.c[1]) * f[1] + shift[1]];
     let u = ink.map(toN);
     for (let it = 0; it < 3; it++) {
       let dx = 0, dy = 0, m = 0;
@@ -558,15 +564,17 @@
       shift = [shift[0] + dx / m * 0.8, shift[1] + dy / m * 0.8];
       u = ink.map(toN);
     }
-    let miss = 0;
+    let miss = 0, dauLech = false;
     const guide = refN.map(st => {
-      const bad = st.filter(([x, y]) => nearest(u, x, y)[0] >= R).length;
-      miss += bad;
+      const d = st.map(([x, y]) => nearest(u, x, y)[0]);
+      miss += d.filter(v => v >= R).length;
+      // Đầu nét chỉ xét với nét dài (từ 0,6 bán kính chữ): chấm ngắn như ở 心 mỗi người đặt một kiểu.
+      if (st.length / g >= 0.6 && Math.max(d[0], d[d.length - 1]) > 0.5) dauLech = true;
       // Đưa nét mẫu về toạ độ bảng để vẽ chồng lên chữ người viết.
-      return { lech: bad / st.length > 0.5, pts: st.map(([x, y]) => [(x - shift[0]) / rs[0] * su[0] + u0.c[0], (y - shift[1]) / rs[1] * su[1] + u0.c[1]]) };
+      return { miss: d.map(v => v >= R), pts: st.map(([x, y]) => [(x - shift[0]) / f[0] + u0.c[0], (y - shift[1]) / f[1] + u0.c[1]]) };
     });
     const unc = miss / flatN.length;
-    return { lech: unc > 0.25, khop: Math.round((1 - unc) * 100), guide };
+    return { lech: unc > 0.15 || dauLech, guide };
   }
   // Máy đọc chữ người học vừa viết rồi so với chữ đúng.
   async function inkVerdict(k) {
