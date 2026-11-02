@@ -110,11 +110,7 @@
         ctx.stroke();
       });
       const ink = inkColor();
-      strokes.forEach((s, i) => {
-        drawStroke(s, ink);
-        ctx.font = "600 12px system-ui, sans-serif"; ctx.fillStyle = "#c0392b";
-        ctx.fillText(String(i + 1), s[0].x + 6, s[0].y - 6);
-      });
+      strokes.forEach(s => drawStroke(s, ink));
       if (cur) drawStroke(cur, ink);
     }
     function toPad(e) {
