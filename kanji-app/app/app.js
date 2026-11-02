@@ -48,6 +48,20 @@
     audio = new Audio("/media/" + encodeURIComponent(file));
     audio.play().catch(() => {});
   }
+  // Phát lần lượt nhiều file (thẻ có cả âm từ lẫn âm câu ví dụ); gọi lại hoặc stopAudio() thì dừng chuỗi cũ.
+  function playList(files) {
+    stopAudio();
+    const list = (files || []).slice();
+    const next = () => {
+      const f = list.shift();
+      if (!f) return;
+      const a = audio = new Audio("/media/" + encodeURIComponent(f));
+      a.addEventListener("ended", () => { if (audio === a) next(); });
+      a.play().catch(() => { if (audio === a) next(); });
+    };
+    next();
+  }
+  function stopAudio() { if (audio) { audio.pause(); audio = null; } }
   document.addEventListener("click", e => {
     const b = e.target.closest("[data-play]");
     if (b) { e.preventDefault(); play(b.dataset.play); }
@@ -415,6 +429,7 @@
   }
   async function endSession() {
     session = null;
+    stopAudio();
     try { await anki.call("guiDeckBrowser"); } catch (e) {}
     renderDecks();
   }
@@ -460,6 +475,8 @@
      - Thẻ khác: hiện phần mặt sau của thẻ (sau <hr id=answer>), che các chữ thuộc mặt trước; nhớ ra rồi lật xem.
      Vẫn chấm trên chính thẻ Anki đang ôn, nên lịch ôn của thẻ đó tính theo cách học này. */
   let hocNguoc = store.get("tk-hoc-nguoc", false);
+  // Tự phát âm thanh của thẻ khi lật (mặc định bật).
+  let tuPhat = store.get("tk-tu-phat", true);
   const plain = html => new DOMParser().parseFromString(String(html || ""), "text/html").body.textContent.trim();
   const fieldOf = (c, ...names) => { for (const n of names) { const f = c.fields && c.fields[n]; if (f && plain(f.value)) return f.value; } return ""; };
   function kanjiOf(c) {
@@ -717,6 +734,7 @@
     const back = hocNguoc && !s.kanji ? await backOnly(c, ord) : "";
     s.mode = s.kanji ? "viet" : back ? "nguoc" : "thuong";
     const modeBtn = `<button class="btn small mode-btn" id="modeS" type="button" aria-pressed="${hocNguoc}" title="Học ngược: kanji thì nhìn Hán Việt + nghĩa rồi viết chữ; từ vựng thì nhìn mặt sau để nhớ mặt trước">Học ngược: ${hocNguoc ? "Bật" : "Tắt"}</button>`;
+    const phatBtn = `<button class="btn small mode-btn" id="phatS" type="button" aria-pressed="${tuPhat}" title="Tự phát âm thanh của thẻ khi lật">🔊 Tự phát: ${tuPhat ? "Bật" : "Tắt"}</button>`;
     const so = plain(fieldOf(c, "Số"));
     const writeUI = s.mode !== "viet" ? "" : `<div class="write-q">
         <div class="small muted">${so ? "#" + esc(so) + " · " : ""}Viết chữ Hán có nghĩa này</div>
@@ -729,7 +747,7 @@
       <div class="write-area"><div class="canvas-box"><canvas id="wpad" aria-label="Bảng viết chữ"></canvas><div class="guide" aria-hidden="true"></div></div></div>`;
     studyEl.innerHTML = `<div class="reviewer"><div class="rv-top"><div><b>${esc(s.title)}</b> <span class="muted">· ${esc(c.deckName || "")} · đã chấm ${s.done}</span></div>
       <span class="counts"><span class="new">${counts.new_count}</span><span class="lrn">${counts.learn_count}</span><span class="rev">${counts.review_count}</span></span>
-      <span class="row-actions">${modeBtn}${s.back ? `<a class="btn small" href="#${esc(s.back)}">← Thẻ kanji</a>` : ""}<button class="btn small" id="endS" type="button">Dừng</button></span></div>
+      <span class="row-actions">${phatBtn}${modeBtn}${s.back ? `<a class="btn small" href="#${esc(s.back)}">← Thẻ kanji</a>` : ""}<button class="btn small" id="endS" type="button">Dừng</button></span></div>
       ${s.mode === "viet"
         // Viết kanji: bảng viết bên trái, mặt sau thẻ hiện bên phải sau khi kiểm tra (màn hình hẹp thì xếp dọc).
         ? `<div class="write-wrap" id="writeWrap"><div class="write-left">${writeUI}</div><iframe class="cardframe" id="cf" title="Thẻ Anki" hidden></iframe></div>`
@@ -749,6 +767,13 @@
     }
     $("#showAns").addEventListener("click", showAnswer);
     $("#endS").addEventListener("click", endSession);
+    $("#phatS").addEventListener("click", () => {
+      tuPhat = !tuPhat;
+      store.set("tk-tu-phat", tuPhat);
+      if (!tuPhat) stopAudio();
+      $("#phatS").textContent = "🔊 Tự phát: " + (tuPhat ? "Bật" : "Tắt");
+      $("#phatS").setAttribute("aria-pressed", String(tuPhat));
+    });
     $("#modeS").addEventListener("click", () => {
       hocNguoc = !hocNguoc;
       store.set("tk-hoc-nguoc", hocNguoc);
@@ -771,6 +796,8 @@
     const ww = $("#writeWrap");
     if (ww) { ww.classList.add("da-hien"); if (wboard) wboard.fit(); }  // bảng nhỏ lại: vẽ lại nét theo kích thước mới
     f.srcdoc = cardDoc(c.answer, c.css, s.ord, s.av);
+    // Âm thanh của mặt sau; thẻ chỉ có âm ở mặt trước (thường là cách đọc từ) thì phát âm mặt trước.
+    if (tuPhat && s.av) playList(s.av.a.length ? s.av.a : s.av.q);
     const eases = (c.buttons && c.buttons.length ? c.buttons : [1, 2, 3, 4]);
     $("#ansArea").innerHTML = `<div class="answers">${eases.map((e, i) => {
       const [cls, label] = EASE[e] || ["good", String(e)];
@@ -782,6 +809,7 @@
   async function answer(ease) {
     const s = session; if (!s || !s.shown || s.busy) return;
     s.busy = true;
+    stopAudio();
     try {
       if (!(await anki.call("guiAnswerCard", { ease }))) throw new Error("Anki không nhận câu trả lời. Hãy kiểm tra cửa sổ Anki đang ở màn hình ôn tập.");
       s.done++;
