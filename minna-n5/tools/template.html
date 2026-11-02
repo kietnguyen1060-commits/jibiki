@@ -151,6 +151,19 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
 .vocab td.ex-cell small { color: var(--muted); display: block; }
 .hide-mean td.mean { color: transparent; background: repeating-linear-gradient(45deg, var(--line) 0 6px, transparent 6px 12px); cursor: pointer; border-radius: 4px; }
 .hide-mean td.mean.show { color: inherit; background: none; }
+.vocab .wcol { display: none; }
+.hide-word .wcol { display: table-cell; width: 11rem; }
+.hide-word td.word { background: repeating-linear-gradient(45deg, var(--line) 0 6px, transparent 6px 12px); cursor: pointer; border-radius: 4px; }
+.hide-word td.word > * { visibility: hidden; }
+.hide-word td.word.show { background: none; }
+.hide-word td.word.show > * { visibility: visible; }
+.hide-word tr:not(.lo) td.ex-cell .jp { visibility: hidden; }
+.wcol input { width: 100%; font: inherit; font-family: var(--font-jp); font-size: 1rem; padding: 5px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--sheet); color: var(--ink); }
+.wcol input.ok { border-color: var(--ok); background: var(--ok-soft); }
+.wcol input.no { border-color: var(--shu); }
+.wcol .kq { display: block; font-size: .78rem; margin-top: 3px; min-height: 1em; }
+.wcol .kq.ok { color: var(--ok); }
+.wcol .kq.no { color: var(--shu); }
 
 /* Đề thi */
 .test-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
@@ -350,12 +363,14 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
     });
     h += `</div><h2>Từ vựng</h2>
       <div class="tools"><input type="search" id="q-${b}" placeholder="Tìm từ, cách đọc hoặc nghĩa…" aria-label="Tìm từ vựng">
-      <label class="toggle"><input type="checkbox" id="hide-${b}"> Che nghĩa để tự kiểm tra</label></div>
-      <div class="table-wrap"><table class="vocab" id="vt"><thead><tr><th>#</th><th>Từ</th><th>Nghĩa</th><th>Ví dụ</th></tr></thead><tbody>`;
+      <label class="toggle"><input type="checkbox" id="hide-${b}"> Che nghĩa để tự kiểm tra</label>
+      <label class="toggle"><input type="checkbox" id="hidew-${b}"> Che từ để tự viết</label></div>
+      <div class="table-wrap"><table class="vocab" id="vt"><thead><tr><th>#</th><th>Từ</th><th class="wcol">Viết</th><th>Nghĩa</th><th>Ví dụ</th></tr></thead><tbody>`;
     words.forEach((w, i) => {
       const main = w[0] || w[1], kana = w[0] ? w[1] : "";
       h += `<tr data-s="${esc((w[0] + " " + w[1] + " " + w[2]).toLowerCase())}"><td class="n">${i + 1}</td>
-        <td><div class="w-main">${esc(main)}</div>${kana ? `<div class="w-kana">${esc(kana)}</div>` : ""}</td>
+        <td class="word" data-k="${esc(w[0])}" data-r="${esc(w[1])}" title="Bấm để hiện từ"><div class="w-main">${esc(main)}</div>${kana ? `<div class="w-kana">${esc(kana)}</div>` : ""}</td>
+        <td class="wcol"><input type="text" lang="ja" autocomplete="off" placeholder="Viết từ…" aria-label="Viết từ số ${i + 1}"><span class="kq"></span></td>
         <td class="mean">${esc(w[2])}</td><td class="ex-cell"><span class="jp">${esc(w[3])}</span><small>${esc(w[4])}</small></td></tr>`;
     });
     h += `</tbody></table></div>
@@ -372,6 +387,44 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
       tbl.querySelectorAll("td.mean").forEach(td => td.classList.remove("show"));
     });
     tbl.addEventListener("click", e => { const td = e.target.closest("td.mean"); if (td) td.classList.toggle("show"); });
+    /* Che từ để tự viết: nhìn nghĩa, gõ từ vào cột "Viết", bấm ô bị che (hoặc Enter) để hiện từ và so.
+       Câu ví dụ tiếng Nhật chứa đáp án nên cũng che tới lúc hiện; bản dịch tiếng Việt vẫn để làm gợi ý.
+       Đúng khi khớp chữ Hán hoặc cách đọc của một trong các cách viết (tách bởi 、), bỏ qua ［…］, 〜, khoảng trắng. */
+    const chuan = x => String(x || "").replace(/[［\[][^］\]]*[］\]]/g, "").replace(/[〜～~\s　・]/g, "");
+    const dapAn = td => [td.dataset.k, td.dataset.r].flatMap(x => String(x || "").split(/[、,，]/)).map(chuan).filter(Boolean);
+    function hienTu(tr) {
+      const td = tr.querySelector("td.word"), inp = tr.querySelector(".wcol input"), kq = tr.querySelector(".wcol .kq");
+      td.classList.add("show"); tr.classList.add("lo");
+      const v = chuan(inp.value);
+      inp.classList.remove("ok", "no"); kq.className = "kq"; kq.textContent = "";
+      if (!v) return;
+      const dung = dapAn(td).includes(v);
+      inp.classList.add(dung ? "ok" : "no"); kq.classList.add(dung ? "ok" : "no");
+      kq.textContent = dung ? "✓ Đúng" : "✗ Chưa đúng";
+    }
+    document.getElementById("hidew-" + b).addEventListener("change", e => {
+      tbl.classList.toggle("hide-word", e.target.checked);
+      tbl.querySelectorAll("td.word").forEach(td => td.classList.remove("show"));
+      tbl.querySelectorAll("tr.lo").forEach(tr => tr.classList.remove("lo"));
+      tbl.querySelectorAll(".wcol input").forEach(inp => { inp.value = ""; inp.classList.remove("ok", "no"); });
+      tbl.querySelectorAll(".wcol .kq").forEach(k => { k.className = "kq"; k.textContent = ""; });
+      const first = tbl.querySelector("tbody tr:not([hidden]) .wcol input");
+      if (e.target.checked && first) first.focus();
+    });
+    tbl.addEventListener("click", e => {
+      const td = e.target.closest("td.word");
+      if (td && tbl.classList.contains("hide-word")) hienTu(td.closest("tr"));
+    });
+    // Enter: hiện từ của dòng này rồi sang ô viết của dòng kế (bỏ qua lúc đang chọn chữ trong bộ gõ tiếng Nhật).
+    tbl.addEventListener("keydown", e => {
+      if (e.key !== "Enter" || e.isComposing || !e.target.matches(".wcol input")) return;
+      e.preventDefault();
+      const tr = e.target.closest("tr");
+      hienTu(tr);
+      let nx = tr.nextElementSibling;
+      while (nx && (nx.hidden || !nx.querySelector(".wcol input"))) nx = nx.nextElementSibling;
+      if (nx) nx.querySelector(".wcol input").focus();
+    });
   }
 
   function passageHTML(p) {
