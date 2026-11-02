@@ -149,23 +149,33 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 660px; }
 .vocab td.ex-cell small { color: var(--muted); display: block; }
 .hide-mean td.mean { color: transparent; background: repeating-linear-gradient(45deg, var(--line) 0 6px, transparent 6px 12px); cursor: pointer; border-radius: 4px; }
 .hide-mean td.mean.show { color: inherit; background: none; }
-.vocab .wcol { display: none; }
-.hide-word .wcol { display: table-cell; width: 17rem; }
-.hide-word td.word { background: repeating-linear-gradient(45deg, var(--line) 0 6px, transparent 6px 12px); cursor: pointer; border-radius: 4px; }
-.hide-word td.word > * { visibility: hidden; }
-.hide-word td.word.show { background: none; }
-.hide-word td.word.show > * { visibility: visible; }
-.hide-word tr:not(.lo) td.ex-cell .jp { visibility: hidden; }
-.wpad { position: relative; border: 1px solid var(--line); border-radius: 8px; background: var(--sheet);
-  background-image: linear-gradient(to bottom, transparent calc(50% - .5px), var(--line) calc(50% - .5px), var(--line) calc(50% + .5px), transparent calc(50% + .5px)); }
-.wpad canvas { display: block; width: 100%; height: 84px; touch-action: none; color: var(--ink);
-  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Ccircle cx='5' cy='5' r='3' fill='%231b1b1b' stroke='white' stroke-width='1.2'/%3E%3C/svg%3E") 5 5, crosshair; }
-.wpad .wx { position: absolute; top: 3px; right: 3px; width: 22px; height: 22px; border: 1px solid var(--line); border-radius: 6px; background: var(--paper); color: var(--muted); font-size: .8rem; line-height: 1; cursor: pointer; padding: 0; }
-.wpad.ok { border-color: var(--ok); background-color: var(--ok-soft); }
-.wpad.no { border-color: var(--shu); }
-.wcol .kq { display: block; font-size: .78rem; margin-top: 3px; min-height: 1em; }
-.wcol .kq.ok { color: var(--ok); }
-.wcol .kq.no { color: var(--shu); }
+/* Tự viết từ — toàn màn hình: nghĩa ở trên, bảng viết to kẻ ô 田 (vuông + chữ thập giữa) để giữ cỡ chữ đều. */
+.vt-full { position: fixed; inset: 0; z-index: 1000; background: var(--paper); color: var(--ink); display: flex; flex-direction: column; align-items: center; justify-content: safe center; gap: 14px; padding: 16px clamp(12px, 3vw, 40px) 24px; overflow: auto; }
+.vt-full > * { width: min(1200px, 100%); }
+.vt-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; color: var(--muted); font-size: .9rem; }
+.vt-top .btn { font-size: .9rem; }
+.vt-full [hidden] { display: none !important; }
+.vt-o { display: inline-flex; gap: 4px; align-items: center; }
+.vt-o button { min-width: 2.2em; padding: 3px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--sheet); color: var(--ink); cursor: pointer; font: inherit; }
+.vt-o button[aria-pressed="true"] { border-color: var(--ai); color: var(--ai); background: var(--ai-soft); font-weight: 700; }
+.vt-q { text-align: center; }
+.vt-mean { font-size: clamp(1.5rem, 3.4vw, 2.4rem); font-weight: 700; line-height: 1.25; }
+.vt-ex { color: var(--muted); margin-top: 4px; }
+.vt-board { background: var(--sheet); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.vt-board canvas { display: block; width: 100%; touch-action: none;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Ccircle cx='6' cy='6' r='3.5' fill='%231b1b1b' stroke='white' stroke-width='1.5'/%3E%3C/svg%3E") 6 6, crosshair; }
+.vt-act { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.vt-act .btn { font-size: 1rem; padding: 10px 18px; }
+.vt-ans { min-height: 5.5em; text-align: center; }
+.vt-res { font-weight: 700; font-size: 1.1rem; }
+.vt-res.ok { color: var(--ok); }
+.vt-res.no { color: var(--shu); }
+.vt-word { font-family: var(--font-jp); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 600; margin-top: 4px; }
+.vt-kana { font-family: var(--font-jp); color: var(--muted); }
+.vt-exjp { font-family: var(--font-jp); margin-top: 4px; }
+.vt-end { text-align: center; }
+.vt-end ul { text-align: left; display: inline-block; margin: 10px auto; }
+.vt-end .vt-word { font-size: 1.2rem; display: inline; }
 .test-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
 .badges { display: flex; gap: 6px; flex-wrap: wrap; }
 .badge { font-size: .8rem; padding: 3px 10px; border-radius: 999px; background: var(--ok-soft); color: var(--ok); font-weight: 600; font-variant-numeric: tabular-nums; }
@@ -365,15 +375,14 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 660px; }
     h += `<h2 id="sec-v">Từ vựng</h2>
       <div class="tools"><input type="search" id="q-${b}" placeholder="Tìm từ, cách đọc hoặc nghĩa…" aria-label="Tìm từ vựng">
       <label class="toggle"><input type="checkbox" id="hide-${b}"> Che nghĩa để tự kiểm tra</label>
-      <label class="toggle"><input type="checkbox" id="hidew-${b}"> Che từ để tự viết</label></div>
-      <div class="table-wrap"><table class="vocab" id="vt"><thead><tr><th>#</th><th>Từ</th><th class="wcol">Viết</th><th>Nghĩa</th><th>Ví dụ</th></tr></thead><tbody>`;
+      <button class="btn" type="button" id="hidew-${b}" title="Toàn màn hình: nhìn nghĩa, viết từ lên bảng to rồi kiểm tra">✍ Che từ để tự viết</button></div>
+      <div class="table-wrap"><table class="vocab" id="vt"><thead><tr><th>#</th><th>Từ</th><th>Nghĩa</th><th>Ví dụ</th></tr></thead><tbody>`;
     let sec = "";
     words.forEach((w, i) => {
-      if (w[5] !== sec) { sec = w[5]; h += `<tr class="sec"><td colspan="5">${esc(sec)}</td></tr>`; }
+      if (w[5] !== sec) { sec = w[5]; h += `<tr class="sec"><td colspan="4">${esc(sec)}</td></tr>`; }
       const main = w[0] || w[1], kana = w[0] ? w[1] : "";
       h += `<tr data-s="${esc((w[0] + " " + w[1] + " " + w[2]).toLowerCase())}"><td class="n">${i + 1}</td>
-        <td class="word" data-k="${esc(w[0])}" data-r="${esc(w[1])}" title="Bấm để hiện từ"><div class="w-main">${esc(main)}${w[6] ? '<span class="tag">tên riêng</span>' : ""}</div>${kana ? `<div class="w-kana">${esc(kana)}</div>` : ""}</td>
-        <td class="wcol"><div class="wpad"><canvas aria-label="Bảng viết từ số ${i + 1}"></canvas><button class="wx" type="button" title="Xoá chữ vừa viết">✕</button></div><span class="kq"></span></td>
+        <td class="word" data-k="${esc(w[0])}" data-r="${esc(w[1])}"><div class="w-main">${esc(main)}${w[6] ? '<span class="tag">tên riêng</span>' : ""}</div>${kana ? `<div class="w-kana">${esc(kana)}</div>` : ""}</td>
         <td class="mean">${esc(w[2])}</td><td class="ex-cell"><span class="jp">${esc(w[3])}</span><small>${esc(w[4])}</small></td></tr>`;
     });
     h += `</tbody></table></div>
@@ -393,96 +402,159 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 660px; }
       tbl.querySelectorAll("td.mean").forEach(td => td.classList.remove("show"));
     });
     tbl.addEventListener("click", e => { const td = e.target.closest("td.mean"); if (td) td.classList.toggle("show"); });
-    /* Che từ để tự viết: nhìn nghĩa, viết từ lên bảng nhỏ ở cột "Viết" (bút bảng vẽ, cảm ứng hoặc chuột),
-       bấm ô bị che để hiện từ. Câu ví dụ tiếng Nhật chứa đáp án nên cũng che tới lúc hiện.
-       Trong app 字引 (trang nằm ở /minna/…), nét viết được gửi cho /api/viet (nhận diện chữ viết tay của Google)
-       để chấm: đúng khi một trong 3 gợi ý đầu khớp chữ Hán hoặc cách đọc (bỏ qua ［…］, 〜, khoảng trắng).
-       Mở trang riêng (không có server) thì chỉ hiện từ để tự so. */
+    /* Che từ để tự viết — toàn màn hình, mỗi lần một từ (theo thứ tự bảng, chỉ các từ đang hiện khi lọc):
+       nhìn nghĩa + câu dịch, viết lên bảng to kẻ ô 田, bấm Kiểm tra để hiện từ. Nét lưu theo tỉ lệ bề rộng bảng
+       nên đổi cỡ màn hình (vào / ra toàn màn hình) không lệch. Trong app 字引 (trang ở /minna/…) nét được gửi cho
+       /api/viet (Google) để chấm: đúng khi một trong 3 gợi ý đầu khớp chữ Hán hoặc cách đọc (bỏ qua ［…］, 〜,
+       khoảng trắng); mở trang riêng thì chỉ hiện từ để tự so. */
     const coMay = /\/minna\/n[45]\.html$/.test(location.pathname);
     const chuan = x => String(x || "").replace(/[［\[][^］\]]*[］\]]/g, "").replace(/[〜～~\s　・]/g, "");
-    const dapAn = td => [td.dataset.k, td.dataset.r].flatMap(x => String(x || "").split(/[、,，]/)).map(chuan).filter(Boolean);
-    const pads = new Map();
-    function bangViet(cv) {
-      const ctx = cv.getContext("2d"), strokes = [];
-      let cur = null;
+    const dapAn = w => [w[0], w[1]].flatMap(x => String(x || "").split(/[、,，]/)).map(chuan).filter(Boolean);
+    async function docChu(strokes) {
+      const t0 = strokes[0][0].t;
+      const ink = strokes.map(st => [st.map(p => Math.round(p.x * 300)), st.map(p => Math.round(p.y * 300)), st.map(p => p.t - t0)]);
+      const res = await fetch("/api/viet", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ink }) });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      return res.json();
+    }
+    function vietToanManHinh(list) {
+      const ov = document.createElement("div");
+      ov.className = "vt-full"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-label", "Tự viết từ");
+      ov.innerHTML = `<div class="vt-top"><span class="vt-pos"></span><span class="vt-score"></span><span class="vt-o" title="Số ô trên bảng: ít ô thì ô to">Số ô ${[4, 6, 8].map(n => `<button type="button" data-o="${n}">${n}</button>`).join("")}</span><button class="btn" type="button" data-a="thoat">✕ Thoát (Esc)</button></div>
+        <div class="vt-q"><div class="vt-mean"></div><div class="vt-ex"></div></div>
+        <div class="vt-board"><canvas aria-label="Bảng viết từ"></canvas></div>
+        <div class="vt-ans" aria-live="polite"></div>
+        <div class="vt-act"><button class="btn" type="button" data-a="truoc">← Trước</button><button class="btn" type="button" data-a="undo">↶ Xoá nét cuối</button><button class="btn" type="button" data-a="xoa">Xoá hết</button><button class="btn primary" type="button" data-a="kiem">Kiểm tra (Enter)</button><button class="btn primary" type="button" data-a="tiep" hidden>Tiếp → (Enter)</button></div>`;
+      document.body.appendChild(ov);
+      const $o = q => ov.querySelector(q), cv = $o("canvas"), ctx = cv.getContext("2d");
+      const strokes = []; let cur = null, idx = 0, hien = false, W = 0, H = 0, oCount = 6;
+      let soO = 6; try { soO = +localStorage.getItem("minna-so-o") || 6; } catch (e) {}
+      const danhDauO = () => ov.querySelectorAll("[data-o]").forEach(x => x.setAttribute("aria-pressed", String(+x.dataset.o === soO)));
+      const kq = list.map(() => null);   // true / false / "tu" (tự so) / null (chưa làm)
+      const css = v => getComputedStyle(ov).getPropertyValue(v).trim();
       function ve() {
-        const r = cv.getBoundingClientRect();
-        ctx.clearRect(0, 0, r.width, r.height);
-        ctx.strokeStyle = getComputedStyle(cv).color; ctx.lineCap = ctx.lineJoin = "round";
+        ctx.clearRect(0, 0, W, H);
+        // Ô kẻ: viền vuông liền, chữ thập giữa ô nét đứt.
+        const c = W / oCount;
+        ctx.lineWidth = 1; ctx.strokeStyle = css("--line") || "#ccc"; ctx.setLineDash([]);
+        for (let i = 1; i < oCount; i++) { ctx.beginPath(); ctx.moveTo(i * c, 0); ctx.lineTo(i * c, H); ctx.stroke(); }
+        ctx.setLineDash([5, 6]); ctx.globalAlpha = .7;
+        ctx.beginPath(); ctx.moveTo(0, H / 2); ctx.lineTo(W, H / 2); ctx.stroke();
+        for (let i = 0; i < oCount; i++) { ctx.beginPath(); ctx.moveTo((i + .5) * c, 0); ctx.lineTo((i + .5) * c, H); ctx.stroke(); }
+        ctx.setLineDash([]); ctx.globalAlpha = 1;
+        ctx.strokeStyle = ctx.fillStyle = css("--ink") || "#1b1b1b"; ctx.lineCap = ctx.lineJoin = "round";
         [...strokes, ...(cur ? [cur] : [])].forEach(st => {
-          if (st.length === 1) { ctx.beginPath(); ctx.arc(st[0].x, st[0].y, st[0].w / 2, 0, 7); ctx.fillStyle = ctx.strokeStyle; ctx.fill(); return; }
-          for (let i = 1; i < st.length; i++) {
-            const p0 = i === 1 ? st[0] : { x: (st[i - 2].x + st[i - 1].x) / 2, y: (st[i - 2].y + st[i - 1].y) / 2 };
-            const a = st[i - 1], q = st[i], m = i === st.length - 1 ? q : { x: (a.x + q.x) / 2, y: (a.y + q.y) / 2 };
+          const P = st.map(p => ({ x: p.x * W, y: p.y * W, w: p.w * c }));
+          if (P.length === 1) { ctx.beginPath(); ctx.arc(P[0].x, P[0].y, P[0].w / 2, 0, 7); ctx.fill(); return; }
+          for (let i = 1; i < P.length; i++) {
+            const p0 = i === 1 ? P[0] : { x: (P[i - 2].x + P[i - 1].x) / 2, y: (P[i - 2].y + P[i - 1].y) / 2 };
+            const a = P[i - 1], q = P[i], m = i === P.length - 1 ? q : { x: (a.x + q.x) / 2, y: (a.y + q.y) / 2 };
             ctx.lineWidth = (a.w + q.w) / 2;
             ctx.beginPath(); ctx.moveTo(p0.x, p0.y); ctx.quadraticCurveTo(a.x, a.y, m.x, m.y); ctx.stroke();
           }
         });
       }
       function fit() {
-        const r = cv.getBoundingClientRect(), dpr = Math.max(1, window.devicePixelRatio || 1);
-        cv.width = Math.round(r.width * dpr); cv.height = Math.round(r.height * dpr);
+        const bw = $o(".vt-board").clientWidth;
+        oCount = Math.max(3, Math.min(soO, Math.floor(bw / 80)));   // ô không nhỏ hơn 80px (màn hình hẹp)
+        W = bw;
+        // Ô vuông, nhưng không cao quá phần màn hình còn lại (để nút bấm vẫn thấy).
+        const rest = window.innerHeight - (ov.scrollHeight - cv.clientHeight) - 8;
+        H = Math.max(90, Math.min(W / oCount, rest > 90 ? rest : W / oCount));
+        const dpr = Math.max(1, window.devicePixelRatio || 1);
+        cv.style.height = H + "px"; cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ve();
       }
       const diem = e => {
         const r = cv.getBoundingClientRect(), p = e.pointerType === "pen" && e.pressure > 0 ? e.pressure : 0.5;
-        return { x: e.clientX - r.left, y: e.clientY - r.top, w: 1.4 + p * 2.6, t: Math.round(performance.now()) };
+        return { x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.width, w: 0.025 + p * 0.045, t: Math.round(performance.now()) };
       };
-      cv.addEventListener("pointerdown", e => { if (e.button > 0) return; e.preventDefault(); cv.setPointerCapture(e.pointerId); cur = [diem(e)]; ve(); });
+      cv.addEventListener("pointerdown", e => { if (e.button > 0 || hien) return; e.preventDefault(); cv.setPointerCapture(e.pointerId); cur = [diem(e)]; ve(); });
       cv.addEventListener("pointermove", e => {
         if (!cur) return;
         const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [];
-        (evs.length ? evs : [e]).forEach(ev => { const p = diem(ev), l = cur[cur.length - 1]; if (Math.hypot(p.x - l.x, p.y - l.y) >= 1) cur.push(p); });
+        (evs.length ? evs : [e]).forEach(ev => { const p = diem(ev), l = cur[cur.length - 1]; if (Math.hypot(p.x - l.x, p.y - l.y) * W >= 1) cur.push(p); });
         ve();
       });
       const het = () => { if (cur) { strokes.push(cur); cur = null; ve(); } };
       cv.addEventListener("pointerup", het); cv.addEventListener("pointercancel", het);
-      return { strokes, fit, clear() { strokes.length = 0; cur = null; ve(); } };
-    }
-    async function docChu(st, cv) {
-      const r = cv.getBoundingClientRect(), k = 300 / Math.max(r.width, 1), t0 = st[0][0].t;
-      const ink = st.map(s => [s.map(p => Math.round(p.x * k)), s.map(p => Math.round(p.y * k)), s.map(p => p.t - t0)]);
-      const res = await fetch("/api/viet", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ink }) });
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      return res.json();
-    }
-    async function hienTu(tr) {
-      const td = tr.querySelector("td.word"), cv = tr.querySelector(".wpad canvas"), box = tr.querySelector(".wpad"), kq = tr.querySelector(".wcol .kq");
-      box.classList.remove("ok", "no");  // bấm lại sau khi xoá và viết lại thì chấm lại
-      td.classList.add("show"); tr.classList.add("lo");
-      const pad = pads.get(cv);
-      if (!pad || !pad.strokes.length) return;
-      if (!coMay) { kq.className = "kq"; kq.textContent = "So chữ bạn viết với từ vừa hiện"; return; }
-      kq.className = "kq"; kq.textContent = "Đang đọc chữ…";
-      let cands;
-      try { cands = await docChu(pad.strokes, cv); } catch (e) { kq.textContent = "Không đọc được chữ (mất mạng) — tự so với từ vừa hiện"; return; }
-      const ans = dapAn(td), top = cands.slice(0, 3).map(chuan);
-      const dung = top.some(c => ans.includes(c));
-      box.classList.add(dung ? "ok" : "no"); kq.classList.add(dung ? "ok" : "no");
-      kq.textContent = dung ? "✓ Đúng" : `✗ Máy đọc ra ${cands[0] || "?"}`;
-    }
-    document.getElementById("hidew-" + b).addEventListener("change", e => {
-      tbl.classList.toggle("hide-word", e.target.checked);
-      tbl.querySelectorAll("td.word").forEach(td => td.classList.remove("show"));
-      tbl.querySelectorAll("tr.lo").forEach(tr => tr.classList.remove("lo"));
-      tbl.querySelectorAll(".wpad").forEach(x => x.classList.remove("ok", "no"));
-      tbl.querySelectorAll(".wcol .kq").forEach(k => { k.className = "kq"; k.textContent = ""; });
-      if (!e.target.checked) return;
-      // Bảng chỉ dựng khi bật (cột mới hiện thì mới đo được kích thước), lần sau bật lại thì xoá chữ cũ.
-      tbl.querySelectorAll(".wpad canvas").forEach(cv => { if (!pads.has(cv)) pads.set(cv, bangViet(cv)); const p = pads.get(cv); p.fit(); p.clear(); });
-    });
-    window.addEventListener("resize", () => { if (tbl.isConnected && tbl.classList.contains("hide-word")) pads.forEach(p => p.fit()); });
-    tbl.addEventListener("click", e => {
-      const x = e.target.closest(".wx");
-      if (x) {
-        const tr = x.closest("tr"), p = pads.get(tr.querySelector(".wpad canvas"));
-        if (p) p.clear();
-        tr.querySelector(".wpad").classList.remove("ok", "no");
-        const kq = tr.querySelector(".wcol .kq"); kq.className = "kq"; kq.textContent = "";
-        return;
+      function diem_so() {
+        const cham = kq.filter(x => x === true || x === false).length, dung = kq.filter(x => x === true).length;
+        $o(".vt-score").textContent = cham ? `Đúng ${dung}/${cham}` : "";
       }
-      const td = e.target.closest("td.word");
-      if (td && tbl.classList.contains("hide-word")) hienTu(td.closest("tr"));
+      function moTu(i) {
+        idx = i; hien = false; strokes.length = 0; cur = null;
+        const w = list[i];
+        $o(".vt-pos").textContent = `Từ ${i + 1}/${list.length}`;
+        $o(".vt-mean").textContent = w[2];
+        $o(".vt-ex").textContent = w[4] || "";
+        $o(".vt-ans").innerHTML = "";
+        $o('[data-a="kiem"]').hidden = false; $o('[data-a="tiep"]').hidden = true;
+        $o('[data-a="truoc"]').disabled = i === 0;
+        $o(".vt-board").hidden = false; $o(".vt-act").hidden = false; $o(".vt-q").hidden = false;
+        diem_so(); fit();
+      }
+      async function kiem() {
+        if (hien) return;
+        hien = true;
+        const w = list[idx], main = w[0] || w[1], kana = w[0] ? w[1] : "";
+        const tu = `<div class="vt-word">${esc(main)}</div>${kana ? `<div class="vt-kana">${esc(kana)}</div>` : ""}${w[3] ? `<div class="vt-exjp">${esc(w[3])}</div>` : ""}`;
+        $o('[data-a="kiem"]').hidden = true; $o('[data-a="tiep"]').hidden = false;
+        if (!strokes.length) { $o(".vt-ans").innerHTML = `<div class="vt-res">Từ cần viết:</div>${tu}`; return; }
+        if (!coMay) { kq[idx] = "tu"; $o(".vt-ans").innerHTML = `<div class="vt-res">So chữ bạn viết với từ này:</div>${tu}`; return; }
+        $o(".vt-ans").innerHTML = `<div class="vt-res">Đang đọc chữ…</div>`;
+        let cands;
+        try { cands = await docChu(strokes); }
+        catch (e) { $o(".vt-ans").innerHTML = `<div class="vt-res">Không đọc được chữ (mất mạng) — tự so với từ này:</div>${tu}`; return; }
+        const ans = dapAn(w), dung = cands.slice(0, 3).map(chuan).some(c => ans.includes(c));
+        kq[idx] = dung;
+        $o(".vt-ans").innerHTML = `<div class="vt-res ${dung ? "ok" : "no"}">${dung ? "✓ Đúng rồi!" : `✗ Chưa đúng — máy đọc ra ${esc(cands[0] || "?")}`}</div>${tu}`;
+        diem_so();
+      }
+      function ketThuc(dsSai) {
+        const cham = kq.filter(x => x === true || x === false).length, dung = kq.filter(x => x === true).length;
+        $o(".vt-board").hidden = true; $o(".vt-act").hidden = true; $o(".vt-q").hidden = true;
+        $o(".vt-pos").textContent = "Xong";
+        $o(".vt-ans").innerHTML = `<div class="vt-end"><div class="vt-mean">Xong ${list.length} từ${cham ? ` · đúng ${dung}/${cham}` : ""}</div>
+          ${dsSai.length ? `<ul>${dsSai.map(w => `<li><span class="vt-word">${esc(w[0] || w[1])}</span> — ${esc(w[2])}</li>`).join("")}</ul>` : ""}
+          <div class="vt-act">${dsSai.length ? '<button class="btn primary" type="button" data-a="lai">Viết lại các từ sai</button>' : ""}<button class="btn" type="button" data-a="thoat">Thoát</button></div></div>`;
+      }
+      function tiep() {
+        if (idx < list.length - 1) return moTu(idx + 1);
+        ketThuc(list.filter((w, i) => kq[i] === false));
+      }
+      function thoat() {
+        if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+        window.removeEventListener("resize", fit); document.removeEventListener("fullscreenchange", fit); document.removeEventListener("keydown", phim, true);
+        ov.remove();
+      }
+      function phim(e) {
+        if (e.key === "Escape") { e.preventDefault(); thoat(); }
+        else if (e.key === "Enter" && !$o(".vt-board").hidden) { e.preventDefault(); hien ? tiep() : kiem(); }
+        else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") { e.preventDefault(); if (!hien) { strokes.pop(); ve(); } }
+      }
+      ov.addEventListener("click", e => {
+        const o = e.target.closest("[data-o]");
+        if (o) { soO = +o.dataset.o; try { localStorage.setItem("minna-so-o", soO); } catch (er) {} danhDauO(); fit(); return; }
+        const a = e.target.closest("[data-a]"); if (!a) return;
+        const act = a.dataset.a;
+        if (act === "thoat") thoat();
+        else if (act === "truoc" && idx > 0) moTu(idx - 1);
+        else if (act === "undo" && !hien) { strokes.pop(); ve(); }
+        else if (act === "xoa" && !hien) { strokes.length = 0; ve(); }
+        else if (act === "kiem") kiem();
+        else if (act === "tiep") tiep();
+        else if (act === "lai") { const sai = list.filter((w, i) => kq[i] === false); thoat(); vietToanManHinh(sai); }
+      });
+      window.addEventListener("resize", fit); document.addEventListener("fullscreenchange", fit); document.addEventListener("keydown", phim, true);
+      // Toàn màn hình nếu trình duyệt cho phép (trong khung không cho thì vẫn phủ kín trang).
+      if (ov.requestFullscreen) ov.requestFullscreen().catch(() => {});
+      danhDauO(); moTu(0);
+    }
+    document.getElementById("hidew-" + b).addEventListener("click", () => {
+      const rows = [...tbl.querySelectorAll("tbody tr:not(.sec)")];
+      const list = words.filter((w, i) => rows[i] && !rows[i].hidden);
+      if (list.length) vietToanManHinh(list);
     });
   }
 
