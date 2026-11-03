@@ -305,3 +305,4 @@ main:has(#view-minna:not([hidden])) { padding: 0; }
   .write-wrap.da-hien .write-left .write-area .canvas-box { width: clamp(300px, calc(100vh - 420px), 460px); }
   .write-wrap.da-hien { grid-template-columns: auto minmax(0, 1fr); }
 }
+.kbd-hint { text-align: center; margin-top: 6px; }

@@ -752,7 +752,8 @@
         // Viết kanji: bảng viết bên trái, mặt sau thẻ hiện bên phải sau khi kiểm tra (màn hình hẹp thì xếp dọc).
         ? `<div class="write-wrap" id="writeWrap"><div class="write-left">${writeUI}</div><iframe class="cardframe" id="cf" title="Thẻ Anki" hidden></iframe></div>`
         : `<iframe class="cardframe" id="cf" title="Thẻ Anki"></iframe>`}
-      <div id="ansArea"><button class="btn primary show-ans" id="showAns" type="button">${s.mode === "viet" ? "Kiểm tra chữ vừa viết <small>(Enter)</small>" : "Hiện đáp án <small>(Space)</small>"}</button></div></div>`;
+      <div id="ansArea"><button class="btn primary show-ans" id="showAns" type="button">${s.mode === "viet" ? "Kiểm tra chữ vừa viết <small>(Enter)</small>" : "Hiện đáp án <small>(Space)</small>"}</button></div>
+      <div class="small muted kbd-hint">Phím tắt: Ctrl+Z hoàn tác lần chấm trước · R nghe lại âm thanh</div></div>`;
     const f = $("#cf");
     f.addEventListener("load", () => fitFrame(f));
     if (s.mode === "viet") {
@@ -823,11 +824,36 @@
       studyEl.prepend(n);
     }
   }
+  // Hoàn tác lần chấm gần nhất (như Ctrl+Z trong Anki): Anki đưa thẻ vừa chấm về lại mặt trước.
+  // Chỉ cho khi phiên này đã chấm ít nhất một thẻ, để không hoàn tác nhầm việc khác trong Anki.
+  async function hoanTac() {
+    const s = session; if (!s || s.busy) return;
+    const bao = t => { const n = document.createElement("div"); n.className = "notice"; n.textContent = t; studyEl.prepend(n); setTimeout(() => n.remove(), 3000); };
+    if (!s.done) return bao("Chưa chấm thẻ nào trong phiên này nên không có gì để hoàn tác.");
+    s.busy = true; stopAudio();
+    let ok = false;
+    try { ok = await anki.call("guiUndo"); } catch (e) { ok = false; }
+    s.busy = false;
+    if (!ok) return bao("Anki không hoàn tác được.");
+    s.done--;
+    await nextCard();
+    bao("Đã hoàn tác lần chấm trước.");
+  }
+  // Nghe lại: mặt sau thì phát như khi lật thẻ; mặt trước chỉ phát ở chế độ thường
+  // (học ngược / viết kanji thì âm thanh sẽ lộ đáp án).
+  function phatLai() {
+    const s = session; if (!s || !s.av) return;
+    if (s.shown) playList(s.av.a.length ? s.av.a : s.av.q);
+    else if (s.mode === "thuong") playList(s.av.q);
+  }
   document.addEventListener("keydown", e => {
     if (!session || $("#view-study").hidden || /input|textarea/i.test(e.target.tagName)) return;
-    // Đang viết kanji thì Space không lật thẻ (dễ bấm nhầm), dùng Enter; Ctrl+Z xoá nét cuối trên bảng viết.
-    if (!session.shown && (e.key === "Enter" || (e.key === " " && session.mode !== "viet"))) { e.preventDefault(); showAnswer(); }
-    else if (!session.shown && session.mode === "viet" && (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") { e.preventDefault(); if (wboard) wboard.undo(); }
+    // Đang viết kanji thì Space không lật thẻ (dễ bấm nhầm), dùng Enter. Ctrl+Z: còn nét trên bảng viết thì xoá
+    // nét cuối, không thì hoàn tác lần chấm thẻ trước. R: nghe lại âm thanh của thẻ.
+    const ctrlZ = (e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === "z";
+    if (ctrlZ) { e.preventDefault(); if (!session.shown && session.mode === "viet" && wboard && wboard.strokes.length) wboard.undo(); else hoanTac(); }
+    else if (e.key.toLowerCase() === "r" && !e.ctrlKey && !e.metaKey && !e.altKey) { e.preventDefault(); phatLai(); }
+    else if (!session.shown && (e.key === "Enter" || (e.key === " " && session.mode !== "viet"))) { e.preventDefault(); showAnswer(); }
     else if (session.shown && /^[1-4]$/.test(e.key)) answer(+e.key);
     else if (session.shown && e.key === " ") { e.preventDefault(); answer(3); }
   });
