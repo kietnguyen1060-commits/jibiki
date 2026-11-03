@@ -399,6 +399,9 @@
       }).join("")}</div>`;
     studyEl.querySelectorAll("[data-tog]").forEach(b => b.addEventListener("click", () => { open[b.dataset.tog] = !open[b.dataset.tog]; store.set("tk-open-decks", open); renderDecks(); }));
     studyEl.querySelectorAll("[data-deck]").forEach(a => a.addEventListener("click", () => startSession({ title: a.dataset.deck, deck: a.dataset.deck })));
+    studyEl.querySelectorAll(".deck:not(.head)").forEach(row => row.addEventListener("click", e => {
+      if (!e.target.closest("[data-tog], [data-deck]")) row.querySelector("[data-deck]").click();
+    }));
     $("#reload").addEventListener("click", renderDecks);
     $("#syncBtn").addEventListener("click", async e => {
       e.target.disabled = true; e.target.textContent = "Đang đồng bộ…";

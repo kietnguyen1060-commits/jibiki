@@ -178,6 +178,11 @@ main { padding-block: 20px 64px; }
 .deck .name button.tog { border: 0; background: none; cursor: pointer; width: 20px; color: var(--muted); }
 .deck .name a { text-decoration: none; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
 .deck .name a:hover { color: var(--ai); }
+/* Di chuột vào dòng deck: nền nhạt + vạch màu bên trái để biết đang chọn dòng nào; bấm chỗ nào trên dòng cũng mở deck. */
+.deck:not(.head) { cursor: pointer; transition: background-color .12s; box-shadow: inset 3px 0 0 transparent; }
+.deck:not(.head):hover { background: var(--ai-soft); box-shadow: inset 3px 0 0 var(--ai); }
+.deck:not(.head):hover .name a { color: var(--ai); }
+.deck .name button.tog:hover { color: var(--ai); }
 .deck .n { text-align: right; font-variant-numeric: tabular-nums; }
 .deck .n.new { color: var(--ai); }
 .deck .n.lrn { color: var(--bad); }
