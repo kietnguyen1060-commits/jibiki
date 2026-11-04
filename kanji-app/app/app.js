@@ -758,7 +758,17 @@
       <div id="ansArea"><button class="btn primary show-ans" id="showAns" type="button">${s.mode === "viet" ? "Kiểm tra chữ vừa viết <small>(Enter)</small>" : "Hiện đáp án <small>(Space)</small>"}</button></div>
       <div class="small muted kbd-hint">Phím tắt: Ctrl+Z hoàn tác lần chấm trước · R nghe lại âm thanh</div></div>`;
     const f = $("#cf");
-    f.addEventListener("load", () => fitFrame(f));
+    f.addEventListener("load", () => {
+      fitFrame(f);
+      // Bấm chuột vào trong thẻ thì phím gõ vào khung thẻ; chuyển ra trang chính để phím tắt (Space, 1–4, R, Ctrl+Z) vẫn chạy.
+      try {
+        f.contentDocument.addEventListener("keydown", ev => {
+          const k = new KeyboardEvent("keydown", { key: ev.key, ctrlKey: ev.ctrlKey, metaKey: ev.metaKey, shiftKey: ev.shiftKey, altKey: ev.altKey, bubbles: true, cancelable: true });
+          document.dispatchEvent(k);
+          if (k.defaultPrevented) ev.preventDefault();
+        });
+      } catch (e) {}
+    });
     if (s.mode === "viet") {
       wboard = makeBoard($("#wpad"));
       $("#wUndo").addEventListener("click", () => wboard.undo());
