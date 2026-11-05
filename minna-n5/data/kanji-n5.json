@@ -1,0 +1,603 @@
+{
+"1": [
+{
+"k": "何",
+"hv": "",
+"nghia": "what"
+},
+{
+"k": "会",
+"hv": "HỘI",
+"nghia": "meeting"
+},
+{
+"k": "学",
+"hv": "",
+"nghia": "study"
+},
+{
+"k": "行",
+"hv": "HÀNG",
+"nghia": "going"
+},
+{
+"k": "国",
+"hv": "",
+"nghia": "country"
+},
+{
+"k": "社",
+"hv": "XÃ",
+"nghia": "company"
+},
+{
+"k": "人",
+"hv": "NHÂN",
+"nghia": "person"
+},
+{
+"k": "生",
+"hv": "SINH",
+"nghia": "life"
+},
+{
+"k": "先",
+"hv": "TIÊN",
+"nghia": "before"
+},
+{
+"k": "前",
+"hv": "TIỀN",
+"nghia": "in front"
+},
+{
+"k": "大",
+"hv": "ĐẠI",
+"nghia": "large"
+},
+{
+"k": "中",
+"hv": "TRUNG",
+"nghia": "in"
+},
+{
+"k": "日",
+"hv": "NHẬT",
+"nghia": "day"
+},
+{
+"k": "本",
+"hv": "BẢN",
+"nghia": "book"
+},
+{
+"k": "名",
+"hv": "DANH",
+"nghia": "name"
+},
+{
+"k": "来",
+"hv": "",
+"nghia": "come"
+}
+],
+"2": [
+{
+"k": "語",
+"hv": "NGỮ",
+"nghia": "word"
+},
+{
+"k": "時",
+"hv": "THÌ",
+"nghia": "time"
+},
+{
+"k": "車",
+"hv": "XA",
+"nghia": "car"
+},
+{
+"k": "手",
+"hv": "THỦ",
+"nghia": "hand"
+},
+{
+"k": "書",
+"hv": "THƯ",
+"nghia": "write"
+},
+{
+"k": "新",
+"hv": "TÂN",
+"nghia": "new"
+},
+{
+"k": "土",
+"hv": "THỔ",
+"nghia": "soil"
+},
+{
+"k": "聞",
+"hv": "",
+"nghia": "hear"
+},
+{
+"k": "話",
+"hv": "THOẠI",
+"nghia": "tale"
+}
+],
+"3": [
+{
+"k": "円",
+"hv": "",
+"nghia": "circle"
+},
+{
+"k": "下",
+"hv": "HẠ",
+"nghia": "below"
+},
+{
+"k": "見",
+"hv": "KIẾN",
+"nghia": "see"
+},
+{
+"k": "食",
+"hv": "",
+"nghia": "eat"
+},
+{
+"k": "千",
+"hv": "THIÊN",
+"nghia": "thousand"
+},
+{
+"k": "電",
+"hv": "",
+"nghia": "electricity"
+},
+{
+"k": "百",
+"hv": "BÁ",
+"nghia": "hundred"
+},
+{
+"k": "万",
+"hv": "VẠN",
+"nghia": "ten thousand"
+}
+],
+"4": [
+{
+"k": "火",
+"hv": "HOẢ",
+"nghia": "fire"
+},
+{
+"k": "休",
+"hv": "HƯU",
+"nghia": "rest"
+},
+{
+"k": "金",
+"hv": "KIM",
+"nghia": "gold"
+},
+{
+"k": "月",
+"hv": "NGUYỆT",
+"nghia": "month"
+},
+{
+"k": "午",
+"hv": "NGỌ",
+"nghia": "noon"
+},
+{
+"k": "後",
+"hv": "HẬU",
+"nghia": "behind"
+},
+{
+"k": "今",
+"hv": "KIM",
+"nghia": "now"
+},
+{
+"k": "水",
+"hv": "THUỶ",
+"nghia": "water"
+},
+{
+"k": "半",
+"hv": "BÁN",
+"nghia": "half"
+},
+{
+"k": "分",
+"hv": "PHÂN",
+"nghia": "part"
+},
+{
+"k": "毎",
+"hv": "",
+"nghia": "every"
+},
+{
+"k": "木",
+"hv": "MỘC",
+"nghia": "tree"
+}
+],
+"5": [
+{
+"k": "一",
+"hv": "NHẤT",
+"nghia": "one"
+},
+{
+"k": "駅",
+"hv": "",
+"nghia": "station"
+},
+{
+"k": "校",
+"hv": "CHÒ",
+"nghia": "exam"
+},
+{
+"k": "子",
+"hv": "TÍ",
+"nghia": "child"
+},
+{
+"k": "週",
+"hv": "CHU",
+"nghia": "week"
+},
+{
+"k": "女",
+"hv": "NỮA",
+"nghia": "woman"
+},
+{
+"k": "年",
+"hv": "NÊN",
+"nghia": "year"
+},
+{
+"k": "友",
+"hv": "HỮU",
+"nghia": "friend"
+}
+],
+"6": [
+{
+"k": "飲",
+"hv": "ẨM",
+"nghia": "drink"
+},
+{
+"k": "花",
+"hv": "HOA",
+"nghia": "flower"
+},
+{
+"k": "魚",
+"hv": "NGƯ",
+"nghia": "fish"
+},
+{
+"k": "店",
+"hv": "ĐIẾM",
+"nghia": "store"
+},
+{
+"k": "読",
+"hv": "",
+"nghia": "read"
+},
+{
+"k": "買",
+"hv": "MÃI",
+"nghia": "buy"
+}
+],
+"7": [
+{
+"k": "上",
+"hv": "THƯỢNG",
+"nghia": "above"
+},
+{
+"k": "父",
+"hv": "",
+"nghia": "father"
+},
+{
+"k": "母",
+"hv": "MẪU",
+"nghia": "mother"
+}
+],
+"8": [
+{
+"k": "安",
+"hv": "AN",
+"nghia": "relax"
+},
+{
+"k": "気",
+"hv": "",
+"nghia": "spirit"
+},
+{
+"k": "古",
+"hv": "CỔ",
+"nghia": "old"
+},
+{
+"k": "高",
+"hv": "CAO",
+"nghia": "tall"
+},
+{
+"k": "山",
+"hv": "SƠN",
+"nghia": "mountain"
+},
+{
+"k": "七",
+"hv": "THẤT",
+"nghia": "seven"
+},
+{
+"k": "小",
+"hv": "TIỂU",
+"nghia": "little"
+},
+{
+"k": "白",
+"hv": "BẠCH",
+"nghia": "white"
+}
+],
+"9": [
+{
+"k": "間",
+"hv": "GIAN",
+"nghia": "interval"
+},
+{
+"k": "少",
+"hv": "THIỂU",
+"nghia": "few"
+}
+],
+"10": [
+{
+"k": "右",
+"hv": "HỮU",
+"nghia": "right"
+},
+{
+"k": "外",
+"hv": "NGOẠI",
+"nghia": "outside"
+},
+{
+"k": "左",
+"hv": "TẢ",
+"nghia": "left"
+},
+{
+"k": "男",
+"hv": "NAM",
+"nghia": "male"
+},
+{
+"k": "東",
+"hv": "ĐANG",
+"nghia": "east"
+}
+],
+"11": [
+{
+"k": "九",
+"hv": "CỬU",
+"nghia": "nine",
+"them": [
+"九つ",
+"ここのつ",
+"9 cái"
+]
+},
+{
+"k": "空",
+"hv": "KHÔNG",
+"nghia": "empty"
+},
+{
+"k": "五",
+"hv": "NGŨ",
+"nghia": "five",
+"them": [
+"五つ",
+"いつつ",
+"5 cái"
+]
+},
+{
+"k": "三",
+"hv": "TAM",
+"nghia": "three",
+"them": [
+"三つ",
+"みっつ",
+"3 cái"
+]
+},
+{
+"k": "四",
+"hv": "TỨ",
+"nghia": "four",
+"them": [
+"四つ",
+"よっつ",
+"4 cái"
+]
+},
+{
+"k": "十",
+"hv": "THẬP",
+"nghia": "ten",
+"them": [
+"十",
+"とお",
+"10 cái"
+]
+},
+{
+"k": "出",
+"hv": "XUẤT",
+"nghia": "exit"
+},
+{
+"k": "天",
+"hv": "THIÊN",
+"nghia": "heavens"
+},
+{
+"k": "二",
+"hv": "NHÌ",
+"nghia": "two",
+"them": [
+"二つ",
+"ふたつ",
+"2 cái"
+]
+},
+{
+"k": "八",
+"hv": "BÁT",
+"nghia": "eight",
+"them": [
+"八つ",
+"やっつ",
+"8 cái"
+]
+},
+{
+"k": "六",
+"hv": "LỤC",
+"nghia": "six",
+"them": [
+"六つ",
+"むっつ",
+"6 cái"
+]
+}
+],
+"12": [
+{
+"k": "雨",
+"hv": "",
+"nghia": "rain"
+},
+{
+"k": "多",
+"hv": "ĐA",
+"nghia": "many"
+}
+],
+"13": [
+{
+"k": "川",
+"hv": "XUYÊN",
+"nghia": "stream"
+}
+],
+"14": [
+{
+"k": "入",
+"hv": "NHẬP",
+"nghia": "enter"
+},
+{
+"k": "立",
+"hv": "LẬP",
+"nghia": "stand up"
+}
+],
+"16": [
+{
+"k": "口",
+"hv": "KHẨU",
+"nghia": "mouth"
+},
+{
+"k": "耳",
+"hv": "NHĨ",
+"nghia": "ear"
+},
+{
+"k": "足",
+"hv": "TÚC",
+"nghia": "leg"
+},
+{
+"k": "長",
+"hv": "TRƯỜNG",
+"nghia": "long"
+},
+{
+"k": "目",
+"hv": "MỤC",
+"nghia": "eye"
+}
+],
+"19": [
+{
+"k": "北",
+"hv": "",
+"nghia": "north"
+}
+],
+"21": [
+{
+"k": "言",
+"hv": "NGÔN",
+"nghia": "say"
+}
+],
+"23": [
+{
+"k": "西",
+"hv": "TÂY",
+"nghia": "west",
+"them": [
+"西",
+"にし",
+"phía tây"
+]
+},
+{
+"k": "道",
+"hv": "ĐẠO",
+"nghia": "road-way"
+},
+{
+"k": "南",
+"hv": "NAM",
+"nghia": "south",
+"them": [
+"南",
+"みなみ",
+"phía nam"
+]
+}
+]
+}

@@ -249,6 +249,7 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
       <a href="#" data-nav="home">Tổng quan</a>
       <a href="#bai-1" data-nav="lesson">Bài học</a>
       <a href="#de-1" data-nav="test">Đề kiểm tra</a>
+      <a href="#luyen-1" data-nav="luyen">Luyện tập</a>
       <a href="#so-sanh" data-nav="so-sanh">So sánh N5–N4</a>
     </nav>
   </div>
@@ -369,7 +370,7 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
     for (let i = 1; i <= 25; i++) h += `<a href="#bai-${i}" ${i === b ? 'aria-current="page"' : ""}>${i}</a>`;
     h += `</nav><p class="eyebrow">Bài ${b} · ${words.length} từ · ${gs.length} mẫu ngữ pháp</p>
       <h1>${LESSON_JP[b]}</h1>
-      <p class="lede">Thuộc <a href="#de-${t.id}">${t.title} (bài ${t.lessons[0]}–${t.lessons[1]})</a>.</p>
+      <p class="lede">Thuộc <a href="#de-${t.id}">${t.title} (bài ${t.lessons[0]}–${t.lessons[1]})</a> · <a href="#luyen-${b}">Luyện tập bài ${b}</a>.</p>
       <h2>Ngữ pháp</h2><div class="grammar">`;
     gs.forEach(g => {
       h += `<article class="g-card" id="g-${g.id}"><header><span class="g-id">${g.id}</span><span class="g-pat">${esc(g.p)}</span><span class="g-mean">${esc(g.m)}</span></header>
@@ -572,15 +573,19 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
     return out.join("");
   }
 
-  function test(id) {
-    setNav("test");
-    const t = D.tests.find(x => x.id === id), cov = D.coverage[id - 1];
-    const key = "minna-n5-de-" + id;
+  /* Đề kiểm tra (#de-N) và trang Luyện tập (#luyen-N) dùng chung cách làm bài, chấm điểm, đồng hồ. */
+  function test(id, luyen) {
+    setNav(luyen ? "luyen" : "test");
+    const t = luyen ? D.luyen[id] : D.tests.find(x => x.id === id), cov = D.coverage[id - 1] || {};
+    const key = (luyen ? "minna-n5-luyen-" : "minna-n5-de-") + id;
     const saved = store.get(key) || { ans: {}, done: false };
     const all = [];
-    let h = `<nav class="lesson-strip" aria-label="Chọn đề">${D.tests.map(x => `<a href="#de-${x.id}" ${x.id === id ? 'aria-current="page"' : ""}>${x.title}</a>`).join("")}</nav>
-      <div class="test-head"><div><p class="eyebrow">Bài ${t.lessons[0]}–${t.lessons[1]} · dạng đề JLPT N5</p><h1>${t.title}</h1></div>
-      <div class="badges"><span class="badge">Từ vựng ${cov.vocab[0]}/${cov.vocab[1]}</span><span class="badge">Ngữ pháp ${cov.grammar[0]}/${cov.grammar[1]}</span></div></div>
+    const dsLuyen = Object.keys(D.luyen).map(Number);
+    let h = `<nav class="lesson-strip" aria-label="${luyen ? "Chọn bài" : "Chọn đề"}">${luyen
+      ? dsLuyen.map(x => `<a href="#luyen-${x}" ${x === id ? 'aria-current="page"' : ""}>${x}</a>`).join("")
+      : D.tests.map(x => `<a href="#de-${x.id}" ${x.id === id ? 'aria-current="page"' : ""}>${x.title}</a>`).join("")}</nav>
+      <div class="test-head"><div><p class="eyebrow">${luyen ? `Bài ${id} · hỏi đủ mọi từ và kanji N5 của bài` : `Bài ${t.lessons[0]}–${t.lessons[1]} · dạng đề JLPT N5`}</p><h1>${t.title}</h1></div>
+      ${luyen ? "" : `<div class="badges"><span class="badge">Từ vựng ${cov.vocab[0]}/${cov.vocab[1]}</span><span class="badge">Ngữ pháp ${cov.grammar[0]}/${cov.grammar[1]}</span></div>`}</div>
       <div class="bar" id="bar"><div class="progress"><i id="prog"></i></div><span class="count" id="cnt"></span>
       <span class="timer" id="tmr" title="Đồng hồ làm đề"><b id="tmrT"></b><select id="tmrLen" aria-label="Thời gian làm bài"></select><button class="btn" id="tmrBtn" type="button"></button></span><button class="btn primary" id="submit" type="button">Nộp bài</button><button class="btn" id="reset" type="button">Làm lại</button></div>
       <div id="res"></div>`;
@@ -595,15 +600,17 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
         all.push({ qid, it, part: s.part });
         h += `<div class="q" data-q="${qid}"><div class="stem"><span class="num">${n}</span><span class="text">${rich(it.q)}</span></div><div class="opts" role="radiogroup" aria-label="Câu ${n}">`;
         it.o.forEach((o, oi) => {
-          const iid = `t${id}-q${qid}-o${oi}`;
-          h += `<label class="opt" for="${iid}"><input type="radio" id="${iid}" name="t${id}-q${qid}" value="${oi}" ${saved.ans[qid] === oi ? "checked" : ""}><span class="k">${oi + 1}</span><span>${esc(o)}</span></label>`;
+          const iid = `${luyen ? "l" : "t"}${id}-q${qid}-o${oi}`;
+          h += `<label class="opt" for="${iid}"><input type="radio" id="${iid}" name="${luyen ? "l" : "t"}${id}-q${qid}" value="${oi}" ${saved.ans[qid] === oi ? "checked" : ""}><span class="k">${oi + 1}</span><span>${esc(o)}</span></label>`;
         });
         const tags = (it.g || []).filter(g => D.grammar[gLesson(g)]).map(g => `<a href="#bai-${gLesson(g)}" title="Xem mẫu ${g}">${g}</a>`).join("");
         h += `</div><div class="fb"><span class="mark"></span>${it.full ? `<span class="full">${esc(it.full)}</span><br>` : ""}${esc(it.e || "")}${tags ? `<span class="tags">${tags}</span>` : ""}</div></div>`;
       });
       h += `</section>`;
     });
-    h += `<div class="pager"><a class="btn" href="#bai-${t.lessons[0]}">← Ôn bài ${t.lessons[0]}–${t.lessons[1]}</a>${id < 5 ? `<a class="btn" href="#de-${id + 1}">Đề ${id + 1} →</a>` : ""}</div>`;
+    h += `<div class="pager">${luyen
+      ? `<a class="btn" href="#bai-${id}">← Ôn bài ${id}</a>${id < 25 ? `<a class="btn" href="#luyen-${id + 1}">Luyện tập bài ${id + 1} →</a>` : ""}`
+      : `<a class="btn" href="#bai-${t.lessons[0]}">← Ôn bài ${t.lessons[0]}–${t.lessons[1]}</a>${id < 5 ? `<a class="btn" href="#de-${id + 1}">Đề ${id + 1} →</a>` : ""}`}</div>`;
     app.innerHTML = h;
     document.documentElement.style.setProperty("--hh", document.querySelector("header.top").offsetHeight + "px");
 
@@ -655,7 +662,7 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
     });
     document.getElementById("reset").addEventListener("click", () => {
       store.set(key, { ans: {}, done: false });
-      test(id);
+      test(id, luyen);
     });
     refresh();
     timer = setupTimer(saved, () => store.set(key, saved), total, () => {
@@ -702,6 +709,7 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
     let m;
     if ((m = h.match(/^bai-(\d+)$/)) && +m[1] >= 1 && +m[1] <= 25) lesson(+m[1]);
     else if ((m = h.match(/^de-(\d)$/)) && +m[1] >= 1 && +m[1] <= 5) test(+m[1]);
+    else if ((m = h.match(/^luyen-(\d+)$/)) && D.luyen[m[1]]) test(+m[1], true);
     else if ((m = h.match(/^so-sanh(?:\/([\w-]+))?$/))) soSanh(m[1]);
     else home();
     window.scrollTo(0, 0);

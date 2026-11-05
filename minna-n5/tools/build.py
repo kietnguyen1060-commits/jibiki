@@ -3,6 +3,8 @@
 Cách dùng: py build.py  → ghi ra ../dist/minna-n5.html
 """
 import json, os, random, sys, importlib.util
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import luyen
 
 sys.stdout.reconfigure(encoding="utf-8")
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -42,7 +44,7 @@ for n in range(1, 6):
 
 # So sánh ngữ pháp N5 – N4: dùng chung một tệp cho cả hai trang.
 so_sanh = json.load(open(os.path.join(HERE, "..", "..", "minna-n4", "data", "so-sanh-n5-n4.json"), encoding="utf-8"))
-payload = json.dumps({"soSanh": so_sanh, "vocab": vocab, "grammar": check.grammar, "tests": tests, "coverage": coverage},
+payload = json.dumps({"soSanh": so_sanh, "vocab": vocab, "grammar": check.grammar, "tests": tests, "coverage": coverage, "luyen": luyen.build(check)},
                      ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
 tpl = open(os.path.join(HERE, "template.html"), encoding="utf-8").read()
 out = tpl.replace("/*__DATA__*/{}", payload)

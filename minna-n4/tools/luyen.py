@@ -15,6 +15,8 @@ for a, b in zip("かきくけこさしすせそたちつてとはひふへほ", 
     VOICE[a] = b; VOICE[b] = a
 O_ROW = "おこそとのほもよろごぞどぼぽ"
 TSU_BEFORE = "かきくけこさしすせそたちつてとぱぴぷぺぽ"
+HANG = ["あいうえお", "かきくけこ", "がぎぐげご", "さしすせそ", "ざじずぜぞ", "たちつてと", "だぢづでど", "なにぬねの",
+        "はひふへほ", "ばびぶべぼ", "まみむめも", "らりるれろ"]
 
 
 def bo_ngoac(s):
@@ -48,11 +50,18 @@ def reading_variants(kana, rng):
                 out.append(kana[:i + 1] + "う" + kana[i + 1:])
         if c == "っ":
             out.append(kana[:i] + kana[i + 1:])
-        elif c in TSU_BEFORE and i:
+        elif c in TSU_BEFORE and i and kana[i - 1] not in "っんー":
             out.append(kana[:i] + "っ" + kana[i:])
+    # Từ ngắn ít lỗi trên: đổi nguyên âm trong cùng hàng (みなみ → みなも), xếp sau các lỗi hay gặp.
+    them = []
+    for i in range(n):
+        for hang in HANG:
+            if kana[i] in hang:
+                them += [kana[:i] + c + kana[i + 1:] for c in hang if c != kana[i]]
     out = [x for x in dict.fromkeys(out) if x != kana]
-    rng.shuffle(out)
-    return out
+    them = [x for x in dict.fromkeys(them) if x != kana and x not in out]
+    rng.shuffle(out); rng.shuffle(them)
+    return out + them
 
 
 def writing_variants(word, k, bo, rng):
@@ -76,7 +85,7 @@ def options(ok, wrong):
 
 
 def tu_drill(b, check, rng):
-    rows = [r for r in check.vocab if not r["ten"]]
+    rows = [r for r in check.vocab if not r.get("ten")]
     items = []
     for r in (x for x in rows if int(x["bai"]) == b):
         word, kana = main_form(r, check)
@@ -85,7 +94,9 @@ def tu_drill(b, check, rng):
         here = [x for x in pool if int(x["bai"]) == b]
         near = [x for x in pool if x not in here and abs(int(x["bai"]) - b) <= 3]
         rng.shuffle(here); rng.shuffle(near)
-        o = options(word, [main_form(x, check)[0] for x in here + near])
+        # Loại từ hiếm (bài chỉ có vài tính từ) thì lấy thêm từ khác loại để đủ 4 phương án.
+        khac = [x for x in rows if x is not r and x["nghia"] != r["nghia"] and abs(int(x["bai"]) - b) <= 3]
+        o = options(word, [main_form(x, check)[0] for x in here + near + khac])
         if len(o) == 4:
             items.append({"q": r["nghia"], "o": o, "a": 0, "e": f"{word} ({kana}) = {r['nghia']}."})
     return items
@@ -108,10 +119,7 @@ def kanji_drill(b, check, bo, rng):
             continue
         word, kana, r = cands[0]
         wrong = reading_variants(kana, rng)
-        others = [main_form(z, check)[1] for z in rows]
-        rng.shuffle(others)
-        others.sort(key=lambda z: abs(len(z) - len(kana)))  # chữ ngắn thì phương án cũng ngắn, không lộ đáp án
-        o = options(kana, wrong + others)
+        o = options(kana, wrong)
         ctx = f"<u>{word}</u>"
         if word in (r.get("vd") or ""):
             ctx = r["vd"].replace(word, f"<u>{word}</u>", 1)
