@@ -6,6 +6,7 @@ Bộ công cụ tự học tiếng Nhật đi kèm Anki:
 - Quét chữ để xem nghĩa / Hán Việt / cách đọc, và ghi chú theo ngày ngay trong app.
 - [`minna-n5/`](minna-n5/) — 5 đề N5, mỗi đề gộp 5 bài Minna no Nihongo I, phủ toàn bộ từ vựng và ngữ pháp; có đồng hồ làm đề và lịch sử điểm.
 - [`minna-n4/`](minna-n4/) — 25 đề N4, mỗi đề một bài Minna no Nihongo II (26–50): ngữ pháp, từ vựng, kanji.
+- Trang Luyện tập N4 (`#luyen-26`…`#luyen-50`): hỏi đủ mọi từ và mọi kanji của bài (đọc và viết), kèm câu cách dùng từ, ngữ pháp cho các mẫu ít được hỏi và bài đọc phải suy luận. Câu soạn mới ở `minna-n4/data/luyen-*.json`, phần drill sinh tự động bằng `minna-n4/tools/luyen.py`; không chép từ sách luyện thi.
 - So sánh ngữ pháp N5 – N4 (`minna-n4/data/so-sanh-n5-n4.json`, tab "So sánh N5–N4" ở cả hai trang): 16 nhóm mẫu dễ nhầm, khác nhau thế nào, dùng khi nào, mẹo chọn.
 
 ## Dữ liệu không có trong repo
@@ -22,4 +23,4 @@ Nội dung sách (cách nhớ và ví dụ của Kanji Look and Learn, danh sác
 - Nhận diện chữ viết tay: [KanjiCanvas](https://github.com/asdfjkl/kanjicanvas) — MIT.
 - Tranh gợi nhớ: [OpenMoji](https://openmoji.org) — CC BY-SA 4.0.
 - Thứ tự nét và hình thành phần: [KanjiVG](http://kanjivg.tagaini.net) — Ulrich Apel, CC BY-SA 3.0.
-- Âm on/kun, số nét: [KANJIDIC2](https://www.edrdg.org/wiki/index.php/KANJIDIC_Project) — EDRDG, CC BY-SA 4.0.
+- Âm on/kun, số nét, bộ thủ: [KANJIDIC2](https://www.edrdg.org/wiki/index.php/KANJIDIC_Project) — EDRDG, CC BY-SA 4.0.
