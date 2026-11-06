@@ -239,6 +239,8 @@ main:has(#view-minna:not([hidden])) { padding: 0; }
 .scan-pop .ch { font-family: var(--font-mincho); font-size: 1.9rem; line-height: 1; border: 0; background: none; color: var(--ink); padding: 0; cursor: pointer; }
 .scan-pop button.ch:hover { color: var(--ai); }
 .scan-pop .hv { color: var(--ai); letter-spacing: .03em; }
+.scan-pop .sp-open { display: inline-block; margin-top: 3px; font-size: .82rem; color: var(--ai); text-decoration: none; }
+.scan-pop .sp-open:hover { text-decoration: underline; }
 .scan-pop small { display: block; color: var(--muted); font-family: var(--font-jp); font-size: .8rem; }
 .scan-pop small.ref { display: inline; font-family: var(--font-vi); }
 .scan-pop .en { color: var(--muted); }
