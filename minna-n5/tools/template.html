@@ -151,6 +151,12 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
 .vocab td.ex-cell small { color: var(--muted); display: block; }
 .hide-mean td.mean { color: transparent; background: repeating-linear-gradient(45deg, var(--line) 0 6px, transparent 6px 12px); cursor: pointer; border-radius: 4px; }
 .hide-mean td.mean.show { color: inherit; background: none; }
+/* Che từ: giống che nghĩa; câu ví dụ tiếng Nhật chứa đáp án nên che tới khi hiện từ của dòng đó. */
+.hide-word td.word { background: repeating-linear-gradient(45deg, var(--line) 0 6px, transparent 6px 12px); cursor: pointer; border-radius: 4px; }
+.hide-word td.word > * { visibility: hidden; }
+.hide-word td.word.show { background: none; }
+.hide-word td.word.show > * { visibility: visible; }
+.hide-word tr:not(.lo) td.ex-cell .jp { visibility: hidden; }
 /* Tự viết từ — toàn màn hình: nghĩa ở trên, bảng viết to kẻ ô 田 (vuông + chữ thập giữa) để giữ cỡ chữ đều. */
 .vt-full { position: fixed; inset: 0; z-index: 1000; background: var(--paper); color: var(--ink); display: flex; flex-direction: column; align-items: center; justify-content: safe center; gap: 14px; padding: 16px clamp(12px, 3vw, 40px) 24px; overflow: auto; }
 .vt-full > * { width: min(1200px, 100%); }
@@ -379,6 +385,7 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
     h += `</div><h2>Từ vựng</h2>
       <div class="tools"><input type="search" id="q-${b}" placeholder="Tìm từ, cách đọc hoặc nghĩa…" aria-label="Tìm từ vựng">
       <label class="toggle"><input type="checkbox" id="hide-${b}"> Che nghĩa để tự kiểm tra</label>
+      <label class="toggle"><input type="checkbox" id="hidet-${b}"> Che từ để tự kiểm tra</label>
       <button class="btn" type="button" id="hidew-${b}" title="Toàn màn hình: nhìn nghĩa, viết từ lên bảng to rồi kiểm tra">✍ Che từ để tự viết</button></div>
       <div class="table-wrap"><table class="vocab" id="vt"><thead><tr><th>#</th><th>Từ</th><th>Nghĩa</th><th>Ví dụ</th></tr></thead><tbody>`;
     words.forEach((w, i) => {
@@ -401,6 +408,15 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
       tbl.querySelectorAll("td.mean").forEach(td => td.classList.remove("show"));
     });
     tbl.addEventListener("click", e => { const td = e.target.closest("td.mean"); if (td) td.classList.toggle("show"); });
+    document.getElementById("hidet-" + b).addEventListener("change", e => {
+      tbl.classList.toggle("hide-word", e.target.checked);
+      tbl.querySelectorAll("td.word").forEach(td => td.classList.remove("show"));
+      tbl.querySelectorAll("tr.lo").forEach(tr => tr.classList.remove("lo"));
+    });
+    tbl.addEventListener("click", e => {
+      const td = e.target.closest("td.word");
+      if (td && tbl.classList.contains("hide-word")) { td.classList.toggle("show"); td.closest("tr").classList.toggle("lo", td.classList.contains("show")); }
+    });
     /* Che từ để tự viết — toàn màn hình, mỗi lần một từ (theo thứ tự bảng, chỉ các từ đang hiện khi lọc):
        nhìn nghĩa + câu dịch, viết lên bảng to kẻ ô 田, bấm Kiểm tra để hiện từ. Nét lưu theo tỉ lệ bề rộng bảng
        nên đổi cỡ màn hình (vào / ra toàn màn hình) không lệch. Trong app 字引 (trang ở /minna/…) nét được gửi cho
