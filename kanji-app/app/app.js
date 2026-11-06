@@ -909,10 +909,12 @@
     const w = wordOf(t);
     if (w) h += `<div class="sp-word"><b>${esc(w[0])}</b><span>${esc(w[1][0])}</span><p>${esc(w[1][1])}</p></div>`;
     if (/[ァ-ヺ]/.test(t)) h += `<div class="sp-kana"><span>${esc(t)}</span><span class="arr">→</span><b>${esc(toHira(t))}</b></div>`;
+    // Link mở thẻ của chữ ở tab mới, để không mất trang đang đọc.
+    const moThe = c => `<a class="sp-open" href="/#lookup/${encodeURIComponent(c)}" target="_blank" rel="noopener" title="Mở thẻ chữ ${esc(c)} ở tab mới">Mở thẻ ↗</a>`;
     [...new Set([...t].filter(isKanji))].slice(0, 8).forEach(c => {
       const x = kllByChar.get(c), d = TD[c];
-      if (x) h += `<div class="sp-k"><button type="button" class="ch" data-k="${esc(c)}" title="Mở thẻ chữ ${esc(c)}">${esc(c)}</button><div><b class="hv">${esc(x.hv)}</b> ${esc(x.nghia)}<small>${esc(x.on)}${x.kun ? " · " + esc(x.kun) : ""}</small></div></div>`;
-      else if (d) h += `<div class="sp-k"><button type="button" class="ch" data-k="${esc(c)}" title="Mở thẻ chữ ${esc(c)}">${esc(c)}</button><div>${d[0] ? `<b class="hv">${esc(d[0])}</b> <small class="ref">Hán Việt tham khảo</small> ` : ""}<span class="en">${esc(d[1])}</span><small>${esc(d[2])}${d[3] ? " · " + esc(d[3]) : ""}</small></div></div>`;
+      if (x) h += `<div class="sp-k"><button type="button" class="ch" data-k="${esc(c)}" title="Mở thẻ chữ ${esc(c)}">${esc(c)}</button><div><b class="hv">${esc(x.hv)}</b> ${esc(x.nghia)}<small>${esc(x.on)}${x.kun ? " · " + esc(x.kun) : ""}</small>${moThe(c)}</div></div>`;
+      else if (d) h += `<div class="sp-k"><button type="button" class="ch" data-k="${esc(c)}" title="Mở thẻ chữ ${esc(c)}">${esc(c)}</button><div>${d[0] ? `<b class="hv">${esc(d[0])}</b> <small class="ref">Hán Việt tham khảo</small> ` : ""}<span class="en">${esc(d[1])}</span><small>${esc(d[2])}${d[3] ? " · " + esc(d[3]) : ""}</small>${moThe(c)}</div></div>`;
       else h += `<div class="sp-k"><span class="ch">${esc(c)}</span><div class="muted">Chưa có trong từ điển của app.</div></div>`;
     });
     return h ? h + `<div class="sp-act"><button type="button" class="btn small" data-note>＋ Ghi chú hôm nay</button></div>` : "";
