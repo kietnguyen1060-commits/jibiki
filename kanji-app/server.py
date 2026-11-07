@@ -7,7 +7,7 @@
 - /api/notes: ghi chú theo ngày, mỗi ngày một file notes/YYYY-MM-DD.md (chỉ trên máy, không đưa lên repo)
 Cách dùng: py server.py   (hoặc bấm đúp start.bat)
 """
-import http.server, json, os, re, socketserver, sys, urllib.parse, urllib.request, webbrowser
+import http.server, json, os, re, socket, socketserver, sys, urllib.parse, urllib.request, webbrowser
 
 for _s in (sys.stdout, sys.stderr):
     try:
@@ -165,8 +165,16 @@ class Server(socketserver.ThreadingMixIn, http.server.HTTPServer):
 
 if __name__ == "__main__":
     Handler.extensions_map.update({".js": "text/javascript; charset=utf-8", ".mp3": "audio/mpeg"})
+    url = f"http://localhost:{PORT}/"
+    # Server đã chạy ngầm từ lúc bật máy thì không chạy thêm bản nữa, chỉ mở trình duyệt.
+    with socket.socket() as s:
+        s.settimeout(1)
+        if s.connect_ex(("127.0.0.1", PORT)) == 0:
+            print(f"字引 Jibiki đã chạy sẵn tại {url}")
+            if "--no-browser" not in sys.argv:
+                webbrowser.open(url)
+            sys.exit(0)
     with Server(("127.0.0.1", PORT), Handler) as httpd:
-        url = f"http://localhost:{PORT}/"
         print(f"字引 Jibiki đang chạy tại {url}")
         print("Âm thanh Anki:", MEDIA or "không tìm thấy thư mục collection.media")
         print("Nhấn Ctrl+C để dừng.")
