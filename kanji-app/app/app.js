@@ -1002,9 +1002,6 @@
     const title = day => { const [y, m, d] = day.split("-").map(Number); return `${WD[new Date(y, m - 1, d).getDay()]}, ${d}/${m}/${y}`; };
     let list = [], cur = today(), timer = null, dirty = false, hong = false;
     let goc = null; // nội dung server của ngày đang mở; null = chưa đọc được
-    const chon = null; // ghi chú đang chọn ở thanh bên
-    // Tách nội dung một ngày thành từng ghi chú: các đoạn cách nhau bằng dòng trống.
-    const doan = text => [...text.replace(/\r\n/g, "\n").matchAll(/[^\n]*\S[^\n]*(?:\n[^\n]*\S[^\n]*)*/g)].map((m, i) => ({ i, start: m.index, text: m[0] }));
     // Bản nháp trong trình duyệt: giữ chữ đã gõ khi server tắt, lưu xong thì xoá.
     const KEY = "tk-note-nhap:";
     const nhap = {
@@ -1038,21 +1035,11 @@
     }
     function drawList() {
       const q = fold($("#noteSearch").value.trim());
-      const days = list.map(n => ({ date: n.date, items: doan(n.text) }));
-      if (!days.some(n => n.date === cur)) days.push({ date: cur, items: doan($("#noteText").value) });
+      const days = list.filter(n => !q || fold(n.text).includes(q) || n.date.includes(q));
+      if (!q && !days.some(n => n.date === cur)) days.push({ date: cur, text: $("#noteText").value });
       days.sort((a, b) => b.date.localeCompare(a.date));
-      const dong = x => {
-        const gio = x.text.match(/^\[(\d\d:\d\d)\]\s*/);
-        const [dau, sau = ""] = (gio ? x.text.slice(gio[0].length) : x.text).split("\n");
-        const phu = [gio && gio[1], sau.trim()].filter(Boolean).join(" · ");
-        return `<b>${esc(dau.slice(0, 80))}</b>${phu ? `<span>${esc(phu.slice(0, 80))}</span>` : ""}`;
-      };
-      $("#noteList").innerHTML = days.map(n => {
-        const items = n.items.filter(x => !q || n.date.includes(q) || fold(x.text).includes(q));
-        if (q && !items.length) return "";
-        const dau = `<button type="button" class="nd" data-day="${n.date}">${title(n.date)}${n.items.length ? "" : " · trống"}</button>`;
-        return dau + items.map(x => `<button type="button" data-day="${n.date}" data-i="${x.i}" ${n.date === cur && x.i === chon ? 'aria-current="true"' : ""}>${dong(x)}</button>`).join("");
-      }).join("") || `<span class="muted">Không thấy ghi chú nào.</span>`;
+      $("#noteList").innerHTML = days.map(n => `<button type="button" data-day="${n.date}" ${n.date === cur ? 'aria-current="true"' : ""}><b>${title(n.date)}</b><span>${esc((n.text.split("\n").find(l => l.trim()) || "(trống)").slice(0, 60))}</span></button>`).join("")
+        || `<span class="muted">Không thấy ghi chú nào.</span>`;
     }
     async function open(day) {
       await save();
