@@ -1036,10 +1036,9 @@
     function drawList() {
       const q = fold($("#noteSearch").value.trim());
       const days = list.filter(n => !q || fold(n.text).includes(q) || n.date.includes(q));
-      if (!q && !days.some(n => n.date === cur)) days.push({ date: cur, text: $("#noteText").value });
       days.sort((a, b) => b.date.localeCompare(a.date));
       $("#noteList").innerHTML = days.map(n => `<button type="button" data-day="${n.date}" ${n.date === cur ? 'aria-current="true"' : ""}><b>${title(n.date)}</b><span>${esc((n.text.split("\n").find(l => l.trim()) || "(trống)").slice(0, 60))}</span></button>`).join("")
-        || `<span class="muted">Không thấy ghi chú nào.</span>`;
+        || `<span class="muted">${q ? "Không thấy ghi chú nào." : "Chưa có ghi chú nào."}</span>`;
     }
     async function open(day) {
       await save();
