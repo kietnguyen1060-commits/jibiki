@@ -1,8 +1,8 @@
-"""Vẽ hình kiểu Kanji Look and Learn: tranh nét (OpenMoji, bản đen trắng) → chữ kanji (nét KanjiVG).
+"""Draw Kanji Look and Learn style pictures: line drawing (OpenMoji, black and white) → the kanji (KanjiVG strokes).
 
-Mỗi dòng trong tools/tranh.txt: `chữ|tranh1 tranh2…` (emoji hoặc mã hex OpenMoji, ví dụ 後|🚶).
-Cách dùng: py make_tranh.py <tranh.txt> <kanjivg.xml.gz> <openmoji/black> <thư mục ra> [chữ…]
-Ghi ra kll_pic_<mã chữ 5 số hex>.svg
+Each line in tools/tranh.txt: `kanji|picture1 picture2…` (an emoji or OpenMoji hex code, for example 後|🚶).
+Usage: py make_tranh.py <tranh.txt> <kanjivg.xml.gz> <openmoji/black> <output folder> [kanji…]
+Writes kll_pic_<5-digit hex code of the kanji>.svg
 """
 import gzip, os, re, sys
 
@@ -29,9 +29,9 @@ for block in re.finditer(r'<kanji id="kvg:kanji_([0-9a-f]+)">(.*?)</kanji>', xml
 
 
 def picto(pic):
-    """Phần trong <svg> của một hình OpenMoji, bỏ id để không trùng khi ghép.
+    """The inner part of an OpenMoji <svg>, without ids so they don't clash when combined.
 
-    pic là emoji (🚶) hoặc mã hex (1F6B6). Tên tệp OpenMoji có khi giữ, có khi bỏ FE0F."""
+    pic is an emoji (🚶) or a hex code (1F6B6). OpenMoji file names sometimes keep FE0F and sometimes drop it."""
     if re.fullmatch(r"[0-9A-Fa-f-]+", pic):
         names = [pic.upper()]
     else:
@@ -60,7 +60,7 @@ for ch, codes in rows.items():
            f'<rect width="{width}" height="{H}" rx="10" fill="#ffffff"/>']
     x = 8
     for i, body in enumerate(pics):
-        # OpenMoji vẽ trên lưới 72×72, phóng lên khung BOX.
+        # OpenMoji draws on a 72×72 grid; scale it up to the BOX frame.
         out.append(f'<g transform="translate({x},{(H - BOX) / 2}) scale({BOX / 72:.4f})">{body}</g>')
         x += BOX
         if i < n - 1:
