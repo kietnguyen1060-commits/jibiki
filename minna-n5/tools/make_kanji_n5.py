@@ -1,9 +1,9 @@
-"""Tạo data/kanji-n5.json: kanji N5 theo bài Minna I đầu tiên có chữ đó.
+"""Build data/kanji-n5.json: N5 kanji, each assigned to the first Minna I lesson that uses it.
 
-Danh sách N5: KANJIDIC2 mức jlpt=4 (mức cũ trước 2010, gần đúng với N5 hiện nay).
-Âm Hán Việt lấy từ kanji-app/app/data/tu-dien.js. Mười chữ không có trong cột kanji của từ vựng Minna I
-(số đếm viết bằng chữ số, 南, 西) được gán bài và từ ví dụ ở bảng THEM.
-Cách dùng: py make_kanji_n5.py (cần kanji-app/_dl/kanjidic/kanjidic2.xml*)."""
+N5 list: KANJIDIC2 level jlpt=4 (the pre-2010 level, close to today's N5).
+Sino-Vietnamese readings come from kanji-app/app/data/tu-dien.js. Ten characters missing from the kanji column of the Minna I
+vocabulary (numbers written as digits, 南, 西) get their lesson and example word from the THEM table.
+Usage: py make_kanji_n5.py (needs kanji-app/_dl/kanjidic/kanjidic2.xml*)."""
 import glob, gzip, json, os, re, xml.etree.ElementTree as ET
 
 HERE = os.path.dirname(os.path.abspath(__file__))
