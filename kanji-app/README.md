@@ -13,7 +13,7 @@ Lookup and the Minna tests work while Anki is closed. Studying cards, the review
 ## Text scan and notes
 
 - **Text scan** (button in the top bar, "Quét chữ"): select Japanese text anywhere (lookup cards, Minna test pages, Anki cards) to see the meaning and Sino-Vietnamese reading of each kanji, the meaning of the word (if it is in Minna/KLL), and katakana converted to hiragana. Selecting a whole sentence (5 characters or more) adds a machine translation from Google Translate through the server's `/api/dich`. Each kanji has a link that opens its card in a new tab. Characters outside the card set use `app/data/tu-dien.js` (built by `tools/build_tudien.py` from KANJIDIC2 and Unihan).
-- **Notes** ("Ghi chú" tab): one page per day, saved automatically to `notes/YYYY-MM-DD.md` on your computer (not published to the repo). The sidebar lists every note, split by blank lines, and clicking one jumps to it. There is a search box, and a "＋ Ghi chú hôm nay" button in the text scan popup. If the server is down, what you type is kept in the browser and saved once the server is back.
+- **Notes** ("Ghi chú" tab): one page per day, saved automatically to `notes/YYYY-MM-DD.md` on your computer (not published to the repo). The sidebar lists every day that has a note, so empty days don't appear. There is a search box, and a "＋ Ghi chú hôm nay" button in the text scan popup. If the server is down, what you type is kept in the browser and saved once the server is back.
 
 ## Reverse study ("Học với Anki")
 
