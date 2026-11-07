@@ -1,4 +1,4 @@
-"""Kiểm tra trang Luyện tập: cấu trúc, mã ngữ pháp, câu ★, độ phủ từ / kanji, câu đọc hiểu không chép nguyên văn."""
+"""Check the practice pages: structure, grammar codes, ★ questions, word / kanji coverage, and reading answers not copied verbatim."""
 import collections, json, os, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -24,7 +24,7 @@ for b, t in data.items():
             for g in it.get("g", []):
                 if g not in ids:
                     errs.append(f"bài {b}: mã ngữ pháp lạ {g}")
-            # Tên riêng, con số ngắn không tránh được; chỉ bắt câu đáp án dài chép từ bài đọc.
+            # Names and short numbers can't be avoided; only flag long answers copied from the passage.
             if s.get("passage") and len(check.strip(it["o"][it["a"]])) > 8 and check.strip(it["o"][it["a"]]) in check.strip(s["passage"]):
                 errs.append(f"bài {b}: đáp án chép nguyên văn: {it['o'][it['a']]}")
     req = [r for r in check.vocab if int(r["bai"]) == b and not r["ten"]]
