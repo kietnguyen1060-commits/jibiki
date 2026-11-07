@@ -1,8 +1,8 @@
-"""Từ điển chữ Hán gọn cho tính năng quét chữ: mọi chữ có cấp lớp hoặc cấp JLPT trong KANJIDIC2.
+"""Compact kanji dictionary for text scan: every character with a school grade or JLPT level in KANJIDIC2.
 
-Ghi ra ../app/data/tu-dien.js: window.TUDIEN = {chữ: [âm Hán Việt (Unihan), nghĩa tiếng Anh, âm on, âm kun]}.
-Chữ có trong bộ thẻ của người học (app-data.js) vẫn ưu tiên dùng nghĩa tiếng Việt của thẻ, file này chỉ bù chữ còn lại.
-Cách dùng: py build_tudien.py
+Writes ../app/data/tu-dien.js: window.TUDIEN = {kanji: [Sino-Vietnamese reading (Unihan), English meaning, on reading, kun reading]}.
+Characters in the learner's own cards (app-data.js) still use the Vietnamese meaning from the card; this file only fills in the rest.
+Usage: py build_tudien.py
 """
 import gzip, json, os, re, sys
 
