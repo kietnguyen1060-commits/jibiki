@@ -218,8 +218,10 @@ class Server(socketserver.ThreadingMixIn, http.server.HTTPServer):
     allow_reuse_address = True
 
 
+# Trang Minna mở riêng (không qua khung của app) cũng cần biết là UTF-8.
+Handler.extensions_map.update({".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".mp3": "audio/mpeg"})
+
 if __name__ == "__main__":
-    Handler.extensions_map.update({".js": "text/javascript; charset=utf-8", ".mp3": "audio/mpeg"})
     url = f"http://localhost:{PORT}/"
     # Server đã chạy ngầm từ lúc bật máy thì không chạy thêm bản nữa, chỉ mở trình duyệt.
     with socket.socket() as s:
