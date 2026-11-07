@@ -254,12 +254,7 @@ main:has(#view-minna:not([hidden])) { padding: 0; }
 .note-list { display: grid; gap: 6px; max-height: calc(100vh - 220px); overflow: auto; }
 .note-list button { text-align: left; border: 1px solid var(--line); border-radius: 10px; background: var(--sheet); padding: 8px 10px; cursor: pointer; display: grid; gap: 2px; font: inherit; color: var(--ink); }
 .note-list button[aria-current="true"] { border-color: var(--ai); background: var(--ai-soft); }
-.note-list button { grid-template-columns: minmax(0, 1fr); }
-.note-list button:hover { border-color: var(--ai); }
-.note-list button b { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .note-list button span { color: var(--muted); font-size: .85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.note-list button.nd { border: 0; background: none; padding: 8px 2px 0; color: var(--muted); font-size: .82rem; font-weight: 500; }
-.note-list button.nd:hover { color: var(--ai); }
 .note-edit { display: grid; gap: 8px; }
 .note-edit header { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
 .note-edit h1 { margin: 0; font-size: 1.3rem; }
