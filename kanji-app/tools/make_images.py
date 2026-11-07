@@ -1,9 +1,9 @@
-"""Vẽ hình cho thẻ kanji từ dữ liệu KanjiVG (CC BY-SA 3.0):
+"""Draw images for kanji cards from KanjiVG data (CC BY-SA 3.0):
 
-- kll_comp_<mã>.svg   hình tách bộ thành phần, mỗi bộ một màu: 彳 + … → 後
-- kll_stroke_<mã>.svg dải thứ tự nét như hàng cuối trang sách Look and Learn
+- kll_comp_<code>.svg   component breakdown, one color per component: 彳 + … → 後
+- kll_stroke_<code>.svg stroke order strip, like the bottom row of a Look and Learn page
 
-Cách dùng: py make_images.py <danh sách chữ> <thư mục ra>
+Usage: py make_images.py <list of kanji> <output folder>
 """
 import gzip, os, re, sys
 
@@ -16,7 +16,7 @@ CREDIT = "<!-- Dựa trên KanjiVG (http://kanjivg.tagaini.net), Ulrich Apel, CC
 
 
 def components(block):
-    """Chia nét theo nhóm cấp 2; mỗi lần mở nhóm cấp 2 mới là một thành phần mới."""
+    """Split strokes by second-level groups; each new second-level group starts a new component."""
     comps, cur = [], None
     depth = 0
     for t in re.finditer(r'<g\b([^>]*)>|</g>|<path\b[^>]*\sid="kvg:[0-9a-f]+(?:-[^"]*)?-s(\d+)"[^>]*\sd="([^"]+)"', block):
@@ -66,7 +66,7 @@ def comp_svg(ch, comps, strokes):
     if n:
         out.append(f'<text x="{x + (gap + 10) / 2}" y="66" font-size="30" text-anchor="middle" fill="#666" font-family="sans-serif">→</text>')
         x += gap + 10
-    # Chữ hoàn chỉnh: mỗi thành phần giữ màu của nó.
+    # The full character: each component keeps its own color.
     body = []
     if n:
         for i, (_, ps) in enumerate(show):
