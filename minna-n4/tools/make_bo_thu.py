@@ -1,6 +1,6 @@
-"""Tạo data/bo-thu.json {kanji: [bộ thủ, số nét]} từ KANJIDIC2 cho các kanji có trong từ vựng Minna.
-Dùng để sinh phương án nhiễu "chữ na ná" trong phần luyện viết kanji. Chỉ cần chạy lại khi đổi từ vựng.
-Cách dùng: py make_bo_thu.py (cần kanji-app/_dl/kanjidic/kanjidic2.xml*)."""
+"""Build data/bo-thu.json {kanji: [radical, stroke count]} from KANJIDIC2 for the kanji in the Minna vocabulary.
+Used to generate look-alike distractors in the kanji writing drills. Only needs to be rerun when the vocabulary changes.
+Usage: py make_bo_thu.py (needs kanji-app/_dl/kanjidic/kanjidic2.xml*)."""
 import glob, gzip, json, os, re, xml.etree.ElementTree as ET
 
 HERE = os.path.dirname(os.path.abspath(__file__))
