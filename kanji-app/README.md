@@ -15,6 +15,22 @@ Lookup and the Minna tests work while Anki is closed. Studying cards, the review
 - **Text scan** (button in the top bar, "Quét chữ"): select Japanese text anywhere (lookup cards, Minna test pages, Anki cards) to see the meaning and Sino-Vietnamese reading of each kanji, the meaning of the word (if it is in Minna/KLL), and katakana converted to hiragana. Selecting a whole sentence (5 characters or more) adds a machine translation from Google Translate through the server's `/api/dich`. Each kanji has a link that opens its card in a new tab. Characters outside the card set use `app/data/tu-dien.js` (built by `tools/build_tudien.py` from KANJIDIC2 and Unihan).
 - **Notes** ("Ghi chú" tab): one page per day, saved automatically to `notes/YYYY-MM-DD.md` on your computer (not published to the repo). The sidebar lists every day that has a note, so empty days don't appear. There is a search box, and a "＋ Ghi chú hôm nay" button in the text scan popup. If the server is down, what you type is kept in the browser and saved once the server is back.
 
+## Study log on GitHub
+
+Each finished task adds one contribution to your GitHub graph:
+
+- **Anki:** finishing a whole deck in "Học với Anki" (no new, learning or due cards left, after grading at least one card). Counts once per deck per day.
+- **Minna N4/N5:** submitting a test ("Nộp bài" on a `#de-…` page). Practice pages don't count.
+
+The server appends a line such as `- 20:15 Nộp đề Minna N4 bài 26: 38/42` to `YYYY-MM.md` in a private log repo, commits it and pushes in the background. If you're offline, the commit stays on your computer and goes up with the next push. Setup:
+
+```
+gh repo create jibiki-log --private
+git clone https://github.com/<you>/jibiki-log.git kanji-app/nhat-ky
+```
+
+`kanji-app/nhat-ky/` is ignored by this repo; set `JIBIKI_LOG` to use another folder. Commits use your global git name and email, which must be linked to your GitHub account. Contributions from a private repo only show to other people if "Include private contributions on my profile" is on in your GitHub profile settings.
+
 ## Reverse study ("Học với Anki")
 
 The **Học ngược** button on the review bar:
