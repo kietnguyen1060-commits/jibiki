@@ -1,7 +1,7 @@
-"""Thêm bảng chia (bang) và lưu ý (luu) cho các mẫu ngữ pháp N5 tạo thể mới, sửa các mẫu đã rà soát.
+"""Add conjugation tables (bang) and notes (luu) to the N5 grammar patterns that create a new form, and fix the reviewed patterns.
 
-Chạy lại được nhiều lần: ghi đè các trường bang/luu/n/p của đúng các mẫu liệt kê dưới đây.
-Cách dùng: py chia_dong_tu.py
+Safe to rerun: it overwrites the bang/luu/n/p fields of exactly the patterns listed below.
+Usage: py chia_dong_tu.py
 """
 import json, os, sys
 
