@@ -1,7 +1,7 @@
-"""Trang Luyện tập N5 cho từng bài. Cách sinh câu dùng chung với N4 (minna-n4/tools/luyen.py).
+"""N5 practice page for each lesson. Question generation is shared with N4 (minna-n4/tools/luyen.py).
 
-Tự động: mỗi từ một câu nghĩa → từ; mỗi kanji N5 một câu đọc và một câu viết, hỏi ở bài đầu tiên có chữ đó.
-Soạn tay (data/luyen-*.json): ngữ pháp cho các mẫu ít được hỏi trong đề và bài đọc phải suy luận.
+Generated: one meaning → word question per word; one reading and one writing question per N5 kanji, asked in the first lesson that uses it.
+Hand-written (data/luyen-*.json): grammar for patterns the tests rarely cover, and reading passages that require inference.
 """
 import glob, importlib.util, json, os, types
 
@@ -23,7 +23,7 @@ def build(check):
     import random
     bo = {k: tuple(v) for k, v in json.load(open(os.path.join(HERE, "..", "..", "minna-n4", "data", "bo-thu.json"), encoding="utf-8")).items()}
     kanji = json.load(open(os.path.join(DATA, "kanji-n5.json"), encoding="utf-8"))
-    # Từ ví dụ cho các kanji không có trong cột kanji của từ vựng (số đếm, 南, 西).
+    # Example words for kanji missing from the vocabulary's kanji column (numbers, 南, 西).
     them = [{"kanji": x["them"][0], "kana": x["them"][1], "nghia": x["them"][2], "bai": b, "vd": "", "ten": False}
             for b, v in kanji.items() for x in v if "them" in x]
     q = types.SimpleNamespace(vocab=check.vocab + them, kanji=kanji, clean=check.clean)
