@@ -1,7 +1,7 @@
-"""Thêm bảng chia động từ (bang) và lưu ý (luu) cho các mẫu ngữ pháp tạo thể mới, sửa các mẫu đã rà soát.
+"""Add verb conjugation tables (bang) and notes (luu) to the grammar patterns that create a new form, and fix the reviewed patterns.
 
-Chạy lại được nhiều lần: ghi đè các trường bang/luu/n/ex của đúng các mẫu liệt kê dưới đây.
-Cách dùng: py chia_dong_tu.py
+Safe to rerun: it overwrites the bang/luu/n/ex fields of exactly the patterns listed below.
+Usage: py chia_dong_tu.py
 """
 import json, os, sys
 
