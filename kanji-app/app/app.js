@@ -410,6 +410,9 @@
     });
   }
 
+  // Tích một ô contribution trên GitHub: server ghi một dòng vào repo nhật ký học rồi commit.
+  const dongGop = (text, once) => fetch("/api/dong-gop", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text, once }) })
+    .then(r => r.ok ? r.json() : null).catch(() => null);
   async function deckCounts(deck) {
     const st = await anki.call("getDeckStats", { decks: [deck] });
     return Object.values(st)[0] || { new_count: 0, learn_count: 0, review_count: 0 };
@@ -725,6 +728,12 @@
       studyEl.innerHTML = `<div class="notice"><b>Xong phần hôm nay của “${esc(s.title)}”.</b> Đã chấm ${s.done} thẻ trong phiên này.${counts.learn_count ? ` Còn ${counts.learn_count} thẻ đang học sẽ đến hạn lại sau vài phút.` : ""}
         <div class="row-actions" style="margin-top:10px">${s.back ? `<a class="btn" href="#${esc(s.back)}">← Quay lại thẻ kanji</a>` : ""}<button class="btn" id="toDecks" type="button">Danh sách deck</button>${counts.learn_count ? '<button class="btn primary" id="again" type="button">Kiểm tra lại</button>' : ""}</div></div>`;
       $("#toDecks").addEventListener("click", endSession);
+      // Học hết deck (không còn thẻ mới, thẻ đang học, thẻ đến hạn) trong phiên có chấm thẻ: tích một ô, mỗi deck một lần một ngày.
+      if (s.done && !counts.new_count && !counts.learn_count && !counts.review_count) {
+        dongGop(`Học xong deck ${s.deck}`, true).then(r => {
+          if (r && r.ok && studyEl.querySelector(".notice")) studyEl.querySelector(".notice b").insertAdjacentHTML("afterend", ` <span class="ggop">✓ Đã tích một ô xanh trên GitHub.</span>`);
+        });
+      }
       const ag = $("#again"); if (ag) ag.addEventListener("click", () => startSession({ title: s.title, deck: s.deck, back: s.back }));
       return;
     }
