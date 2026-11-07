@@ -1002,7 +1002,7 @@
     const title = day => { const [y, m, d] = day.split("-").map(Number); return `${WD[new Date(y, m - 1, d).getDay()]}, ${d}/${m}/${y}`; };
     let list = [], cur = today(), timer = null, dirty = false, hong = false;
     let goc = null; // nội dung server của ngày đang mở; null = chưa đọc được
-    const chon = null; // ghi chú đang chọn ở thanh bên
+    let chon = null, cho = null, sang = null; // ghi chú đang chọn ở thanh bên, ghi chú sẽ chọn khi mở xong ngày, hẹn giờ bôi sáng
     // Tách nội dung một ngày thành từng ghi chú: các đoạn cách nhau bằng dòng trống.
     const doan = text => [...text.replace(/\r\n/g, "\n").matchAll(/[^\n]*\S[^\n]*(?:\n[^\n]*\S[^\n]*)*/g)].map((m, i) => ({ i, start: m.index, text: m[0] }));
     // Bản nháp trong trình duyệt: giữ chữ đã gõ khi server tắt, lưu xong thì xoá.
@@ -1082,7 +1082,32 @@
       }
       box.value = text;
       box.readOnly = false;
+      chon = cho; cho = null;
       drawList();
+      toi();
+    }
+    // Đưa con trỏ tới ghi chú đang chọn: cuộn tới, bôi sáng một lát rồi đặt con trỏ ở cuối đoạn.
+    function toi() {
+      const box = $("#noteText"), p = chon === null ? null : doan(box.value)[chon];
+      if (!p) return;
+      const cs = getComputedStyle(box), m = document.createElement("div");
+      m.style.cssText = `position:absolute;visibility:hidden;white-space:pre-wrap;overflow-wrap:break-word;font:${cs.font};width:${box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)}px`;
+      m.textContent = box.value.slice(0, p.start);
+      document.body.append(m);
+      const top = m.offsetHeight;
+      m.remove();
+      box.focus();
+      box.setSelectionRange(p.start, p.start + p.text.length);
+      box.scrollTop = top;
+      clearTimeout(sang);
+      sang = setTimeout(boSang, 1000);
+    }
+    // Bỏ bôi sáng trước khi gõ, kẻo phím đầu tiên thay mất cả đoạn đang chọn.
+    function boSang() {
+      clearTimeout(sang);
+      sang = null;
+      const box = $("#noteText");
+      box.setSelectionRange(box.selectionEnd, box.selectionEnd);
     }
     async function save() {
       clearTimeout(timer);
@@ -1118,7 +1143,14 @@
     $("#noteToday").addEventListener("click", () => go("notes/" + today()));
     $("#noteDate").addEventListener("change", e => { if (e.target.value) go("notes/" + e.target.value); });
     $("#noteSearch").addEventListener("input", drawList);
-    $("#noteList").addEventListener("click", e => { const b = e.target.closest("[data-day]"); if (b) go("notes/" + b.dataset.day); });
+    $("#noteList").addEventListener("click", e => {
+      const b = e.target.closest("[data-day]");
+      if (!b) return;
+      const i = b.dataset.i === undefined ? null : Number(b.dataset.i);
+      if (b.dataset.day === cur) { chon = i; drawList(); toi(); }
+      else { cho = i; go("notes/" + b.dataset.day); }
+    });
+    $("#noteText").addEventListener("beforeinput", () => { if (sang) boSang(); });
     return {
       async show(day) { try { await flush(); } catch (e) { hong = true; } await loadList(); await open(/^\d{4}-\d{2}-\d{2}$/.test(day || "") ? day : today()); },
       // Thêm một đoạn vào cuối ghi chú hôm nay (dùng từ khung quét chữ).
