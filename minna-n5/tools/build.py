@@ -1,6 +1,6 @@
-"""Gộp dữ liệu (từ vựng, ngữ pháp, 5 đề) vào template thành một trang HTML.
+"""Merge the data (vocabulary, grammar, 5 tests) into the template as a single HTML page.
 
-Cách dùng: py build.py  → ghi ra ../dist/minna-n5.html
+Usage: py build.py  → writes ../dist/minna-n5.html
 """
 import json, os, random, sys, importlib.util
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -22,7 +22,7 @@ for r in check.vocab:
 tests, coverage = [], []
 for n in range(1, 6):
     t = json.load(open(os.path.join(DATA, "tests", f"test{n}.json"), encoding="utf-8"))
-    # Đảo vị trí phương án để đáp án đúng chia đều 4 vị trí (cố định theo seed).
+    # Rotate the options so correct answers spread evenly over the 4 positions (fixed by the seed).
     rng = random.Random(1000 + n)
     items = [it for s in t["sections"] for it in s["items"] if "o" in it]
     slots = [i % 4 for i in range(len(items))]
@@ -42,7 +42,7 @@ for n in range(1, 6):
     coverage.append({"id": n, "vocab": [used, total], "grammar": [sum(g in gram for g in gids), len(gids)]})
     tests.append(t)
 
-# So sánh ngữ pháp N5 – N4: dùng chung một tệp cho cả hai trang.
+# N5–N4 grammar comparison: one shared file for both pages.
 so_sanh = json.load(open(os.path.join(HERE, "..", "..", "minna-n4", "data", "so-sanh-n5-n4.json"), encoding="utf-8"))
 payload = json.dumps({"soSanh": so_sanh, "vocab": vocab, "grammar": check.grammar, "tests": tests, "coverage": coverage, "luyen": luyen.build(check)},
                      ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
