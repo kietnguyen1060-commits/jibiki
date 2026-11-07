@@ -995,11 +995,24 @@
 
   /* ---------- Ghi chú theo ngày (lưu thành file notes/YYYY-MM-DD.md qua server) ---------- */
   const notes = (() => {
+    const CHO = "Server đang tắt — chữ vẫn được giữ, sẽ tự lưu khi server chạy lại";
     const pad = n => String(n).padStart(2, "0");
     const today = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
     const WD = ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"];
     const title = day => { const [y, m, d] = day.split("-").map(Number); return `${WD[new Date(y, m - 1, d).getDay()]}, ${d}/${m}/${y}`; };
-    let list = [], cur = today(), timer = null, dirty = false;
+    let list = [], cur = today(), timer = null, dirty = false, hong = false;
+    let goc = null; // nội dung server của ngày đang mở; null = chưa đọc được
+    // Bản nháp trong trình duyệt: giữ chữ đã gõ khi server tắt, lưu xong thì xoá.
+    const KEY = "tk-note-nhap:";
+    const nhap = {
+      get(day) { try { return JSON.parse(localStorage.getItem(KEY + day)); } catch (e) { return null; } },
+      set(day, text, base) { try { localStorage.setItem(KEY + day, JSON.stringify({ text, base })); } catch (e) {} },
+      del(day) { try { localStorage.removeItem(KEY + day); } catch (e) {} },
+      days() { try { return Object.keys(localStorage).filter(k => k.startsWith(KEY)).map(k => k.slice(KEY.length)); } catch (e) { return []; } }
+    };
+    // File trên server không đổi thì dùng nháp; đổi rồi hoặc chưa đọc được thì nối hai bản, không ghi đè.
+    const ghep = (srv, d) => d.base === srv || !srv.trim() || d.text.includes(srv.trim()) ? d.text
+      : srv.includes(d.text.trim()) ? srv : srv.trimEnd() + "\n\n" + d.text;
     const api = (day, opt) => fetch(day ? `/api/notes/${day}` : "/api/notes", opt).then(r => { if (!r.ok) throw new Error(r.status); return r; });
     const put = (day, body) => api(day, { method: "PUT", headers: { "Content-Type": "text/plain; charset=utf-8" }, body });
     function remember(day, text) {
@@ -1008,8 +1021,17 @@
       else if (text.trim()) list.push({ date: day, text });
     }
     async function loadList() {
-      try { list = await (await api()).json(); } catch (e) { list = []; }
+      try { list = await (await api()).json(); } catch (e) { /* server tắt: giữ danh sách đang có */ }
       drawList();
+    }
+    // Đẩy các bản nháp còn sót của những ngày khác lên server.
+    async function flush() {
+      for (const day of nhap.days()) {
+        const d = nhap.get(day);
+        if (!d || (day === cur && dirty)) continue;
+        await put(day, ghep(await (await api(day)).text(), d));
+        nhap.del(day);
+      }
     }
     function drawList() {
       const q = fold($("#noteSearch").value.trim());
@@ -1021,28 +1043,63 @@
     }
     async function open(day) {
       await save();
-      cur = day;
+      clearTimeout(timer);
+      dirty = false; // bản chưa lưu được vẫn nằm trong nháp của ngày cũ
+      cur = day; goc = null;
+      const box = $("#noteText"), state = $("#noteState");
+      box.readOnly = true; // đang tải: chưa cho gõ, kẻo chữ của ngày cũ vào nhầm ngày mới
       $("#noteDate").value = day;
       $("#noteTitle").textContent = title(day) + (day === today() ? " · hôm nay" : "");
       let text = "";
-      try { text = await (await api(day)).text(); $("#noteState").textContent = text ? "Đã lưu" : ""; }
-      catch (e) { $("#noteState").textContent = "Không kết nối được server"; }
-      $("#noteText").value = text;
+      try {
+        const srv = await (await api(day)).text();
+        if (cur !== day) return;
+        goc = text = srv;
+        state.textContent = text ? "Đã lưu" : "";
+      } catch (e) {
+        if (cur !== day) return;
+        hong = true;
+        state.textContent = "Không kết nối được server";
+      }
+      const d = nhap.get(day);
+      if (d) {
+        text = goc === null ? d.text : ghep(goc, d);
+        if (text === goc) nhap.del(day);
+        else { dirty = true; state.textContent = CHO; timer = setTimeout(save, goc === null ? 5000 : 0); }
+      }
+      box.value = text;
+      box.readOnly = false;
       drawList();
     }
     async function save() {
       clearTimeout(timer);
       if (!dirty) return;
       dirty = false;
-      const text = $("#noteText").value;
+      const day = cur, box = $("#noteText");
+      let text = box.value;
       try {
-        await put(cur, text);
-        $("#noteState").textContent = "Đã lưu " + new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
-        remember(cur, text);
-        drawList();
-      } catch (e) { dirty = true; $("#noteState").textContent = "Chưa lưu được — kiểm tra server"; }
+        if (goc === null) { // chưa đọc được file của ngày này: đọc trước để không ghi đè
+          const srv = await (await api(day)).text();
+          if (cur === day) { goc = srv; text = box.value; }
+          const g = ghep(srv, { text, base: null });
+          if (cur === day && g !== text) box.value = g;
+          text = g;
+        }
+        await put(day, text);
+        const d = nhap.get(day);
+        if (d && (d.text === text || (cur === day && box.value === text))) nhap.del(day);
+        remember(day, text);
+        if (cur === day) {
+          goc = text;
+          $("#noteState").textContent = "Đã lưu " + new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
+        }
+        if (hong) { hong = false; await flush(); await loadList(); } else drawList();
+      } catch (e) {
+        hong = true;
+        if (cur === day) { dirty = true; $("#noteState").textContent = CHO; timer = setTimeout(save, 5000); }
+      }
     }
-    $("#noteText").addEventListener("input", () => { dirty = true; $("#noteState").textContent = "Đang gõ…"; clearTimeout(timer); timer = setTimeout(save, 700); });
+    $("#noteText").addEventListener("input", () => { dirty = true; nhap.set(cur, $("#noteText").value, goc); $("#noteState").textContent = "Đang gõ…"; clearTimeout(timer); timer = setTimeout(save, 700); });
     $("#noteText").addEventListener("blur", save);
     $("#noteText").addEventListener("keydown", e => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") { e.preventDefault(); save(); } });
     $("#noteToday").addEventListener("click", () => go("notes/" + today()));
@@ -1050,7 +1107,7 @@
     $("#noteSearch").addEventListener("input", drawList);
     $("#noteList").addEventListener("click", e => { const b = e.target.closest("[data-day]"); if (b) go("notes/" + b.dataset.day); });
     return {
-      async show(day) { await loadList(); await open(/^\d{4}-\d{2}-\d{2}$/.test(day || "") ? day : today()); },
+      async show(day) { try { await flush(); } catch (e) { hong = true; } await loadList(); await open(/^\d{4}-\d{2}-\d{2}$/.test(day || "") ? day : today()); },
       // Thêm một đoạn vào cuối ghi chú hôm nay (dùng từ khung quét chữ).
       async append(text) {
         const day = today();
@@ -1060,6 +1117,7 @@
         const body = (old.trimEnd() ? old.trimEnd() + "\n\n" : "") + `[${t}] ${text}`;
         await put(day, body);
         remember(day, body);
+        if (cur === day) goc = body;
         if (!$("#view-notes").hidden && cur === day) { $("#noteText").value = body; drawList(); }
       }
     };
