@@ -5,9 +5,11 @@
 - /api/viet (POST): nhận diện chữ viết tay qua Google Input Tools cho bảng vẽ (dự phòng: KanjiCanvas trên máy)
 - /api/dich?q=…: dịch máy cả câu Nhật → Việt (gửi câu tới Google Translate) cho khung quét chữ
 - /api/notes: ghi chú theo ngày, mỗi ngày một file notes/YYYY-MM-DD.md (chỉ trên máy, không đưa lên repo)
+- /api/dong-gop (POST): ghi một dòng vào repo nhật ký học (nhat-ky/), commit và push để tích một ô contribution trên GitHub
 Cách dùng: py server.py   (hoặc bấm đúp start.bat)
 """
-import http.server, json, os, re, socket, socketserver, sys, urllib.parse, urllib.request, webbrowser
+import datetime, http.server, json, os, re, socket, socketserver, subprocess, sys, threading
+import urllib.parse, urllib.request, webbrowser
 
 for _s in (sys.stdout, sys.stderr):
     try:
@@ -37,6 +39,39 @@ MEDIA = find_media_dir()
 NOTES = os.path.join(HERE, "notes")
 DAY = re.compile(r"^/api/notes/(\d{4}-\d{2}-\d{2})$")
 CACHE = {}  # câu đã dịch trong phiên chạy server
+LOG = os.environ.get("JIBIKI_LOG") or os.path.join(HERE, "nhat-ky")  # bản clone của repo nhật ký học
+LOG_LOCK = threading.Lock()
+
+
+def git(*args):
+    """Chạy git trong repo nhật ký, không bật cửa sổ console (server chạy ngầm bằng pythonw)."""
+    return subprocess.run(["git", "-C", LOG, *args], capture_output=True, text=True, encoding="utf-8",
+                          creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0), timeout=60)
+
+
+def dong_gop(text, once):
+    """Ghi một dòng vào nhat-ky/YYYY-MM.md rồi commit và push. once=True: trong ngày đã ghi đúng dòng này thì thôi.
+    Trả về (đã ghi?, lý do). Push lỗi (mất mạng) thì commit vẫn nằm trên máy và được đẩy lên ở lần sau."""
+    if not os.path.isdir(os.path.join(LOG, ".git")):
+        return False, "chưa có repo nhật ký (kanji-app/nhat-ky)"
+    now = datetime.datetime.now()
+    path = os.path.join(LOG, now.strftime("%Y-%m") + ".md")
+    head = now.strftime("## %Y-%m-%d")
+    with LOG_LOCK:
+        old = open(path, encoding="utf-8").read() if os.path.isfile(path) else ""
+        today = old.split(head, 1)[1].split("\n## ", 1)[0] if head in old else ""
+        if once and f" {text}\n" in today:
+            return False, "hôm nay đã ghi rồi"
+        add = ("" if head in old else ("\n" if old else "") + head + "\n\n") + f"- {now:%H:%M} {text}\n"
+        with open(path, "a", encoding="utf-8", newline="\n") as fh:
+            fh.write(add)
+        git("symbolic-ref", "HEAD", "refs/heads/main")  # repo mới tạo còn trống: nhánh đầu tiên là main
+        git("add", os.path.basename(path))
+        r = git("commit", "-q", "-m", text)
+        if r.returncode:
+            return False, (r.stderr or r.stdout).strip()[:200]
+    threading.Thread(target=lambda: git("push", "-q", "origin", "main"), daemon=True).start()
+    return True, "ok"
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -71,6 +106,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
         """/api/viet: nhận diện chữ viết tay qua Google Input Tools. Body: {"ink": [[[x…], [y…], [t…]], …]}
         (toạ độ trên khung 300×300, t là mili giây từ lúc đặt bút nét đầu). Trả về danh sách chữ gợi ý."""
+        if urllib.parse.urlparse(self.path).path == "/api/dong-gop":
+            return self.dong_gop()
         if urllib.parse.urlparse(self.path).path != "/api/viet":
             return self.send_error(404)
         length = int(self.headers.get("Content-Length") or 0)
@@ -90,6 +127,24 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         except Exception as e:  # mất mạng, Google đổi API…
             return self.send_body(502, json.dumps({"error": str(e)}, ensure_ascii=False), "application/json; charset=utf-8")
         self.send_body(200, json.dumps(cands, ensure_ascii=False), "application/json; charset=utf-8")
+
+    def dong_gop(self):
+        """Body JSON {"text": "...", "once": true}. Chỉ nhận từ chính app: bắt buộc Content-Type application/json
+        (trang web khác gửi kiểu này phải hỏi CORS trước và bị chặn) và Origin, nếu có, là localhost:8780."""
+        origin = self.headers.get("Origin")
+        if not (self.headers.get("Content-Type") or "").startswith("application/json") or \
+                (origin and origin not in (f"http://localhost:{PORT}", f"http://127.0.0.1:{PORT}")):
+            return self.send_error(403)
+        length = int(self.headers.get("Content-Length") or 0)
+        try:
+            data = json.loads(self.rfile.read(min(length, 4000)).decode("utf-8"))
+            text = re.sub(r"\s+", " ", str(data.get("text") or "")).strip()[:200]
+        except Exception:
+            return self.send_error(400)
+        if not text:
+            return self.send_error(400)
+        ok, why = dong_gop(text, bool(data.get("once")))
+        self.send_body(200, json.dumps({"ok": ok, "why": why}, ensure_ascii=False), "application/json; charset=utf-8")
 
     def do_PUT(self):
         # Chỉ nhận PUT từ chính app (trình duyệt chặn PUT khác nguồn vì server không trả CORS).

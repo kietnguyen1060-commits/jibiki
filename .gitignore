@@ -17,3 +17,6 @@ __pycache__/
 
 # Ghi chú theo ngày của người học (server lưu trên máy).
 kanji-app/notes/
+
+# Repo nhật ký học (jibiki-log, riêng tư) clone vào đây để server commit.
+kanji-app/nhat-ky/
