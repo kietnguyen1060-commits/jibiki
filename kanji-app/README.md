@@ -5,7 +5,8 @@ App chạy trên máy để tra kanji bằng chữ viết tay, xem thẻ kiểu 
 ## Mở app
 
 1. Mở Anki (đã cài add-on AnkiConnect, mã `2055492159`).
-2. Bấm đúp `start.bat`. Trình duyệt sẽ mở `http://localhost:8780`.
+2. Bấm đúp `start.bat`. Trình duyệt sẽ mở `http://localhost:8780`. Server đã chạy sẵn thì chỉ mở trình duyệt, không chạy thêm bản nữa.
+   Muốn server tự chạy ngầm khi bật máy: tạo lối tắt trong thư mục `shell:startup` trỏ tới `pyw -3 server.py --no-browser`, thư mục làm việc là `kanji-app`.
 
 Tra cứu và bộ đề Minna dùng được cả khi Anki đóng. Phần học thẻ, lịch ôn và sửa cách nhớ cần Anki đang mở.
 
