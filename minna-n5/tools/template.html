@@ -332,9 +332,16 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
       hist.unshift({ d: `${p(d.getDate())}/${p(d.getMonth() + 1)} ${p(d.getHours())}:${p(d.getMinutes())}`, s: saved.score, n: total, t: Math.round(used), len: tm.len || 0 });
       store.set(key + "-lich-su", hist.slice(0, 20));
       saved.logged = true;
+      // Nộp đề (không tính trang Luyện tập): tích một ô contribution trên GitHub qua server của app.
+      const de = key.match(/^minna-(n[45])-de-(\d+)$/);
+      if (de) fetch("/api/dong-gop", { method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: `Nộp đề Minna ${de[1].toUpperCase()} ${de[1] === "n4" ? "bài" : "số"} ${de[2]}: ${saved.score}/${total}` }) })
+        .then(r => r.ok ? r.json() : null)
+        .then(r => { const el = document.getElementById("ggop"); if (el && r && r.ok) el.textContent = "✓ Đã tích một ô xanh trên GitHub."; })
+        .catch(() => {});
     }
     const over = tm.len && used >= tm.len * 60;
-    return `<div><span class="eyebrow">Thời gian</span><div>${fmt(used)}${tm.len ? ` / ${tm.len} phút${over ? " · hết giờ, bài tự nộp" : ""}` : ""}</div></div>` +
+    return `<div id="ggop" class="muted"></div><div><span class="eyebrow">Thời gian</span><div>${fmt(used)}${tm.len ? ` / ${tm.len} phút${over ? " · hết giờ, bài tự nộp" : ""}` : ""}</div></div>` +
       (hist.length ? `<details class="hist" ${hist.length > 1 ? "open" : ""}><summary>Các lần làm đề này (${hist.length})</summary><table><tr><th>Lúc</th><th>Điểm</th><th>Thời gian</th></tr>${hist.map(r => `<tr><td>${r.d}</td><td>${r.s}/${r.n}</td><td>${fmt(r.t)}${r.len ? " / " + r.len + "′" : ""}</td></tr>`).join("")}</table></details>` : "");
   }
 
