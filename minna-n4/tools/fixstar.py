@@ -1,6 +1,6 @@
-"""Đặt đáp án câu ★ theo câu hoàn chỉnh ("full") và viết lại lời giải.
+"""Set the answer of each ★ question from its complete sentence ("full") and rewrite the explanation.
 
-Cách dùng: py fixstar.py [số bài ...]
+Usage: py fixstar.py [lesson number ...]
 """
 import json, os, re, sys
 
