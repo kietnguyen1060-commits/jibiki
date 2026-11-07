@@ -1,4 +1,4 @@
-"""Kiểm tra trang Luyện tập N5: cấu trúc, mã ngữ pháp, câu ★, độ phủ từ / kanji, mẫu ngữ pháp còn ít câu."""
+"""Check the N5 practice pages: structure, grammar codes, ★ questions, word / kanji coverage, and grammar patterns with few questions."""
 import collections, json, os, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
