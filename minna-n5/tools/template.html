@@ -94,7 +94,8 @@ h2 { font-size: 1.15rem; margin: 32px 0 12px; }
 .lesson-strip a[aria-current="page"] { background: var(--ai); color: var(--sheet); border-color: var(--ai); }
 .grammar { display: grid; gap: 10px; }
 .g-card { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; display: grid; gap: 6px; min-width: 0; }
-.g-card header { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.g-card header { line-height: 1.7; }
+.g-card header > span { margin-right: 6px; }
 .g-id { font-size: .75rem; color: var(--ai); font-weight: 700; font-variant-numeric: tabular-nums; border: 1px solid var(--ai); border-radius: 6px; padding: 0 6px; }
 .g-pat { font-family: var(--font-jp); font-weight: 700; font-size: 1.05rem; }
 .g-mean { color: var(--muted); }
@@ -386,7 +387,7 @@ table.vocab { width: 100%; border-collapse: collapse; min-width: 640px; }
       <p class="lede">Thuộc <a href="#de-${t.id}">${t.title} (bài ${t.lessons[0]}–${t.lessons[1]})</a> · <a href="#luyen-${b}">Luyện tập bài ${b}</a>.</p>
       <h2>Ngữ pháp</h2><div class="grammar">`;
     gs.forEach(g => {
-      h += `<article class="g-card" id="g-${g.id}"><header><span class="g-id">${g.id}</span><span class="g-pat">${esc(g.p)}</span><span class="g-mean">${esc(g.m)}</span></header>
+      h += `<article class="g-card" id="g-${g.id}"><header><span class="g-id">${g.id}</span> <span class="g-pat">${esc(g.p)}</span> <span class="g-mean">${esc(g.m)}</span></header>
         <p>${esc(g.n)}</p>${ssLinks(g.id)}${(g.bang || []).map(t => `<div class="chia"><b>${esc(t.t)}</b><div class="chia-wrap"><table class="${t.r.every(r => r[0].length <= 14) ? "ngan" : ""} ${t.h.length <= 3 ? "doc" : ""}"><thead><tr>${t.h.map(c => `<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${t.r.map(r => `<tr>${r.map(c => `<td>${esc(c).replace(/ ／ /g, "<br>")}</td>`).join("")}</tr>`).join("")}</tbody></table></div></div>`).join("")}${g.luu ? `<ul class="luu">${g.luu.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}<div class="ex">${g.ex.map(e => `<div><span class="jp">${esc(e[0])}</span><small>${esc(e[1])}</small></div>`).join("")}</div></article>`;
     });
     h += `</div><h2>Từ vựng</h2>
