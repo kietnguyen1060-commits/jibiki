@@ -66,6 +66,7 @@ py tools/build_data.py "<path to a copy of collection.anki2>" _dl/kanjivg/kanjiv
 - `tools/make_tranh.py` draws book-style pictures: an OpenMoji line drawing → the kanji (`kll_pic_<code>.svg`). The picture for each character is chosen in `tools/tranh.txt` (`character|emoji…`).
 - `tools/make_images.py` draws two SVG images per character from KanjiVG: the component breakdown (`kll_comp_<code>.svg`, for example 彳 + 夋 → 後) and the stroke order strip (`kll_stroke_<code>.svg`).
 - `tools/anki_update.py` adds the images to Anki: it adds the "Hình" and "Nét viết" fields, uploads images to the media folder, changes the back of the card to a book-like layout, and adds 392 kanji found in the Minna vocabulary but not in Kanji Look and Learn (deck `Kanji Look and Learn::4. Bổ sung từ Minna`, numbered `+1`, `+2`…).
+- `tools/toeic_bang_viet.py` adds a handwriting board to the back of every card of the "TOEIC EZ Vocab" note type: a strip with the word and its meaning, a lined board for writing (pen pressure, undo, clear) and nothing else changed. The original template is saved to `_build/toeic-template-backup.json` first; run it again to update the board, or with `--remove` to take it out.
 - Meanings, Sino-Vietnamese readings and mnemonics for the additional characters are in `tools/extra_vi_*.txt` (`character|SINO-VIETNAMESE|meaning|mnemonic`), written in the Look and Learn style from the components and not copied from the book.
 
 ## Sources and licenses
