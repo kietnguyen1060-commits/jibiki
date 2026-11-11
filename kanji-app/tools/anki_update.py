@@ -21,7 +21,7 @@ ROOT = os.path.join(HERE, "..")
 MEDIA = os.path.join(ROOT, "_build", "media")
 MODEL = "Kanji Look and Learn - Kanji (VN)"
 PRESET = 1789638944497  # "KLL --Bài con": học hết bài, giống các bài KLL khác
-DECK = "Kanji Look and Learn::4. Bổ sung từ Minna::Bài {:02d}"
+DECK = "Kanji Look and Learn::3. Bổ sung từ Minna::Bài {:02d}"
 
 
 def call(action, **params):
@@ -45,7 +45,7 @@ def multi(actions, size=200):
 SACH = os.path.join(ROOT, "_build", "sach")  # tranh cắt từ PDF sách của người học (cat_tranh_sach.py), không đưa lên repo
 N3 = os.path.join(ROOT, "_build", "n3n2")    # dữ liệu + tranh sách N3–N2 tiếng Việt (doc_n3n2.py), không đưa lên repo
 MEDIA_N3 = os.path.join(ROOT, "_build", "media_n3")  # hình thành phần / nét cho chữ mới của sách N3–N2
-DECK_N3 = "Kanji Look and Learn::5. N3–N2 (sách tiếng Việt)::Phần {:02d}"
+DECK_N3 = "Kanji Look and Learn::4. N3–N2 (sách tiếng Việt)::Phần {:02d}"
 
 
 def img_fields(ch):
