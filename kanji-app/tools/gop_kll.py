@@ -41,8 +41,11 @@ def lesson_of(deck):
 
 def main():
     dry = "--dry-run" in sys.argv
+    names = call("deckNames")
+    if WORDS not in names and SENTS not in names:
+        return print(f"nothing to merge: the old decks are gone (already merged into {NEW})")
     cards = call("cardsInfo", cards=call("findCards", query=f'"deck:{WORDS}" or "deck:{SENTS}"'))
-    conf = call("getDeckConfig", deck=WORDS)["id"]
+    conf = call("getDeckConfig", deck=WORDS if WORDS in names else SENTS)["id"]
     by_lesson = {}
     for c in cards:
         b = lesson_of(c["deckName"])
