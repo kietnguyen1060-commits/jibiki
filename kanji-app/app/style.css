@@ -279,7 +279,7 @@ main:has(#view-minna:not([hidden])) { padding: 0; }
 /* ---------- Học ngược: viết kanji từ Hán Việt + nghĩa ---------- */
 .mode-btn[aria-pressed="true"] { color: var(--ai); border-color: var(--ai); background: var(--ai-soft); }
 .write-q { text-align: center; display: grid; gap: 4px; margin: 6px 0 10px; }
-.write-q .wq-hv { font-size: 2.5rem; line-height: 1.15; font-weight: 800; letter-spacing: .06em; color: var(--ai); margin: 4px 0 2px; }
+.write-q .wq-hv { font-size: 2.5rem; line-height: 1.15; font-weight: 800; letter-spacing: .06em; color: var(--ai); margin: 4px 0 12px; }
 .write-q .wq-mean { font-size: 1.1rem; color: var(--muted); }
 .write-q .wq-hint { font-size: .9rem; color: var(--muted); max-width: 520px; margin: 4px auto 0; }
 .write-q .wq-hint summary { cursor: pointer; }
