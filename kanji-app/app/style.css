@@ -279,8 +279,8 @@ main:has(#view-minna:not([hidden])) { padding: 0; }
 /* ---------- Học ngược: viết kanji từ Hán Việt + nghĩa ---------- */
 .mode-btn[aria-pressed="true"] { color: var(--ai); border-color: var(--ai); background: var(--ai-soft); }
 .write-q { text-align: center; display: grid; gap: 4px; margin: 6px 0 10px; }
-.write-q .wq-hv { font-size: 1.6rem; font-weight: 700; letter-spacing: .08em; color: var(--ai); }
-.write-q .wq-mean { font-size: 1.15rem; }
+.write-q .wq-hv { font-size: 2.5rem; line-height: 1.15; font-weight: 800; letter-spacing: .06em; color: var(--ai); margin: 4px 0 2px; }
+.write-q .wq-mean { font-size: 1.1rem; color: var(--muted); }
 .write-q .wq-hint { font-size: .9rem; color: var(--muted); max-width: 520px; margin: 4px auto 0; }
 .write-q .wq-hint summary { cursor: pointer; }
 .write-area { display: grid; gap: 10px; justify-items: center; margin-bottom: 12px; }
@@ -301,7 +301,7 @@ main:has(#view-minna:not([hidden])) { padding: 0; }
 /* Màn hình rộng: đề bài + nút bên trái, bảng viết to bên phải (cao theo màn hình, 320–600px) để không phải cuộn.
    Sau khi kiểm tra: đề bài xếp trên bảng (bảng nhỏ lại một chút), đáp án ở cột bên phải. */
 @media (min-width: 861px) {
-  .write-left { display: grid; grid-template-columns: minmax(200px, 260px) auto; gap: 28px; justify-content: center; align-items: center; }
+  .write-left { display: grid; grid-template-columns: minmax(220px, 300px) auto; gap: 28px; justify-content: center; align-items: center; }
   .write-left .write-q { text-align: left; margin: 0; }
   .write-left .write-q .wq-hint { margin: 4px 0 0; }
   .write-left .board-actions { justify-content: flex-start; margin-top: 10px; }
