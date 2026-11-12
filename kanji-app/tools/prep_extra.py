@@ -1,7 +1,7 @@
-"""Lập bảng nguồn cho các kanji có trong từ vựng Minna nhưng không có trong Kanji Look and Learn.
+"""Build a source table for the kanji in the Minna vocabulary that Kanji Look and Learn doesn't cover.
 
-Ghi ra tools/extra_source.json (dùng để soạn nghĩa/cách nhớ tiếng Việt) và in bảng tóm tắt.
-Cách dùng: py prep_extra.py
+Writes tools/extra_source.json (used to write the Vietnamese meanings and mnemonics) and prints a summary.
+Usage: py prep_extra.py
 """
 import gzip, json, os, re, sys
 
@@ -24,7 +24,7 @@ for w in data["minna"]:
             words[c].append(f"{w[0]}({w[1]})={w[2][:18]}")
 order.sort()
 
-# KANJIDIC2: nghĩa tiếng Anh, âm on/kun, số nét, cấp JLPT cũ, bộ thủ.
+# KANJIDIC2: English meanings, on/kun readings, stroke count, old JLPT level, radical.
 kd = {}
 xml = gzip.open(os.path.join(DL, "kanjidic", "kanjidic2.xml.gz"), "rt", encoding="utf-8").read()
 for m in re.finditer(r"<character>(.*?)</character>", xml, re.S):
@@ -40,14 +40,14 @@ for m in re.finditer(r"<character>(.*?)</character>", xml, re.S):
         "jlpt": int((re.search(r"<jlpt>(\d)</jlpt>", b) or [0, 0])[1]),
     }
 
-# Unihan kVietnamese (chỉ để đối chiếu âm Hán Việt).
+# Unihan kVietnamese (only to cross-check Sino-Vietnamese readings).
 viet = {}
 for line in open(os.path.join(DL, "unihan", "Unihan_Readings.txt"), encoding="utf-8"):
     if "\tkVietnamese\t" in line:
         cp, _, val = line.rstrip("\n").split("\t")
         viet[chr(int(cp[2:], 16))] = val
 
-# Thành phần cấp một trong KanjiVG.
+# First-level components in KanjiVG.
 comp = {}
 kvg = gzip.open(os.path.join(DL, "kanjivg", "kanjivg.xml.gz"), "rt", encoding="utf-8").read()
 for blk in re.finditer(r'<kanji id="kvg:kanji_([0-9a-f]+)">(.*?)</kanji>', kvg, re.S):
